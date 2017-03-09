@@ -1,5 +1,5 @@
 port     = 80
-initial  = false
+initial  = true
 timezone = Asia/Manila
 
 [backup]
@@ -7,7 +7,7 @@ auto     = false
 backupto = 
 
 [update]
-auto = true
+auto = false
 
 [personal]
 username = 
