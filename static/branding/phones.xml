@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<phones>
+    <phone>
+        <id>1</id>
+        <name>Tablet 7"</name>
+        <width>600</width>
+        <height>800</height>
+    </phone>
+    <phone>
+        <id>2</id>
+        <name>Tablet 10.1"</name>
+        <width>720</width>
+        <height>1024</height>
+    </phone>
+    <phone>
+        <id>3</id>
+        <name>Phone 4"</name>
+        <width>330</width>
+        <height>520</height>
+    </phone>
+    <phone>
+        <id>4</id>
+        <name>Phone 4.52"</name>
+        <width>330</width>
+        <height>550</height>
+    </phone>
+</phones>

@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+        <link rel="stylesheet" href="/static/assets/bootstrap/3.3.7/css/bootstrap.css" />
+        <link rel="stylesheet" href="/static/css/bootstrap-select.min.css" />
+        <link rel="stylesheet" href="/static/assets/fa/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/static/css/jquery.datetimepicker.css" />
+        <link rel="stylesheet" href="/static/css/magicsuggest-min.css" />
+        <link rel="stylesheet" href="/static/css/datatables.min.css" />
+        <style>
+            .wrapper {
+                display: table;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #f8f8f8;
+            }
+            .sidebar {
+                position: relative;
+                display: table-cell;
+                width: 64px;
+                background-color: #d3d3d3;
+                border-right: 1px solid #a9a9a9;
+                vertical-align: top;
+            }
+            .report-toggle {
+                width: 100%;
+                height: 64px;
+                padding-top: 10px;
+                border-bottom: 1px solid #a9a9a9;
+                cursor: pointer;
+                text-align: center;
+                color: rgba(0,0,0,0.5);
+                text-shadow: 0 1px 0 #fff;
+            }
+            .report-toggle:hover {
+                background-color: #bcbcbc;
+            }
+            .content-wrapper {
+                display: table-cell;
+                position: relative;
+                width: 100%;
+                height: 100%;
+                vertical-align: top;
+                background-color: #f8f8f8;
+                text-align: center;
+            }
+            .container {
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0;
+                padding: 0;
+            }
+            .content {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                overflow-y: auto;
+            }
+            .content:before {
+                content: '';
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.8) url('/static/images/ic_logo_login.png') no-repeat fixed center;
+                opacity : 0.2;
+            }
+            .report-wrapper {
+                display: inline-block;
+                position: relative;
+                width: 90%;
+                height: 320px;
+                margin: 5px;
+                border: 1px solid #d3d3d3;
+                background-color: rgba(255, 255, 255, 0.90);
+            }
+            .report-wrapper .action {
+                width: 100%;
+                height: 8%;
+                padding: 2px 5px;
+                background-color: #f5f5f5;
+                border-bottom: 1px solid #d3d3d3;
+            }
+            .report-container {
+                position: relative;
+                width: 98%;
+                height: 90%;
+                margin: 0 auto;
+                overflow-y: hidden;
+            }
+            .report-container:hover {
+                overflow-y: auto;
+            }
+            .table thead th,
+            .table tbody td {
+                text-align: left !important;
+            }
+            .table thead tr:first-child th {
+                text-align: center;
+            }
+            .back {
+                display: inline-block;
+                position: absolute;
+                bottom: 10px;
+                left: 15%;
+            }
+        </style>
+        <title>Report</title>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="sidebar">
+                <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Item Sales Chart" data-report="item-sales"><i class="fa fa-shopping-cart fa-3x fa-fw"></i></div>
+                <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Bills &amp; Sales Chart" data-report="cust-bills"><i class="fa fa-money fa-3x fa-fw"></i></div>
+                <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Preperation Time Chart" data-report="prep-time"><i class="fa fa-clock-o fa-3x fa-fw"></i></div>
+                <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Item Sales Table" data-report="item-table"><i class="fa fa-table fa-3x fa-fw"></i></div>
+                <a href="../" data-toggle="tooltip" data-placement="right" title="back" class="back"><i class="fa fa-home fa-2x fa-fw"></i></a>
+            </div>
+            <div class="content-wrapper">
+                <div class="container">
+                    <div class="content">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="report_option_modal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <h4 class="modal-title">Item Sales</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <input type="text" id="date_from" class="form-control input-sm" readonly />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <input type="text" id="date_to" class="form-control input-sm" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Group By</label>
+                            <select id="group_by" class="form-control input-sm selectpicker">
+                                <option value="hourly">Hourly</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Report Type</label>
+                            <select id="report_type" class="form-control input-sm selectpicker">
+                                <option value="line">Line</option>
+                                <option value="bar">Bar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kitchen Loc.</label>
+                            <input type="text" id="kitchen_loc" />
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <input type="text" id="category" />
+                        </div>
+                        <div class="form-group">
+                            <label>Item</label>
+                            <input id="item" type="text" class="form-control input-sm" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="generate" class="btn btn-success btn-sm" data-dismiss="modal">Create</button>
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/static/assets/js/jquery.min.js"></script>
+        <script src="/static/assets/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="/static/js/bootstrap-select.min.js"></script>
+        <script src="/static/js/moment.min.js"></script>
+        <script src="/static/js/Chart.min.js"></script>
+        <script src="/static/js/jquery.datetimepicker.js"></script>
+        <script src="/static/js/magicsuggest-min.js"></script>
+        <script src="/static/js/datatables.min.js"></script>
+        <script>
+            (function(win, doc){
+                "use strict";
+
+                $("[data-toggle='tooltip']").tooltip();
+
+                $(doc).ready(function(){
+                    $.ajax({
+                        "url": "/apiFunction/",
+                        "data": {"method":"get_report_filters"},
+                        "method": "GET",
+                        "dataType": "json",
+                        "method": "GET",
+                        "beforeSend": function(xhr){
+                            if (xhr.overrideMimeType) {
+                                xhr.overrideMimeType("application/json");
+                            }
+                        },
+                        "success": function(response){
+                            var kitchen_loc = response.location || [],
+                                category = response.category || [],
+                                items = response.items || [],
+
+                                $content = $(".content"),
+                                ReportOptionModal = (function(){
+                                    var $modal        = $("#report_option_modal"),
+                                        $title        = $modal.find(".modal-title"),
+                                        $date_from    = $modal.find("#date_from"),
+                                        $date_to      = $modal.find("#date_to"),
+                                        $report_type  = $modal.find("#report_type"),
+                                        $group_by     = $modal.find("#group_by"),
+                                        $btn_generate = $modal.find("#generate"),
+
+                                        ms_kitchen_loc = $("#kitchen_loc").magicSuggest({
+                                            "allowFreeEntries": false,
+                                            "allowDuplicates": false,
+                                            "minChars": 1,
+                                            "data": kitchen_loc
+                                        }),
+
+                                        ms_category = $("#category").magicSuggest({
+                                            "allowFreeEntries": false,
+                                            "allowDuplicates": false,
+                                            "minChars": 1,
+                                            "data": category
+
+                                        }),
+
+                                        ms_item = $("#item").magicSuggest({
+                                            "allowFreeEntries": false,
+                                            "allowDuplicates": false,
+                                            "minChars": 1,
+                                            "data": items
+                                            /*
+                                            "data": function(q){
+                                                if (!q || q.length === 0) return [];
+
+                                                var keyword =q.toLowerCase(),
+                                                    cat_ids = ms_category.getValue(),
+                                                    match = cat_ids.length == 0
+                                                          ? function(item){ return item.indexOf(keyword) !== -1; }
+                                                          : function(item){ return item.indexOf(keyword) !== -1 && cat_ids.indexOf(item.cat) !== -1; },
+                                                    results = [],
+                                                    item = null,
+                                                    i = 0;
+
+                                                for (; item = items[i ++];) {
+                                                    if (match(item.name.toLowerCase())) {
+                                                        delete item.cat;
+                                                        results.push(item);
+                                                    }
+                                                }
+
+                                                return results;
+                                            }
+                                            */
+                                        }),
+
+                                        $group_by_container    = $group_by.closest(".form-group"),
+                                        $report_type_container = $report_type.closest(".form-group"),
+                                        $kitchen_loc_container = $modal.find("#kitchen_loc").closest(".form-group"),
+                                        $category_container    = $modal.find("#category").closest(".form-group"),
+                                        $item_container        = $modal.find("#item").closest(".form-group"),
+
+                                        today = (function(){
+                                            var now = new Date(),
+                                                y   = now.getFullYear(),
+                                                m   = now.getMonth() + 1,
+                                                d   = now.getDate();
+
+                                            (m < 10) && (m = "0" + ("" + m));
+                                            (d < 10) && (d = "0" + ("" + d));
+
+                                            return [y, m, d].join("-");
+                                        })(),
+
+                                        init = {
+                                            "item-sales": function(){
+                                                $title.text("Item Sales");
+                                                $group_by_container.show();
+                                                $report_type_container.show();
+                                                $kitchen_loc_container.show();
+                                                $category_container.show();
+                                                $item_container.show();
+                                            },
+                                            "cust-bills": function(){
+                                                $title.text("Customer Bills & Sales");
+                                                $group_by_container.show();
+                                                $report_type_container.hide();
+                                                $kitchen_loc_container.hide();
+                                                $category_container.hide();
+                                                $item_container.hide();
+                                            },
+                                            "prep-time": function(){
+                                                $title.text("Preperation Time");
+                                                $group_by_container.show();
+                                                $report_type_container.show();
+                                                $kitchen_loc_container.show();
+                                                $category_container.show();
+                                                $item_container.show();
+                                            },
+                                            "item-table": function(){
+                                                $title.text("Item Sales (Table)");
+                                                $group_by_container.hide();
+                                                $report_type_container.hide();
+                                                $kitchen_loc_container.show();
+                                                $category_container.show();
+                                                $item_container.show();
+                                            }
+                                        };
+
+                                    /* *** remove items under removed category ***
+                                    $(ms_category).on("selectionchange", function(e, ms, records){
+                                        var selected_category = ms_category.getValue(),
+                                            selected_items = ms_item.getSelection(),
+                                            remove_items = $.grep(selected_items, function(e, i){
+                                                return selected_category.indexOf(e.cat) === -1;
+                                            });
+
+                                        if (remove_items.length > 0) {
+                                            ms_item.removeFromSelection(remove_items, true);
+                                        }
+                                    });
+                                    */
+
+                                    /* *** auto add category of selected item ***
+                                    $(ms_item).on("selectionchange", function(e, ms, records){
+                                        var selected_category = ms_category.getValue(),
+                                            selected_items = ms_item.getSelection(),
+                                            add_category = [];
+
+                                        $.each(selected_items, function(i, e){
+                                            var cat_id = e.cat;
+                                            if (selected_category.indexOf(cat_id) === -1 && add_category.indexOf(cat_id) === -1) {
+                                                var cat = null, i = 0;
+                                                for (; cat = category[i ++];) {
+                                                    if (cat.id === cat_id) {
+                                                        add_category.push(cat);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                        if (add_category.length > 0) {
+                                            ms_category.addToSelection(add_category, true);
+                                        }
+                                    });
+                                    */
+
+                                    $date_from
+                                        .val(today + " 00:00")
+                                        .datetimepicker({
+                                            "timepicker": true,
+                                            "closeOnDateSelect": true,
+                                            "format": "Y-m-d H:i",
+                                            "onSelectDate" : function(d){
+                                                if (+new Date(d) > +new Date($date_to.val())) {
+                                                    $date_to.val($date_from.val());
+                                                }
+                                            }
+                                        });
+
+                                    $date_to
+                                        .val(today + " 23:00")
+                                        .datetimepicker({
+                                            "timepicker": true,
+                                            "closeOnDateSelect": true,
+                                            "format": "Y-m-d H:i",
+                                            "onSelectDate": function(d){
+                                                if (+new Date(d) < +new Date($date_from.val())) {
+                                                    $date_from.val($date_to.val());
+                                                }
+                                            }
+                                        });
+
+                                    return {
+                                        "Get": function(ctrl){
+                                            switch (ctrl.toLowerCase()) {
+                                                case "date_from": return $date_from;
+                                                case "date_to": return $date_to;
+                                                case "report_type": return $report_type;
+                                                case "group_by": return $group_by;
+                                                case "kitchen_loc": return ms_kitchen_loc;
+                                                case "category": return ms_category;
+                                                case "item": return ms_item;
+                                                default: return null;
+                                            }
+                                        },
+                                        "Show": function(report, config, callback){
+                                            if (!init[report]) {
+                                                return;
+                                            }
+
+                                            if (config && typeof config === "object") {
+                                                /* *** this features are reserve for "Report Update" ***
+                                                if (config.update) {
+                                                    $btn_generate
+                                                        .removeClass("btn-success")
+                                                        .addClass("btn-warning")
+                                                        .text("Update");
+                                                } else {
+                                                    $btn_generate
+                                                        .removeClass("btn-warning")
+                                                        .addClass("btn-success")
+                                                        .text("Create");
+                                                }
+
+                                                if ("date_from" in config) {
+                                                    $date_from.val(config.date_from)
+                                                }
+                                                if ("date_to" in config) {
+                                                    $date_to.val(config.date_to)
+                                                }
+                                                */
+
+                                                if (config.ongenerate instanceof Function) {
+                                                    $btn_generate.get(0).onclick = function(e){
+                                                        config.ongenerate({
+                                                            "date_from"   : $date_from.val(),
+                                                            "date_to"     : $date_to.val(),
+                                                            "report_type" : $report_type.val(),
+                                                            "group_by"    : $group_by.val(),
+                                                            "kitchen_loc" : ms_kitchen_loc.getValue(),
+                                                            "category"    : ms_category.getValue(),
+                                                            "items"       : ms_item.getValue()
+                                                        });
+                                                    };
+                                                }
+                                            }
+
+                                            init[report]();
+                                            if (callback instanceof Function) callback();
+                                            $modal.modal("show");
+                                        },
+                                        "Hide": function(){
+                                            $modal.modal("hide");
+                                        }
+                                    };
+                                })(),
+
+                                Rand = function(f, t){
+                                    return Math.floor(Math.random() * t) + f;
+                                },
+
+                                RandomRGB = function(){
+                                    var rgb = [], i = 0;
+                                    for (; i++ < 3;) {
+                                        rgb.push(Rand(50, 150));
+                                    }
+                                    return rgb;
+                                },
+
+                                GenerateID = function(){
+                                    var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                                        len = chars.length;
+                                    do {
+                                        var id = "",
+                                            i = 0;
+                                        for (; i++ < 8;) {
+                                            id += chars[Rand(0, len - 1)] + "";
+                                        }
+                                        if ($("#" + id).length === 0) return id;
+                                    } while(true);
+                                },
+
+                                ReportList = {},
+
+                                GraphReport = (function(){
+                                    var create_container = function(id, type, parent){
+                                            var wrapper = doc.createElement("div"),
+
+                                                action = doc.createElement("div"),
+                                                btn_settings = doc.createElement("a"),
+                                                btn_close = doc.createElement("button"),
+
+                                                container = doc.createElement("div"),
+                                                canvas = doc.createElement("canvas");
+
+                                            $(btn_settings)
+                                                .attr("href", "#")
+                                                .attr("data-report-settings", "")
+                                                .append("<i class='fa fa-cog fa-fw'></i>")
+                                                .hide();
+
+                                            $(btn_close)
+                                                .html("&times;")
+                                                .addClass("close")
+                                                .attr("type", "button")
+                                                .attr("data-report-remove", "");
+
+                                            $(action)
+                                                .addClass("action")
+                                                .append(btn_settings)
+                                                .append(btn_close);
+
+                                            $(container)
+                                                .attr("data-report-type", type)
+                                                .addClass("report-container")
+                                                .append(action)
+                                                .append(canvas);
+
+                                            $(wrapper)
+                                                .attr("id", id)
+                                                .addClass("report-wrapper")
+                                                .append(action)
+                                                .append(container)
+                                                .appendTo(parent);
+
+                                            canvas.style.width = "100%";
+                                            canvas.style.height = "100%";
+
+                                            canvas.width = canvas.offsetWidth;
+                                            canvas.height = canvas.offsetHeight;
+
+                                            return container;
+                                        },
+                                        fetch = function(config, callback){
+                                            var urls = {
+                                                    "item-sales": "/apiFunction/",
+                                                    "cust-bills": "/apiFunction/",
+                                                    "prep-time": "/apiFunction/"
+                                                };
+
+                                            $.ajax({
+                                                "url": urls[config.report],
+                                                "data": config.param,
+                                                "method": "GET",
+                                                "beforeSend": function(xhr){
+                                                    if (xhr.overrideMimeType) {
+                                                        xhr.overrideMimeType("application/json");
+                                                    }
+                                                },
+                                                "success": function(response){
+                                                    var report = {};
+                                                    if (response.status === "OK") {
+
+                                                        if (!response.data || !response.data.length) {
+                                                            if (callback instanceof Function) {
+                                                                callback({"error":1});
+                                                            }
+                                                            return;
+                                                        }
+
+                                                        var filter = [],
+                                                            date_format = "MM/DD/YYYY";
+
+                                                        if (config.param.category) {
+                                                            var tmp = [],
+                                                                selected_cat = ReportOptionModal.Get("category").getSelection(),
+                                                                cat = null,
+                                                                i = 0;
+                                                            for (; cat = selected_cat[i ++];) {
+                                                                tmp.push(cat.name);
+                                                            }
+                                                            filter.push("Categories: " + tmp.join(","));
+                                                        } else {
+                                                            filter.push("Categories: All");
+                                                        }
+
+                                                        if (config.param.kitchen_loc) {
+                                                            var tmp = [],
+                                                                selected_kitchen = ReportOptionModal.Get("kitchen_loc").getSelection(),
+                                                                kitchen = null,
+                                                                i = 0;
+                                                            for (; kitchen = selected_kitchen[i ++];) {
+                                                                tmp.push(kitchen.name);
+                                                            }
+                                                            filter.push("Kitchen: " + tmp.join(","));
+                                                        } else {
+                                                            filter.push("Kitchen: All");
+                                                        }
+
+                                                        if (config.param.items) {
+                                                            var tmp = [],
+                                                                selected_item = ReportOptionModal.Get("item").getSelection(),
+                                                                item = null,
+                                                                i = 0;
+                                                            for (; item = selected_item[i ++];) {
+                                                                tmp.push(item.name);
+                                                            }
+                                                            filter.push("Item: " + tmp.join(","));
+                                                        } else {
+                                                            filter.push("Item: All");
+                                                        }
+
+                                                        switch (config.report) {
+
+
+                                                            // *** Handle Item Sales Report ***
+                                                            case "item-sales":
+                                                                if (!response.data || !response.data.length) {
+                                                                    report = null;
+                                                                    break;
+                                                                }
+
+                                                                var title = "Item Sales",
+                                                                    ds = [],
+                                                                    data = response.data,
+                                                                    labels = !!data[0] ? data[0].dates : [],
+                                                                    item = null,
+                                                                    i = 0;
+
+                                                                if (filter.length > 0) {
+                                                                    title += " for " + filter.join(" - ");
+                                                                }
+
+                                                                title += " as of "
+                                                                      + moment(ReportOptionModal.Get("date_from").val()).format(date_format) + " to "
+                                                                      + moment(ReportOptionModal.Get("date_to").val()).format(date_format);
+
+                                                                for (; item = data[i++];) {
+                                                                    var rgb = RandomRGB().join(",");
+                                                                    ds.push({
+                                                                        "label": item.item_name,
+                                                                        "data": item.values,
+                                                                        "backgroundColor": "rgba(" + rgb + ", 0.2)",
+                                                                        "borderColor": "rgba(" + rgb + ", 0.7)",
+                                                                        "spanGaps": true,
+                                                                        "borderWidth": 1
+                                                                    });
+                                                                }
+
+                                                                report = {
+                                                                    "type": config.report_type,
+                                                                    "data": {
+                                                                        "labels": labels,
+                                                                        "datasets": ds
+                                                                    },
+                                                                    "options": {
+                                                                        "maintainAspectRatio": false,
+                                                                        "responsive": true,
+                                                                        "title": {
+                                                                            "display": true,
+                                                                            "text": title
+                                                                            //"text": "Item Sales for Categories: " + selected_cat + " - Kitchen Locations: " + selected_kitchen + " - Items: " + selected_items
+                                                                        },
+                                                                        "tooltip": {
+                                                                          "mode": "label"
+                                                                        },
+                                                                        "scales": {
+                                                                          "yAxes": [{
+                                                                              "ticks": {
+                                                                                  "beginAtZero": true
+                                                                              },
+                                                                              "scaleLabel": {
+                                                                                  "display": true,
+                                                                                  "labelString": "sales"
+                                                                              }
+                                                                          }]
+                                                                        }
+                                                                    }
+                                                                };
+                                                                break;
+
+
+                                                            // *** Handle Customer Bills Report ***
+                                                            case "cust-bills":
+                                                                if (!response.data || !response.data.length) {
+                                                                    report = null;
+                                                                    break;
+                                                                }
+
+                                                                var title = "Bills & Sales as of "
+                                                                          + moment(ReportOptionModal.Get("date_from").val()).format(date_format) + " to "
+                                                                          + moment(ReportOptionModal.Get("date_to").val()).format(date_format),
+                                                                    data = response.data[0] || {"bill_count":0, "total_sales":0,"bill_average":0};
+                                                                report = {
+                                                                    "type": "bar",
+                                                                    "data": {
+                                                                        "labels": data.dates,
+                                                                        "datasets": [
+                                                                            {
+                                                                                "type": "bar",
+                                                                                "label": "Bills",
+                                                                                "data": data.bill_count,
+                                                                                "backgroundColor": "rgba(0, 0, 230, 0.2)",
+                                                                                "borderColor": "rgba(0, 0, 230, 0.7)",
+                                                                                "fill": false,
+                                                                                "spanGaps": true,
+                                                                                "borderWidth": 2,
+                                                                                "yAxisID": "A"
+                                                                            },
+                                                                            {
+                                                                                "type": "line",
+                                                                                "label": "Sales",
+                                                                                "data": data.total_sales,
+                                                                                "backgroundColor": "rgba(0, 200, 0, 0.2)",
+                                                                                "borderColor": "rgba(0, 200, 0, 0.7)",
+                                                                                "fill": true,
+                                                                                "spanGaps": true,
+                                                                                "borderWidth": 1,
+                                                                                "yAxisID": "B"
+                                                                            },
+                                                                            {
+                                                                                "type": "line",
+                                                                                "label": "Sales Ave.",
+                                                                                "data": data.bill_average,
+                                                                                "backgroundColor": "rgba(200, 0, 0, 0.2)",
+                                                                                "borderColor": "rgba(200, 0, 0, 0.7)",
+                                                                                "fill": false,
+                                                                                "spanGaps": true,
+                                                                                "borderWidth": 2,
+                                                                                "yAxisID": "B"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "options": {
+                                                                        "maintainAspectRatio": false,
+                                                                        "responsive": true,
+                                                                        "title": {
+                                                                            "display": true,
+                                                                            "text": title
+                                                                        },
+                                                                        "tooltips": {
+                                                                          "mode": "label"
+                                                                        },
+                                                                        "scales": {
+                                                                            "yAxes": [
+                                                                                {
+                                                                                    "id": "A",
+                                                                                    "type": "linear",
+                                                                                    "display": true,
+                                                                                    "position": "left",
+                                                                                    "gridLines": {
+                                                                                        "display": false
+                                                                                    },
+                                                                                    "ticks": {
+                                                                                        "beginAtZero": true
+                                                                                    },
+                                                                                    "labels": {
+                                                                                        "show": true,
+                                                                                    },
+                                                                                    "scaleLabel": {
+                                                                                        "display": true,
+                                                                                        "labelString": "Bills"
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "id": "B",
+                                                                                    "type": "linear",
+                                                                                    "display": true,
+                                                                                    "position": "right",
+                                                                                    "gridLines": {
+                                                                                        "display": false
+                                                                                    },
+                                                                                    "ticks": {
+                                                                                        "beginAtZero": true
+                                                                                    },
+                                                                                    "labels": {
+                                                                                        "show": true,
+                                                                                    },
+                                                                                    "scaleLabel": {
+                                                                                        "display": true,
+                                                                                        "labelString": "Sales"
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                };
+                                                                break;
+
+
+                                                            // *** Handle Preperation Time Report ***
+                                                            case "prep-time":
+                                                                if (!response.data || !response.data.length) {
+                                                                    report = null;
+                                                                    break;
+                                                                }
+
+                                                                var title = "Preperation Time",
+                                                                    ds = [],
+                                                                    data = response.data,
+                                                                    labels = !!data[0] ? data[0].dates : [0],
+                                                                    item = null,
+                                                                    i = 0;
+
+                                                                if (filter.length > 0) {
+                                                                    title += " for " + filter.join(" - ");
+                                                                }
+
+                                                                title += " as of "
+                                                                      + moment(ReportOptionModal.Get("date_from").val()).format(date_format) + " to "
+                                                                      + moment(ReportOptionModal.Get("date_to").val()).format(date_format);
+
+                                                                for (; item = data[i++];) {
+                                                                    var rgb = RandomRGB().join(",");
+                                                                    ds.push({
+                                                                        "label": item.item_name,
+                                                                        "data": item.values,
+                                                                        "backgroundColor": "rgba(" + rgb + ", 0.2)",
+                                                                        "borderColor": "rgba(" + rgb + ", 0.7)",
+                                                                        "spanGaps": true,
+                                                                        "borderWidth": 1
+                                                                    });
+                                                                }
+                                                                report = {
+                                                                    "type": config.report_type,
+                                                                    "data": {
+                                                                        "labels": labels,
+                                                                        "datasets": ds
+                                                                    },
+                                                                    "options": {
+                                                                        "maintainAspectRatio": false,
+                                                                        "responsive": true,
+                                                                        "title": {
+                                                                            "display": true,
+                                                                            "text": title
+                                                                        },
+                                                                        "tooltip": {
+                                                                          "mode": "label"
+                                                                        },
+                                                                        "scales": {
+                                                                          "yAxes": [{
+                                                                              "ticks": {
+                                                                                  "beginAtZero": true
+                                                                              },
+                                                                              "scaleLabel": {
+                                                                                  "display": true,
+                                                                                  "labelString": "minutes"
+                                                                              }
+                                                                          }]
+                                                                        }
+                                                                    }
+                                                                };
+                                                                break;
+
+
+                                                            default:
+                                                                report = {"error":1};
+                                                                break;
+                                                        }
+                                                    } else {
+                                                        report = {"error":1};
+                                                    }
+
+                                                    if (callback instanceof Function) {
+                                                        callback(report);
+                                                    }
+                                                }
+                                            });
+                                        };
+                                    return {
+                                        "Create": function(config){
+                                            fetch(config, function(report){
+                                                if ("error" in report) {
+                                                    alert("No record found.");
+                                                    return;
+                                                }
+
+                                                var id = GenerateID(),
+                                                    parent = $content.get(0),
+                                                    container = create_container(id, config.report, parent);
+                                                ReportList[id] = new Chart($(container).find("canvas").get(0), report);
+                                            });
+                                        },
+                                        "Update": function(config){
+                                            var id = config.id;
+                                            ReportList[id].clear().destroy();
+                                            fetch(config, function(report){
+                                                ReportList[id] = new Chart($("#" + id).find("canvas").get(0), report);
+                                            });
+                                        }
+                                    }
+                                })(),
+
+                                TableReport = (function(){
+                                    var create_container = function(id, type){
+                                            var wrapper = doc.createElement("div"),
+
+                                                action = doc.createElement("div"),
+                                                btn_settings = doc.createElement("a"),
+                                                btn_close = doc.createElement("button"),
+
+                                                container = doc.createElement("div"),
+                                                table = doc.createElement("table");
+
+                                            $(btn_settings)
+                                                .attr("href", "#")
+                                                .attr("data-report-settings", "")
+                                                .append("<i class='fa fa-cog fa-fw'></i>")
+                                                .hide();
+
+                                            $(btn_close)
+                                                .html("&times;")
+                                                .addClass("close")
+                                                .attr("type", "button")
+                                                .attr("data-report-remove", "");
+
+                                            $(action)
+                                                .addClass("action")
+                                                .append(btn_settings)
+                                                .append(btn_close);
+
+                                            $(table)
+                                                .addClass("table")
+                                                .append("<thead></thead>")
+                                                .append("<tbody></tbody>")
+
+                                            $(container)
+                                                .attr("data-report-type", type)
+                                                .addClass("report-container")
+                                                .append(action)
+                                                .append(table);
+
+                                            $(wrapper)
+                                                .attr("id", id)
+                                                .addClass("report-wrapper")
+                                                .append(action)
+                                                .append(container);
+
+                                            return container;
+
+                                        },
+                                        fetch = function(config, callback){
+                                            var urls = {
+                                                    "item-table": "/apiFunction/"
+                                                };
+                                            $.ajax({
+                                                "url": urls[config.report],
+                                                "data": config.param,
+                                                "method": "GET",
+                                                "beforeSend": function(xhr){
+                                                    if (xhr.overrideMimeType) {
+                                                        xhr.overrideMimeType("application/json");
+                                                    }
+                                                },
+                                                "success": function(response){
+                                                    var report = {};
+                                                    if (response.status === "OK") {
+
+                                                        if (!response.data || !response.data.length) {
+                                                            if (callback instanceof Function) {
+                                                                callback({"error":1});
+                                                            }
+                                                            return;
+                                                        }
+
+                                                        var sales_col = config.param.group_by.substr(0, 1).toUpperCase() +
+                                                                        config.param.group_by.substr(1),
+                                                            filter = [],
+                                                            date_format = "MM/DD/YYYY";
+
+                                                        if (filter.length > 0) {
+                                                            title += " for " + filter.join(" - ");
+                                                        }
+
+                                                        title += " as of "
+                                                              + moment(ReportOptionModal.Get("date_from").val()).format(date_format) + " to "
+                                                              + moment(ReportOptionModal.Get("date_to").val()).format(date_format);
+
+                                                        if (config.param.category) {
+                                                            var tmp = [],
+                                                                selected_cat = ReportOptionModal.Get("category").getSelection(),
+                                                                cat = null,
+                                                                i = 0;
+                                                            for (; cat = selected_cat[i ++];) {
+                                                                tmp.push(cat.name);
+                                                            }
+                                                            filter.push("Categories: " + tmp.join(","));
+                                                        } else {
+                                                            filter.push("Categories: All");
+                                                        }
+
+                                                        if (config.param.kitchen_loc) {
+                                                            var tmp = [],
+                                                                selected_kitchen = ReportOptionModal.Get("kitchen_loc").getSelection(),
+                                                                kitchen = null,
+                                                                i = 0;
+                                                            for (; kitchen = selected_kitchen[i ++];) {
+                                                                tmp.push(kitchen.name);
+                                                            }
+                                                            filter.push("Kitchen: " + tmp.join(","));
+                                                        } else {
+                                                            filter.push("Kitchen: All");
+                                                        }
+
+                                                        if (config.param.items) {
+                                                            var tmp = [],
+                                                                selected_item = ReportOptionModal.Get("item").getSelection(),
+                                                                item = null,
+                                                                i = 0;
+                                                            for (; item = selected_item[i ++];) {
+                                                                tmp.push(item.name);
+                                                            }
+                                                            filter.push("Item: " + tmp.join(","));
+                                                        } else {
+                                                            filter.push("Item: All");
+                                                        }
+
+                                                        switch (config.report) {
+                                                            case "item-table":
+                                                                var title = "Item Sales";
+                                                                if (filter.length) {
+
+                                                                }
+                                                                report = {
+                                                                    "title": title,
+                                                                    //"cols": ["Item", "Category", "Unit Price", "Qty. Sold", "Date/Time", sales_col + " Sales"],
+                                                                    "cols": ["Item", "Category", "Qty. Sold", "Total Sales"],
+                                                                    "rows": response.data
+                                                                };
+                                                                break;
+                                                            default:
+                                                                report = {"error": 1};
+                                                        }
+                                                    } else {
+                                                        report = {"error": 1};
+                                                    }
+                                                    if (callback instanceof Function) {
+                                                        callback(report);
+                                                    }
+                                                }
+                                            });
+                                        };
+                                    return {
+                                        "Create": function(config){
+                                            fetch(config, function(report){
+                                                if ("error" in report) {
+                                                    alert("No record found.");
+                                                    return;
+                                                }
+
+                                                var id = GenerateID(),
+                                                    container = create_container(id, config.report),
+                                                    $table = $(container).find("table"),
+                                                    $thead = $table.find("thead:eq(0)"),
+                                                    $tbody = $table.find("tbody:eq(0)");
+
+                                                $thead
+                                                    .append("<tr><th colspan='" + report.cols.length + "' data-sort='none'>" + report.title + "</th></tr>")
+                                                    .append("<tr><th>" + report.cols.join("</th><th>") + "</th></tr>");
+
+                                                var rows = report.rows,
+                                                    row = null,
+                                                    r = 0;
+                                                for (; row = rows[r ++];) {
+                                                    row = row.slice(2);
+                                                    $tbody.append("<tr><td>" + row.join("</td><td>") + "</td></tr>");
+                                                }
+
+                                                ReportList[id] = null;
+                                                $content.append(container.parentNode);
+                                                $table.dataTable({
+                                                    "paging": false,
+                                                    "searching": false,
+                                                    "info": false
+                                                });
+                                            });
+                                        },
+                                        "Update": function(config){
+                                            fetch(config, function(report){
+                                                var df = $(doc.createDocumentFragment()),
+                                                    rows = report.rows;
+                                                    row = null;
+                                                    r = 0;
+                                                for (; row = rows[r ++];) {
+                                                    $df.append("<tr><td>" + row.join("</td><td>") + "</td></tr>");
+                                                }
+
+                                                $("#" + config.id + " table tbody:eq(0)").html("").append($df);
+                                            });
+                                        }
+                                    };
+                                })();
+
+                            $(".sidebar").get(0).onclick = function(e){
+                                (e.stopPropagation) ? e.stopPropagation() : (e.cancelBubble=true);
+                                var target = e.target || e.srcElement;
+                                switch (target.tagName.toLowerCase()) {
+                                    case "i":
+                                        target = target.parentNode;
+                                    case "div":
+                                        if (target.hasAttribute("data-report")) {
+                                            switch (target.getAttribute("data-report")) {
+                                                case "item-sales":
+                                                    ReportOptionModal.Show("item-sales", {"ongenerate": function(config){
+                                                        GraphReport.Create({
+                                                            "report": "item-sales",
+                                                            "report_type": config.report_type,
+                                                            "param": {
+                                                                "method":"get_sales_chart",
+                                                                "date_from": config.date_from,
+                                                                "date_to": config.date_to,
+                                                                "time_frame": config.group_by,
+                                                                "group_by": config.group_by,
+                                                                "kitchen_loc": config.kitchen_loc.join(","),
+                                                                "category": config.category.join(","),
+                                                                "items": config.items.join(",")
+                                                            }
+                                                        });
+                                                    }});
+                                                    break;
+                                                case "cust-bills":
+                                                    ReportOptionModal.Show("cust-bills", {"ongenerate": function(config){
+                                                        GraphReport.Create({
+                                                            "report": "cust-bills",
+                                                            "report_type": "bar",
+                                                            "param": {
+                                                                "method":"get_bill_chart",
+                                                                "date_from": config.date_from,
+                                                                "date_to": config.date_to,
+                                                                "time_frame": config.group_by,
+                                                                "group_by": config.group_by
+                                                            }
+                                                        });
+                                                    }});
+                                                    break;
+                                                case "prep-time":
+                                                    ReportOptionModal.Show("prep-time", {"ongenerate": function(config){
+                                                        GraphReport.Create({
+                                                            "report": "prep-time",
+                                                            "report_type": config.report_type,
+                                                            "param": {
+                                                                "method":"get_kpi_chart",
+                                                                "date_from": config.date_from,
+                                                                "date_to": config.date_to,
+                                                                "time_frame": config.group_by,
+                                                                "group_by": config.group_by,
+                                                                "kitchen_loc": config.kitchen_loc.join(","),
+                                                                "category": config.category.join(","),
+                                                                "items": config.items.join(",")
+                                                            }
+                                                        });
+                                                    }});
+                                                    break;
+                                                case "item-table":
+                                                    ReportOptionModal.Show("item-table", {"ongenerate": function(config){
+                                                        TableReport.Create({
+                                                            "report": "item-table",
+                                                            "param": {
+                                                                "method":"get_sales_table",
+                                                                "date_from": config.date_from,
+                                                                "date_to": config.date_to,
+                                                                "time_frame": config.group_by,
+                                                                "group_by": config.group_by,
+                                                                "kitchen_loc": config.kitchen_loc.join(","),
+                                                                "category": config.category.join(","),
+                                                                "items": config.items.join(",")
+                                                            }
+                                                        });
+                                                    }});
+                                                    break;
+                                                default:
+                                                    return;
+                                            }
+                                        }
+                                        break;
+                                }
+                            };
+
+                            $content.height($content.get(0).offsetHeight);
+                            $content.get(0).onclick = function(e){
+                                (e.stopPropagation) ? e.stopPropagation() : (e.cancelBubble = true);
+                                var target = e.target || e.srcElement;
+                                switch (target.tagName.toLowerCase()) {
+                                    case "button": //delete
+                                        if (target.hasAttribute("data-report-remove")) {
+
+                                            var $wrapper = $(target).closest(".report-wrapper");
+                                            $wrapper.hide("fast", function(){
+                                                delete ReportList[$wrapper.attr("id")];
+                                                $wrapper.remove();
+                                            });
+
+                                            /*
+                                            if (confirm("Are you sure you want to remove this report?")) {
+                                                var $wrapper = $(target).closest(".report-wrapper");
+                                                $wrapper.hide("fast", function(){
+                                                    delete ReportList[$wrapper.attr("id")];
+                                                    $wrapper.remove();
+                                                });
+                                            }
+                                            */
+                                        }
+                                        break;
+
+                                    /* *** below code reserve for "Report Update" ***
+                                    case "i":
+                                        target = target.parentNode;
+                                    case "a":
+                                        if (target.hasAttribute("data-report-settings")) {
+
+                                        }
+                                        break;
+                                    */
+                                }
+                            };
+                        },
+                        "error": function(x,y,z){
+                            console.log(JSON.stringify(x));
+                            console.log(y);
+                            console.log(z);
+                        }
+                    });
+                });
+            })(window, document);
+            $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
+        </script>
+    </body>
+</html>

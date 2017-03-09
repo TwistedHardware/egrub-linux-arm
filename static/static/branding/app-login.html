@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/branding/theme-editor-style.css">
+        <link rel="stylesheet" type="text/css" href="/static/assets/fa/css/font-awesome.min.css" media="all"/>
+        <link rel="stylesheet" type="text/css" href="/static/assets/bootstrap/3.3.7/css/bootstrap.css" media="all"/>
+    </head>
+    <body id="login_body" class="background-login" style="margin:0px; padding:0px; overflow-y: hidden;">
+        <div class="overlay-login"></div>
+        <div id="page_effect" style="margin:0px; padding:0px; display: none;">
+
+            <div style="margin:0px; position: relative;">
+
+                <!-- Login logo -->
+                <div class="text-center" style="margin-top: 25%; position: relative;">
+                    <img id="logo" src="/media/images/branding/ic_logo_login.png" width="200px" />
+                </div>
+
+                <!-- Username -->
+                <div style="margin-top: 15px; margin-left: 10%;">
+
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-stack-2x"></i>
+                        <i class="fa fa-user title-text" style="font-size: 2em; padding-left: 10px;"></i>
+                    </span>
+
+                    <span style="font-size: 24px;">
+                        &nbsp
+                    </span>
+
+                    <span class="title-text login-field" style="font-size: 38px; vertical-align: bottom; display: inline-block; width: 75%;">
+                        Username
+                    </span>
+
+                </div>
+
+                <!-- Password -->
+                <div style="margin-top: 15px; margin-left: 10%;">
+
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-stack-2x"></i>
+                        <i class="fa fa-key title-text" style="font-size: 2em; padding-left: 10px;"></i>
+                    </span>
+
+                    <span style="font-size: 24px;">
+                        &nbsp
+                    </span>
+
+                    <span class="title-text login-field" style="font-size: 38px; vertical-align: bottom; display: inline-block; width: 75%;">
+                        Password
+                    </span>
+
+                </div>
+
+                <!-- Login button -->
+                <div style="margin-top: 15px; margin-left: 10%; margin-right: 10%;">
+
+                    <a class="btn btn-login theme-color btn-lg btn-block" href="app.html">LOGIN</a>
+
+                </div>
+
+            </div>
+
+        </div>
+        <script src="/static/assets/js/jquery.min.js"></script>
+        <script src="/static/js/branding/xml.js"></script>
+        <script src="/static/js/branding/theme.js"></script>
+    </body>
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+
+            apply_theme(document);
+
+            $('#page_effect').fadeIn(800);
+
+        });
+
+    </script>
+</html>

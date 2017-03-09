@@ -1,0 +1,237 @@
+<html>
+  <link rel="stylesheet" href="/static/css/branding/normalize.css">
+  <link rel="stylesheet" href="/static/css/branding/theme-editor-style.css">
+  <body>
+      <!--The Main Thing-->
+      <div id="wrapper">
+          <div class="phone view_2" id="phone_1">
+              <!-- <div id="loader">Loading...</div> -->
+              <iframe src="/static/branding/app-login.html" id="frame_1"></iframe>
+          </div>
+      </div>
+
+      <!--Controls etc.-->
+      <form id="form-controls" method="POST">
+          <div id="controls">
+              <!--Idea by /u/aerosole-->
+              <div id="divPerspective" style="display: none;">
+                  <label for="iframePerspective">Add perspective:</label>
+                  <input type="checkbox" id="iframePerspective"  checked="true" />
+              </div>
+
+              <div id="divCollapse">
+                  <input type="button" id="btnHide" value="Hide Controls" onclick="showControls(false);" style="width: 140px;" />
+                  <input type="button" id="btnShow" value="Show Controls" onclick="showControls();" style="width: 140px; display: none;" />
+              </div>
+
+              <div>
+                  <label for="theme">Theme:</label>
+                  <input type="color" id="theme" name="color" value="#ce0e00" class="element" />
+              </div>
+
+              <div>
+                  <label for="item_label">Item Label:</label>
+                  <input type="color" id="item_label" name="label" value="#ce0e00" class="element" />
+              </div>
+
+              <div>
+                  <label for="logo">Logo:</label>
+                  <span style="position: relative;">
+                      <input type="file" id="logo" name="logo" style="text-align: right; opacity: 0; z-index: 2;"/>
+                      <input type="button" value="Choose your logo" class="element" onclick="document.getElementById('logo').click();" style="position: absolute; top: 0px; left: 0px; z-index: 1;" />
+                  </span>
+              </div>
+
+              <div>
+                  <label for="logo_reverse">Logo (reverse):</label>
+                  <span style="position: relative;">
+                      <input type="file" id="logo_reverse" name="logo_reverse" style="text-align: right; opacity: 0; z-index: 2;"/>
+                      <input type="button" value="Choose your logo" class="element" onclick="document.getElementById('logo_reverse').click();" style="position: absolute; top: 0px; left: 0px; z-index: 1;" />
+                  </span>
+              </div>
+
+              <div>
+                  <label for="login_background">Login (background):</label>
+                  <span style="position: relative;">
+                      <input type="file" id="login_background" name="login_background" style="text-align: right; opacity: 0; z-index: 2;"/>
+                      <input type="button" value="Choose your background" class="element" onclick="document.getElementById('login_background').click();" style="position: absolute; top: 0px; left: 0px; z-index: 1;" />
+                  </span>
+              </div>
+
+              <div>
+                  <label for="app_title">App Title:</label>
+                  <input type="text" id="app_title" name="app_title" placeholder="Title" class="element" />
+              </div>
+
+              <div>
+                  <button type="button" onclick="save();">Save</button> <button>Cancel</button>
+              </div>
+
+          </div>
+      </form>
+
+      <div id="phone-controls">
+
+          <div id="views">
+            <button id="view-1" value="1">Table View</button>
+            <button id="view-2" value="2">Front View</button>
+          </div>
+
+          <div id="phones">
+
+          </div>
+
+      </div>
+  </body>
+  <script src="/static/assets/js/jquery.min.js"></script>
+  <script src="/static/js/branding/index.js"></script>
+  <script src="/static/js/branding/theme.js"></script>
+  <script src="/static/js/branding/xml.js"></script>
+
+  <script type="text/javascript">
+
+      // onload
+
+      var phones = get_phones();
+
+      createPhones(phones);
+
+      updateIframe();
+
+      theme = get_theme();
+
+      document.getElementById('theme').value = theme[0].color;
+      document.getElementById('item_label').value = theme[0].label;
+      document.getElementById("app_title").value = theme[0].app_title;
+
+      showControls(false, 0);
+
+      // events
+
+      document.getElementById("frame_1").addEventListener("load", function(evt) {
+
+          var doc = document.getElementById('frame_1').contentWindow.document;
+
+          color = document.getElementById("theme").value;
+          theme_change(color, doc);
+
+          color = document.getElementById("item_label").value;
+          item_label_change(color, doc);
+
+          var input = document.getElementById("logo");
+          var img   = doc.getElementById('logo');
+          logo_change(input, img);
+
+          var input = document.getElementById("logo_reverse");
+          var img   = doc.getElementById('logo_reverse');
+          logo_change(input, img);
+
+          var input = document.getElementById("logo_reverse");
+          var img   = doc.getElementById('logo_reverse');
+          logo_change(input, img);
+
+          var input = document.getElementById("login_background");
+          var obj   = doc.getElementById('login_body');
+          login_background_change(input, obj);
+
+          var obj   = doc.getElementById('app_title');
+          var value = document.getElementById("app_title").value;
+          app_title_change(obj, value);
+      });
+
+      document.getElementById("theme").addEventListener("change", function(evt) {
+
+          var color = evt.target.value;
+          var doc = document.getElementById('frame_1').contentWindow.document;
+
+          theme_change(color, doc);
+      });
+
+      document.getElementById("item_label").addEventListener("change", function(evt) {
+
+          var color = evt.target.value;
+          var doc = document.getElementById('frame_1').contentWindow.document;
+
+          item_label_change(color, doc);
+      });
+
+      document.getElementById("logo").addEventListener("change", function(evt) {
+
+          var input = evt.target;
+          var doc = document.getElementById('frame_1').contentWindow.document;
+
+          var img = doc.getElementById('logo');
+
+          logo_change(input, img);
+      });
+
+      document.getElementById("logo_reverse").addEventListener("change", function(evt) {
+
+          var input = evt.target;
+          var doc = document.getElementById('frame_1').contentWindow.document;
+
+          var img = doc.getElementById('logo_reverse');
+
+          logo_change(input, img);
+      });
+
+      document.getElementById("login_background").addEventListener("change", function(evt) {
+
+          var doc  = document.getElementById('frame_1').contentWindow.document;
+          var obj  = doc.getElementById('login_body');
+
+          input = evt.target;
+
+          login_background_change(input, obj);
+      });
+
+      document.getElementById("app_title").addEventListener("keyup", function(evt) {
+
+          var doc  = document.getElementById('frame_1').contentWindow.document;
+          var obj  = doc.getElementById('app_title');
+
+          value = evt.target.value;
+          app_title_change(obj, value);
+      });
+
+      // functions
+
+      function showControls(val = true, duration = 700) {
+
+          var controls = document.getElementById("controls");
+          var divs     = controls.getElementsByTagName('div');
+
+          n = divs.length;
+          for(var i = 0; i < n; i++) {
+              if(divs[i].id == '') {
+                  if(val) {
+                      $(divs[i]).fadeIn(duration);
+                  }
+                  else {
+                      $(divs[i]).fadeOut(duration);
+                  }
+              }
+          }
+
+          if(val) {
+              document.getElementById('btnHide').style.display = 'block';
+              document.getElementById('btnShow').style.display = 'none';
+          }
+          else {
+              document.getElementById('btnHide').style.display = 'none';
+              document.getElementById('btnShow').style.display = 'block';
+          }
+      }
+
+      function save() {
+
+          var frm = $('#form-controls');
+
+          frm.attr('action', '/apiFunction/?method=save_theme');
+          frm.attr('enctype', 'multipart/form-data');
+
+          frm.submit();
+      }
+
+  </script>
+</html>

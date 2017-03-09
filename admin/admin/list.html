@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>eGrub - {{.Schema.Name}}
+    </title>
+    <link rel="shortcut icon" href="/static/favicon.ico"/>
+
+    <link rel="stylesheet" href="/static/assets/bootstrap/3.3.7/css/bootstrap.css" >
+    <link rel="stylesheet" href="/static/assets/fa/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="/static/assets/bootstrap/3.3.7/css/bootstrap-theme.css" >
+    <link rel="stylesheet" href="/static/assets/datepicker/css/bootstrap-datetimepicker.css">
+    <!-- <link rel="stylesheet" href="/static/assets/chosen/docsupport/style.css"> -->
+    <!-- <link rel="stylesheet" href="/static/assets/chosen/docsupport/prism.css"> -->
+    <link rel="stylesheet" href="/static/assets/chosen/chosen.css">
+    <link rel="stylesheet" href="/static/assets/admin/main.css">
+    <link rel="stylesheet" href="/static/assets/css/hover.css">
+    <style type="text/css" media="all">
+      /* fix rtl for demo */
+      .chosen-rtl .chosen-drop { left: -9000px; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  </head>
+  <body>
+    <script src="/static/assets/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/static/assets/js/tether.min.js" ></script>
+    <script src="/static/assets/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+    <script src="/static/assets/moment.js"></script>
+    <script src="/static/assets/datepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script src="/static/assets/admin/main.js"></script>
+    <script src="/static/assets/js/wow.js"></script>
+    <script src="/static/assets/js/floatHead.min.js"></script>
+    <script src="/static/assets/js/staticdata.js"></script>
+
+
+
+    <div class="top-space col-sm-12">
+    </div>
+    <div class="fixed-top bg-black3 default-padding z-index9">
+      <div class="">
+        <div class="pull-right" style="display: block-inline;">
+          <div class="admin-button ">
+            <a href="/settings/" style="margin-left:20px;" class="fontgray pointer">
+              <i class="top-panel fa fa-wrench pointer" data-toggle="tooltip" data-placement="bottom" title="Settings"></i>&nbsp;
+            </a>
+            <!-- <span class="v-center fontgray tab-custom admin_font capitalized camelcaseFix">
+                {{.Schema.Name}}
+            </span> -->
+            <span  style="margin-left:20px;" class="fontgray pointer hidden-xs" onclick="closetopTabs(this);" data-trigger="admin-toggle" >
+              <i class="top-panel fa fa-th pointer"></i>
+            </span>
+            <div style="" id="headtab-container" class="toptabs admin-toggle-size dropdown-menu admin-toggle admin-toggle-padding pull-right">
+
+            </div>
+            <button  class="searchDark capitalized admin_font fontwhite v-center pointer btn btn-primary"
+            style="margin-left:20px;" onclick="closetopTabs(this);" data-trigger="user-toggle">
+              <i class="top-panel fa fa-user fa-fw"></i>
+            </button>
+            <div style="right:5px;" class="z-index9 toptabs admin-toggle-size dropdown-menu user-toggle  pull-right">
+              <center>
+                <p></p>
+                <table class="table table-hover drop-table">
+                  {{if .UserExists}}
+                    <tr class="pointer"><td onclick="clickA(this);" >
+                      <a class="no-style" href="/admin/profile/{{.ID}}">
+                        <i class="fa fa-user-circle-o fa-fw"></i>
+                          &nbsp;{{.User}}
+                      </a>
+                    </td></tr>
+                  {{end}}
+                  <tr class="pointer"><td onclick="clickA(this);" ><a  class="no-style" href="/admin/profile/{{.ID}}#changepass"><i class="fa fa-lock fa-fw"></i> Change Password</a></td></tr>
+                  <tr class="pointer"><td onclick="clickA(this);" ><a class="no-style" href="/admin/logout/"><i class="fa fa-sign-out fa-fw"></i> Logout</a></td></tr>
+                </table>
+              </center>
+            </div>
+          </div>
+        </div>
+        <div class="pull-left" style="display: block-inline;">
+          <a href="/admin/">
+            <img class="hvr-grow" src="/static/logo.png">
+          </a>
+          <span class="admin_font fontwhite capitalized vertical-center hidden-xs" >
+            <a id="" href="/admin/" class="no-style breadcrumb-item fontwhite" >
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ><i class="fa fa-home"></i> Dashboard </span>
+            </a>&nbsp;&nbsp;<span class="bread-dash">/</span>&nbsp;&nbsp;
+            <span id="Current_Position" class="no-style breadcrumb-item active camelcaseFix">{{.Schema.Name}}</span>
+           </span>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid main-content">
+
+      <div class="col-sm-12 justify-content-md-center">
+            <div class="col-xs-6" style="padding:0px;">
+              <div class="input-group search " style="float:left;">
+                <input type="text" class="form-control camelcaseFixPlaceHolder"
+                id="search" placeholder="{{.Schema.Name}}">
+                <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+              </div>
+            </div>
+            <div class="col-xs-6" style="padding:0px;">
+              {{$isSchema := .Schema.Name}}
+
+              {{ if eq .Schema.Name "Layout" }}
+                <a class="btn btn-primary search pull-right" href="/static/layout/">
+                  <i class="fa fa-plus"></i> Add New {{.Schema.Name}}
+                </a>
+              {{ else }}
+                <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-primary search pull-right" href="/admin/{{.Schema.ModelName}}/new">
+                  <i class="fa fa-plus"></i> Add New <span class="camelcaseFix">{{.Schema.Name}}</span>
+                </a>
+                <a class="hidden-xs btn btn-primary search pull-right" href="/admin/{{.Schema.ModelName}}/new">
+                  <i class="fa fa-plus"></i> Add New <span class="camelcaseFix">{{.Schema.Name}}</span>
+                </a>
+              {{ end }}
+            </div>
+
+          <br>
+          <br>
+          <br>
+        <table id="listtable" class="table table-striped  table-bordered  table-hover table-condensed float-header">
+          <thead class="admin_font">
+            <tr class="table-header capitalized">
+              <th class="checkbox-container">
+                <input id="main_check" class="" type="checkbox">&nbsp;&nbsp;
+              </th>
+              {{range .Schema.Columns}}
+              <!-- <th class="trigger_desc pointer"><a href="?o={{.}}&p=" class="camelcaseFix">{{.}}</a><i class="fa fa-sort-desc pull-right">&nbsp;&nbsp;</i></th> -->
+              <th class="trigger_desc pointer"><a href="?o={{.}}" class="camelcaseFix">{{.}}</a>
+                <span class="fa-stack fa-fw pull-right">
+                  <i class="fontdarkgray fa fa-sort-asc fa-stack-1x"></i>
+                  <i class="fontdarkgray fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+              </th>
+              {{end}}
+            </tr>
+          </thead>
+          <tbody>
+            {{$name := .Schema.LUrl}}
+            {{range .Schema.Rows}}
+              <tr>
+                <td onclick="$('#main_check').prop('checked', false);">
+                  <input  class="item_check" type="checkbox">
+                </td>
+                {{ range $index, $value := . }}
+                  {{if .IsFkeyRel }}{{else}}
+
+
+                    {{if .IsBool}}
+                      <td>
+                        {{if .Value}}
+                          <i class="fa fa-check-circle" aria-hidden="true" style="color:green;"></i>
+                        {{else}}
+                        <i class="fa fa-times-circle" aria-hidden="true" style="color:red;"></i>
+                      </td>
+                      {{end}}
+                    {{else if .IsString}}
+                      <td>
+                        {{.Value}}
+                      </td>
+                    {{else if .IsNumber}}
+                      <td>
+                        {{.Value}}
+                      </td>
+                    {{else if .IsDate}}
+                      <td>
+                        {{.Value}}
+                      </td>
+                    {{else if .IsID}}
+                      <td class="search pointer Row_id" data-id="{{.ID}}" onclick="$(this).find('a')[0].click();">
+                        <a  class="ID bold no-style"
+                        href="
+                        {{if eq $isSchema "Layout"}}
+                        /admin/svg/{{.ID}}
+                        {{else}}
+                        /admin/{{$name}}/{{.ID}}
+                        {{end}}
+                        "
+                        >{{.Value}}</a>
+                      </td>
+                    {{else if .IsList}}
+                      <td class="camelcaseFix">
+                        {{.Value}}
+                      </td>
+                    {{else if .IsFKey}}
+                      <td class="search pointer" onclick="$(this).find('a')[0].click();">
+                        <a class="bold no-style" href="/admin/{{.FUrl}}">{{.Value}}</a>
+                      </td>
+                    {{else if .IsMultiLingual}}
+                      <td class="">
+                        {{.Value}}
+                      </td>
+                    {{else if .IsImage}}
+                        <td class="">
+                          <img class="hvr-grow pointer image_trigger" style="max-width: 50px; height: auto;" src="{{.Value}}" />
+                        </td>
+                    {{else}}
+                      <td>
+                        <span class="other">{{.Value}}</span>
+                      </td>
+                    {{end}}
+                  {{end}} <!-- End of Else  -->
+                {{end}} <!-- End of Index Range  -->
+              </tr>
+            {{end}} <!-- End of Rows Range  -->
+          </tbody>
+        </table>
+
+        <div class="fixed-bottom bg-footer default-padding z-index9 admin_font bold">
+          <button onclick="BuildDeleteList('item_check')" class="hidden-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
+          <button onclick="BuildDeleteList('item_check')" class="hidden-sm hidden-md hidden-lg btn-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
+          <!-- <div class=""> -->
+            <ul id="pagination_container" class="pagination pagination-sm" style="float:right;margin:0px;">
+
+            </ul>
+          <!-- </div> -->
+        </div>
+        <div class="bottom-space col-sm-12">
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade z-index99999" role="dialog" style="width:100%;">
+      <div class="modal-dialog" style="width:70%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div>
+          <div class="modal-body">
+            <!-- <p>Some text in the modal.</p> -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="Deletemodal" class="modal fade z-index99999" role="dialog" style="width:100%;">
+      <div class="modal-dialog" style="width:70%;">
+        <!-- Modal content-->
+        <br>
+        <br>
+        <div class="modal-content">
+          <form method="POST" action="">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title bold capitalized"><i class="fa fa-trash"></i>&nbsp;Confirm Delete</h4>
+          </div>
+          <div class="modal-body">
+            <h4>
+              <center>
+              Are you sure you want to delete the selected <span class="camelcaseFix" style="text-transform:lowercase;">{{.Schema.Name}}</span>/s?
+            </center>
+          </h4>
+          <center>
+            <div style="max-height:600px;overflow-y:auto;" class="admin_font capitalized bold" id="list_container_listID"></div>
+          </center>
+            <input id="listID" type="hidden" name="listID">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" value="delete" name="delete" class="btn btn-primary" >Confirm Delete</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {{if .IsUpdated}}
+      <div class="fixed_bottom_right alert alert-info z-index99999">
+        <strong>Info:</strong>&nbsp;&nbsp;Changes Successfully Applied to <span class="camelcaseFix">{{.Schema.Name}}</span>
+      </div>
+    {{end}}
+
+    <!-- Conflict in jquery -->
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script> -->
+    <!-- Conflict in jquery -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+    <script src="/static/assets/chosen/chosen.jquery.js"></script>
+    <script src="/static/assets/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <script type="text/javascript">
+      var pages = "{{.Pagination}}";
+      var schemaname = "{{.Schema.Name}}";
+    paginator('pagination_container', pages, schemaname);
+
+    // console.log(pages);
+    setHeaderTabs(arrayVariableHeader, '#headtab-container', 'col-sm-4');
+
+    //var href_ = '/admin/'+ $('#camelcaseFixHref').attr('href').toLowerCase()+'/new';
+    //$('#camelcaseFixHref').attr('href', href_);
+
+
+
+    fixcamelcase_pagination('camelcasefixPagination');
+    //FOR CLICK
+    $('.trigger_desc').click(function(){
+      $(this).find('a')[0].click();
+    });
+
+    var search_ = window.location.search;
+    // console.log(search_.search('o=-'));
+
+    function getPValue(){
+    if (search_.search("p=") >= 0){
+      var a = 0;
+      a = search_.split("p=")[1];
+      // console.log(a);
+      return a;
+    }
+  }
+
+  $('.image_trigger').click(function(){
+    var a = $(this).attr('src');
+    var header = $(this).parent().parent().find('td').find('a.ID');
+    console.log(header);
+    var content = "";
+    content += '<img src="'+a+'" style="max-width:100%;"/>';
+    $('.modal-body').html(content);
+    $('.modal-title').text(header.text());
+    $('#myModal').modal('show');
+
+  });
+
+//SET TABLE ORDER
+    if (search_.search("o=-") >= 0){
+      $('a.camelcaseFix').each(function(index){
+        var content_y = "";
+        var y = $(this).closest('th').find('span');
+        if ($(this).text().search(":ID") >= 0){
+          var c = tableOrder($(this), 'ID');
+          var x = c.replace('o=','o=-');
+          $(this).attr("href", c);
+          if (x == search_){
+            $(this).attr("href", fixcamelcase_($(this)));
+            content_y = descOrg;
+          }else{
+            content_y = defaultOrg;
+          }
+        }else{
+          if ($(this).text().search(":_id") >= 0){
+            var c = tableOrder($(this), 'fKey');
+            var x = c.replace('o=','o=-');
+            $(this).attr("href", c);
+            if (x == search_){
+              $(this).attr("href", fixcamelcase_($(this)));
+              content_y = descOrg;
+            }else{
+              var content_y = "";
+              content_y = defaultOrg;
+            }
+          }else{
+          var x= fixcamelcase_($(this)).replace('o=','o=-');
+          $(this).attr("href", fixcamelcase_($(this)));
+            if (x == search_){
+              $(this).attr("href", fixcamelcase_($(this)));
+              content_y = descOrg;
+            }else{
+
+              content_y = defaultOrg;
+            }
+          }
+        }
+        y.html(content_y);
+      });
+    }else{
+      $('a.camelcaseFix').each(function(index){
+        var content_y = "";
+        var y = $(this).closest('th').find('span');
+        if ($(this).text().search(":ID") >= 0){
+            var c = tableOrder($(this), 'ID');
+            $(this).attr("href", c);
+          if (c == search_){
+            $(this).attr("href", fixcamelcase_($(this)).replace('o=','o=-'));
+            content_y = ascOrg;
+          }else{
+            content_y = defaultOrg;
+          }
+        }else{
+          if ($(this).text().search(":_id") >= 0){
+            var c = tableOrder($(this), 'fKey');
+            $(this).attr("href", c);
+            if (c == search_){
+              $(this).attr("href", fixcamelcase_($(this)).replace('o=','o=-'));
+              content_y = ascOrg;
+            }else{
+              content_y = defaultOrg;
+            }
+          }else{
+            var x= fixcamelcase_($(this));
+            $(this).attr("href", fixcamelcase_($(this)));
+            if (x == search_){
+              $(this).attr("href", fixcamelcase_($(this)).replace('o=','o=-'));
+              content_y = ascOrg;
+            }else{
+              content_y = defaultOrg;
+            }
+          }
+        }
+        y.html(content_y);
+      });
+    }
+    fixcamelcase('camelcaseFix','','');
+
+    fixcamelcase('camelcaseFixPlaceHolder','', 'placeholder');
+      var config = {
+        '.chosen-select'           : {},
+        '.chosen-select-deselect'  : {allow_single_deselect:true},
+        '.chosen-select-no-single' : {disable_search_threshold:10},
+        '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+        '.chosen-select-width'     : {width:"95%"}
+      }
+      for (var selector in config) {
+        $(selector).chosen(config[selector]);
+      }
+      // $('.bread_show').fadeOut().fadeIn();
+
+      floattableHeader('table.float-header');
+
+      searchTable('listtable', 'search');
+
+
+
+      check_all('main_check', 'item_check');
+      $( ".fixed_bottom_right" ).delay( 2000 ).fadeOut( 1000 );
+      $('#listID').val("");
+      $('#listModelName').val("");
+    </script>
+  </body>
+</html>

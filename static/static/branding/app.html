@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/branding/theme-editor-style.css">
+        <link rel="stylesheet" type="text/css" href="/static/assets/fa/css/font-awesome.min.css" media="all"/>
+        <link rel="stylesheet" type="text/css" href="/static/assets/bootstrap/3.3.7/css/bootstrap.css" media="all"/>
+    </head>
+
+    <body style="margin:0px; padding:0px; overflow-y: hidden;">
+        <div id="page_effect" style="margin:0px; padding:0px; display: none;">
+            <div class="row" style="margin:0px;">
+                <div class="col-xs-6" style="padding-right: 0px; padding-left: 0px;">
+                    <div id="logoArea" class="theme-color" style="padding:10px;">
+                        <div class="text-center">
+                            <img id="logo_reverse" src="/media/images/branding/ic_logo_reverse.png" class="" style="width:140px; height:140px; margin-right:auto; margin-left:auto">
+                        </div>
+                        <div id="app_title" class="title-text" style="font-size:24px">&nbsp;</div>
+                    </div>
+                    <div id="menuArea" class="menu-area" style="padding:0px;">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li style="margin-top: 0px;">
+                                <a href="" style="font-size: 16px; font-weight: bold; color: gray;">
+                                    <i class="fa fa-users" style="margin-top: 10px; margin-right: 15px;"></i>
+                                    <span>Customers</span>
+                                </a>
+                            </li>
+                            <li class="menu-active" style="margin-top: 8px;">
+                                <a href="" style="font-size: 16px; font-weight: bold; color: gray;">
+                                    <i class="fa fa-th theme-color-menu-icon" style="margin-top: 10px; margin-right: 15px;"></i>
+                                    <span>Items</span>
+                                </a>
+                            </li>
+                            <li style="margin-top: 0px;">
+                                <a href="" style="font-size: 16px; font-weight: bold; color: gray;">
+                                    <i class="fa fa-shopping-cart" style="margin-top: 10px; margin-right: 15px;"></i>
+                                    <span>Cart</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <hr>
+                        <div style="margin-left:16px; color: gray;">Settings</div>
+                        <ul class="nav nav-pills nav-stacked">
+                            <li style="margin-top: 0px;">
+                                <a href="app-login.html" style="font-size: 16px; font-weight: bold; color: gray;">
+                                    <i class="fa fa-sign-out" style="margin-top: 10px; margin-right: 15px;"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding:0px; margin:0px; height: 5000px; position: relative; overflow: hidden;">
+                    <div class="overlay"></div>
+                    <div class="theme-color block text-right" style="padding: 20px 20px 20px 0px;">
+
+                        <i class="fa fa-search title-text" style="font-size:24px; padding-left:36px;"></i>
+                        <i class="fa fa-th title-text" style="font-size:24px; padding-left:36px;"></i>
+                        <i class="fa fa-bell-o title-text" style="font-size:24px; padding-left:36px;"></i>
+                    </div>
+                    <div class="darker" style="height:4px;"></div>
+                    <div class="theme-color block" style="height:50px;"></div>
+                    <div style="overflow:hidden; padding-top:4px;">
+                        <div style="margin-top: -135px;">
+                            <div class="menu-item">
+                                <div class="food1" style="width:100%; height:190px; border-bottom: solid #eee 2px;"></div>
+                                <div style="padding-top:10px; padding-right:10px;">
+                                    <span class="theme-color-menu-label" style="font-size: 18px;">Dom Perignon</span>
+                                    <span class="text-muted pull-right" style="font-size: 18px;">Cham...</span>
+                                </div>
+                                <div style="padding-top:3px; padding-bottom:8px;">
+                                    <span style="font-size: 18px;">16700.0</span>
+                                </div>
+                            </div>
+                            <div class="menu-item">
+                                <div class="food2" style="width:100%; height:190px; border-bottom: solid #eee 2px;"></div>
+                                <div style="padding-top:10px; padding-right:10px;">
+                                    <span class="theme-color-menu-label" style="font-size: 18px;">Chili Beef Lettuce Wrap</span>
+                                    <span class="text-muted pull-right" style="font-size: 18px;">Appet...</span>
+                                </div>
+                                <div style="padding-top:3px; padding-bottom:8px;">
+                                    <span style="font-size: 18px;">280.0</span>
+                                </div>
+                            </div>
+                            <div class="menu-item">
+                                <div class="food3" style="width:100%; height:190px; border-bottom: solid #eee 2px;"></div>
+                                <div style="padding-top:10px; padding-right:10px;">
+                                    <span class="theme-color-menu-label" style="font-size: 18px;">Chilean Sea Bass w/...</span>
+                                    <span class="text-muted pull-right" style="font-size: 18px;">Entree</span>
+                                </div>
+                                <div style="padding-top:3px; padding-bottom:8px;">
+                                    <span style="font-size: 18px;">2730.0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <script src="/static/assets/js/jquery.min.js"></script>
+        <script src="/static/js/branding/xml.js"></script>
+        <script src="/static/js/branding/theme.js"></script>
+    </body>
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+
+            apply_theme(document);
+
+            $('#page_effect').fadeIn(800);
+
+        });
+
+    </script>
+
+</html>

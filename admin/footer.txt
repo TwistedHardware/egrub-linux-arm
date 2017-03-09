@@ -1,0 +1,24 @@
+<script src="/static/assets/chosen/chosen.jquery.js"></script>
+<script src="/static/assets/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+  $(function () {
+      $('.date').datetimepicker({
+        format: "YYYY-MM-DD HH:mm"
+      });
+  });
+</script>
+<script type="text/javascript">
+fixcamelcase('camelcaseFix','upper');
+  var config = {
+    '.chosen-select'           : {},
+    '.chosen-select-deselect'  : {allow_single_deselect:true},
+    '.chosen-select-no-single' : {disable_search_threshold:10},
+    '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+    '.chosen-select-width'     : {width:"95%"}
+  }
+  for (var selector in config) {
+    $(selector).chosen(config[selector]);
+  }
+</script>
+</body>
+</html>

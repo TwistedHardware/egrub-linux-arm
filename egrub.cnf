@@ -1,0 +1,36 @@
+port     = 80
+initial  = true
+timezone = Asia/Manila
+
+[backup]
+auto     = false
+backupto = 
+
+[update]
+auto = true
+
+[personal]
+username = admin
+fullname = 
+address  = 
+mobile   = 
+email    = 
+
+[restaurant]
+name            = 
+phone           = 
+issign          = false
+orderstaging    = false
+vatvalue        = 0.12
+servicecharge   = 0.0
+tinnumber       = 
+print_bill      = false
+printonrecieved = false
+printonready    = false
+address         = 
+sss             = 
+footer          = """THIS INVOICE RECEIPT SHALL BE VALID FOR
+FIVE(5) YEARS FROM THE DATE OF THE
+PERMIT TO USE"""
+header          = 
+
