@@ -491,12 +491,6 @@
 
 	<!--  Plugin for the Wizard -->
 	<script src="/static/wizard/js/material-bootstrap-wizard.js"></script>
-	<!-- AIzaSyD_AIAYFXoSM9rUaJtlae3szezGE3cA83c -->
-	<!-- <script src="https://maps.google.com/maps/api/js?sensor=false&key=AIzaSyD_AIAYFXoSM9rUaJtlae3szezGE3cA83c"></script> -->
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyD_AIAYFXoSM9rUaJtlae3szezGE3cA83c"></script>
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/dist/typeahead.bundle.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead-addresspicker/0.1.4/typeahead-addresspicker.min.js"></script>
 
 	<!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
 	<script src="/static/wizard/js/jquery.validate.min.js"></script>
@@ -518,7 +512,6 @@
     check_index();
   };
 
-
 	$(document).ready(function() {
 	  $(window).keydown(function(event){
 	    if(event.keyCode == 13) {
@@ -538,16 +531,6 @@
     });
     check_index();
   };
-
-
-	// instantiate the addressPicker suggestion engine (based on bloodhound)
-	var addressPicker = new AddressPicker({
-	 map: {
-	  id: '#map',
-		zoom: 7,
-		center: new google.maps.LatLng(14.596845, 120.986447),
-	 }
-	});
 
 	// instantiate the typeahead UI
 	$('#address').typeahead(null, {
@@ -569,5 +552,23 @@
 	});
 
 	$('.checkbox').prop('checked',false);
+
+	</script>
+	<!-- AIzaSyD_AIAYFXoSM9rUaJtlae3szezGE3cA83c -->
+	<!-- <script src="https://maps.google.com/maps/api/js?sensor=false&key=AIzaSyD_AIAYFXoSM9rUaJtlae3szezGE3cA83c"></script> -->
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyD_AIAYFXoSM9rUaJtlae3szezGE3cA83c"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/dist/typeahead.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead-addresspicker/0.1.4/typeahead-addresspicker.min.js"></script>
+	<script>
+
+	// instantiate the addressPicker suggestion engine (based on bloodhound)
+	var addressPicker = new AddressPicker({
+	 map: {
+	  id: '#map',
+		zoom: 7,
+		center: new google.maps.LatLng(14.596845, 120.986447),
+	 }
+	});
   </script>
 </html>
