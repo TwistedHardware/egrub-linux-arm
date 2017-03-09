@@ -31,6 +31,6 @@ address         =
 sss             = 
 footer          = """THIS INVOICE RECEIPT SHALL BE VALID FOR
 FIVE(5) YEARS FROM THE DATE OF THE
-PERMIT TO USE"""
+PERMIT TO USE """
 header          = 
 
