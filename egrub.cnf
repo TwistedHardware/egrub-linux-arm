@@ -1,5 +1,5 @@
 port     = 80
-initial  = true
+initial  = false
 timezone = Asia/Manila
 
 [backup]
@@ -10,7 +10,7 @@ backupto =
 auto = true
 
 [personal]
-username = admin
+username = 
 fullname = 
 address  = 
 mobile   = 
@@ -31,6 +31,6 @@ address         =
 sss             = 
 footer          = """THIS INVOICE RECEIPT SHALL BE VALID FOR
 FIVE(5) YEARS FROM THE DATE OF THE
-PERMIT TO USE """
+PERMIT TO USE"""
 header          = 
 
