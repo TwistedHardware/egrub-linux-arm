@@ -7,7 +7,7 @@ auto     = false
 backupto = 
 
 [update]
-auto = true
+auto = false
 
 [personal]
 username = 
