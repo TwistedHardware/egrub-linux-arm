@@ -306,6 +306,8 @@ function paginator(container_id, page_count){
           fp = 1,
           lp = page_count,
           sp = p <= mid_base ? fp : p - mid_base,
+          //sp = sp >= 1 ? sp : 1;
+          //console.log(sp);
           ep = sp + (max_page - 1),
           i = 0;
 
@@ -313,6 +315,7 @@ function paginator(container_id, page_count){
             ep = lp;
             sp = lp - (max_page - 1);
         }
+        sp = sp >= 1 ? sp : 1;
 
         // console.log(p);
         // console.log(sp);
