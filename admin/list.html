@@ -114,6 +114,13 @@
                   <i class="fa fa-plus"></i> Add New <span class="camelcaseFix">{{.Schema.Name}}</span>
                 </a>
               {{ end }}
+
+              <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right" href="/admin/export/?m={{.Schema.ModelName}}" style="margin-right:2px;">
+                <i class="fa fa-table"></i> Excel
+              </a>
+              <a class="hidden-xs btn btn-success search pull-right" href="/admin/export/?m={{.Schema.ModelName}}" style="margin-right:3px;">
+                <i class="fa fa-table"></i> Excel
+              </a>
             </div>
 
           <br>

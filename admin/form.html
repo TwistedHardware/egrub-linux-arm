@@ -223,7 +223,7 @@
                           {{else if .Number}}
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <input {{ if .Required }} required {{ end }} class="form-control" name="{{.Name}}" type="number" step="0.01" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
+                                <input {{ if .Required }} required {{ end }} {{if eq .Max ""}}{{else}} max="{{.Max}}" {{end}} {{if eq .Min ""}}{{else}} min="{{.Min}}" {{end}} class="form-control" name="{{.Name}}" type="number" step="0.01" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
                                 {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
@@ -336,6 +336,13 @@
                   </a>
                   <a class="hidden-xs btn btn-primary search pull-right camelcaseFix camelcaseFixHref" href="/admin/{{.ModelName}}/new?{{$MainModel}}ID={{$MainModelID}}&return_url=/admin/{{$MainModelS}}/{{$MainModelID}}">
                     <i class="fa fa-plus"></i> Add New {{.Name}}
+                  </a>
+
+                  <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right" href="/admin/export/?m={{.ModelName}}" style="margin-right:2px;">
+                    <i class="fa fa-table"></i> Excel
+                  </a>
+                  <a class="hidden-xs btn btn-success search pull-right" href="/admin/export/?m={{.ModelName}}" style="margin-right:3px;">
+                    <i class="fa fa-table"></i> Excel
                   </a>
                 </div>
 
