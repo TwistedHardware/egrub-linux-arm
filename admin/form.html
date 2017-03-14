@@ -243,9 +243,13 @@
                           {{else if .List}}
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <select {{if .Required}} required {{end}} name="{{.Name}}" data-placeholder="Select" class="chosen-select form-control" tabindex="2" {{if .ReadOnly}} readonly {{end}}>
+                                <select {{if .Required}} required {{end}} name="{{.Name}}" data-placeholder="Select" class="{{if .Required}}select_required {{end}}chosen-select form-control" tabindex="2" {{if .ReadOnly}} readonly {{end}}>
                                   {{range .Choices}}
-                                  <option value="{{ .K }}"{{if .Selected}} selected{{end}}>{{ .V }}</option>
+                                    {{if eq .K 0}}
+                                    <option value=""{{if .Selected}} selected{{end}}>{{ .V }}</option>
+                                    {{else}}
+                                    <option value="{{ .K }}"{{if .Selected}} selected{{end}}>{{ .V }}</option>
+                                    {{end}}
                                   {{end}}
                                 </select>
                               </div>
@@ -253,9 +257,13 @@
                           {{else if .FKey}}
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <select name="{{.Name}}" data-placeholder="Select" class="chosen-select form-control"  tabindex="2" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
+                                <select {{if .Required}} required {{end}} name="{{.Name}}" data-placeholder="Select" class="{{if .Required}}select_required {{end}}chosen-select form-control"  tabindex="2" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
                                   {{range .Choices}}
-                                  <option value="{{ .K }}"{{if .Selected}} selected{{end}}>{{ .V }}</option>
+                                    {{if eq .K 0}}
+                                    <option value=""{{if .Selected}} selected{{end}}>{{ .V }}</option>
+                                    {{else}}
+                                    <option value="{{ .K }}"{{if .Selected}} selected{{end}}>{{ .V }}</option>
+                                    {{end}}
                                   {{end}}
                                 </select>
                                 <a class="checkinventory camelcaseFixHrefID {{if .ReadOnly}}hidden{{end}} no-style" href="/admin/{{.Name}}">
@@ -558,7 +566,6 @@
         $(selector).chosen(config[selector]);
         $(selector).prop("disabled", false);
       }
-
       floattableHeader('table.float-header');
 
           $('th.trigger_desc.camelcaseFix').each(function(index){
@@ -670,7 +677,28 @@
 
           $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-          })
+          });
+
+
+          $('.select_required').each(function(index){
+            var a = $(this).prop('required');
+            if (a){
+              $(this).css("display", "inline")
+                .css("position","absolute")
+                .css("height", "1px")
+                .css("width", "1px")
+                .css("z-index", "-1")
+                .attr("tabindex", "-1");
+              // $.validator.setDefaults({ ignore: ":hidden:not(.select_required)" });
+              // var x = 0;
+              // $(this).find('option').each(function() {
+              //     if(x == 0) {
+              //         $(this).val("");
+              //     }
+              //     x ++;
+              // });
+            }
+          });
     </script>
   </body>
 </html>

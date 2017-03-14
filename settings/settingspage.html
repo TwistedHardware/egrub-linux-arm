@@ -322,7 +322,7 @@
                         <div class="fixed-bottom bg-black3 default-padding z-index9">
                           <div class="">
                             <div class="pull-right">
-                              <button type="submit" class="no-borderradius btn  btn-primary" style="display:inline-block;" onclick="show_loading();" name="save" value="">
+                              <button type="submit" class="no-borderradius btn  btn-primary" style="display:inline-block;" onclick="show_loading(); BeginConnectionChecking();" name="save" value="">
                                 Apply Changes
                               </button>
                             </div>
@@ -867,6 +867,32 @@
 
         $( ".fixed_bottom_right" ).delay( 2000 ).fadeOut( 1000 );
         hide_loading(1000);
+
+        function BeginConnectionChecking() {
+            setTimeout(function(){
+                var result = IsConnected();
+                if (result == false) {
+                    alert("You are disconnected from the server. Kindly connect to new SSID and refresh your browser.")
+                }
+            }, 5000);
+        }
+
+        function IsConnected() {
+            var xhr = new XMLHttpRequest();
+            var file = "media/images/branding/0.jpg"; //image path in your project
+            var randomNum = Math.round(Math.random() * 10000);
+            xhr.open('HEAD', file + "?rand=" + randomNum, false);
+            try {
+                xhr.send(null);
+                if (xhr.status >= 200 && xhr.status < 304) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (e) {
+                return false;
+            }
+        }
 
     </script>
   </body>
