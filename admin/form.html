@@ -135,27 +135,27 @@
                   <tbody>
                     <form method="POST" action="" class="form-horizontal form-signin" enctype="multipart/form-data">
                       {{range .Schema.Fields}}
+                        <tr>
+                          {{ if .ID }}
+                          {{ else }}
+                          <td>
+                              <label class="col-sm-12 control-label form_label " data-toggle="tooltip" data-placement="bottom" title="{{ .Help }}"><span class="camelcaseFix">{{.DisplayName}}</span>{{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"> <i class="fa fa-question-circle"></i>{{end}}:{{ if .Required }}<span style="color:#f00;font-weight:bold;">&nbsp;*</span>{{ end }}</label>
+                          </td>
+                          {{ end }}
                           {{if .String}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label ">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               {{if eq .DisplayName "SVG"}}
                               <p class="admin_font text-muted capitalized v-center bold">&nbsp;&nbsp;&nbsp;&nbsp;
                                 <i style="color:red;" class="fa fa-warning"></i>&nbsp;SVG TEXT FILE TOO LARGE.</p>
                               {{else}}
                               <div class="col-sm-12">
-                                <input class="form-control strings" name="{{.Name}}" type="{{if eq .DisplayName "Password"}}password{{else}}text{{end}}" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}}>
+                                <input {{if .Required}} required {{end}} class="form-control strings" name="{{.Name}}" type="text" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                               {{end}}
+
                             </td>
-                          </tr>
                           {{else if .Image}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="">
                               <div class="col-sm-12">
                                 <table class="" style="width: 100%;">
@@ -164,10 +164,11 @@
                                       <div class="input-group search">
                                         <label class="input-group-btn">
                                             <span class="btn btn-primary">
-                                                Browse&hellip; <input name="{{.Name}}" type="file" style="display: none;" multiple>
+                                              Browse&hellip; <input {{ if .Required }} required {{ end }} name="{{.Name}}" type="file" style="display: none;" multiple>
                                             </span>
                                         </label>
-                                        <input  type="text" class="form-control" readonly>
+                                        <input {{ if .Required }} required {{ end }} type="text" class="form-control" readonly>
+                                        {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                                     </div>
                                       <!-- <input class="pull-right btn btn-default btn-file" name="{{.Name}}" type="file" accept=".png, .jpg, .jpeg"> -->
                                     </td>
@@ -178,20 +179,17 @@
                               </table>
                               </div>
                             </td>
-                          </tr>
 
                           {{else if .MultiLingual}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
+                            {{$required := .Required}}
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12 multilingual">
                                 {{$FName := .Name}}
                                 {{range .Translations}}
+                                {{ if .Active }}
                                 <div class="input-group">
-                                  <div class="input-group-addon {{if .Default}}bold{{end}} " style="font-family:monospace;">{{.Code}}</div>
-                                  <input type="text" name="{{.Code}}-{{$FName}}" class="form-control stringsMulti" value="{{.Value}}">
+                                  <div class="input-group-addon {{if .Default}}bold{{end}}" style="font-family:monospace;">{{.Code}}</div>
+                                  <input type="text" {{if .Default}}{{ if $required }} required {{ end }}{{ end }}name="{{.Code}}-{{$FName}}" class="form-control stringsMulti" value="{{.Value}}">
                                   <div class="input-group-addon">{{if .Translated}}
                                     <i  class="fa fa-check-circle" style="color:green" ></i>
                                   {{else}}
@@ -199,87 +197,63 @@
                                   {{end}}</div>
                                 </div>
                                 {{end}}
+                                {{end}}
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
-                          </tr>
                           {{else if .Date}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
                                 <div class='input-group date' id='datetimepicker1'>
-                                  <input class="form-control" name="{{.Name}}" type="text" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}}>
+                                  <input {{ if .Required }} required {{ end }} class="form-control" name="{{.Name}}" type="text" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                                 </div>
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
-                          </tr>
                           {{else if .Email}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <input class="form-control" name="{{.Name}}" type="email" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}}>
+                                <input {{ if .Required }} required {{ end }} class="form-control" name="{{.Name}}" type="email" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
-                          </tr>
                           {{else if .Number}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <input class="form-control" name="{{.Name}}" type="number" step="0.01" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}}>
+                                <input {{ if .Required }} required {{ end }} class="form-control" name="{{.Name}}" type="number" step="0.01" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
-                          </tr>
                           {{else if .Bool}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
                                 <!-- <input name="{{.Name}}" style="width: 20px; height: 20px;" type="checkbox" class="form-check-input checkbox-primary" {{if .Value}}checked{{end}} {{if .ReadOnly}} readonly {{end}}> -->
                                 <div onclick="$(this).find('input').click();" class="material-switch">
-                                  <input  name="{{.Name}}" type="checkbox" {{if .Value}}checked{{end}} {{if .ReadOnly}} readonly {{end}} />
+                                  <input {{ if .Required }} required {{ end }} name="{{.Name}}" type="checkbox" {{if .Value}}checked{{end}} {{if .ReadOnly}} disabled {{end}} />
                                   <label  class="label-primary"></label>
                                 </div>
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
-                          </tr>
                           {{else if .ID}}
-                          <input class="form-control hidden" name="{{.Name}}" type="text" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}}>
+                          <input {{ if .Required }} required {{ end }} class="form-control hidden" name="{{.Name}}" type="text" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
                           {{else if .List}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <select name="{{.Name}}" data-placeholder="Select" class="chosen-select form-control" tabindex="2">
+                                <select {{if .Required}} required {{end}} name="{{.Name}}" data-placeholder="Select" class="chosen-select form-control" tabindex="2" {{if .ReadOnly}} readonly {{end}}>
                                   {{range .Choices}}
                                   <option value="{{ .K }}"{{if .Selected}} selected{{end}}>{{ .V }}</option>
                                   {{end}}
                                 </select>
                               </div>
                             </td>
-                          </tr>
                           {{else if .FKey}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <select name="{{.Name}}" data-placeholder="Select" class="chosen-select form-control"  tabindex="2" {{if .ReadOnly}} disabled {{end}}>
+                                <select name="{{.Name}}" data-placeholder="Select" class="chosen-select form-control"  tabindex="2" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
                                   {{range .Choices}}
                                   <option value="{{ .K }}"{{if .Selected}} selected{{end}}>{{ .V }}</option>
                                   {{end}}
@@ -287,35 +261,27 @@
                                 <a class="checkinventory camelcaseFixHrefID {{if .ReadOnly}}hidden{{end}} no-style" href="/admin/{{.Name}}">
                                     <i class="fa fa-plus-circle"></i>&nbsp;add new
                                  </a>
+                                 {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
-                          </tr>
                           {{else if .M2M}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <select name="{{.Name}}" data-placeholder="Select" class="chosen-select form-control" tabindex="2" multiple>
+                                <select name="{{.Name}}" data-placeholder="Select" class="chosen-select form-control" tabindex="2" multiple {{if .ReadOnly}} readonly {{end}}>
                                   {{range .Choices}}
                                   <option value="{{ .K }}"{{if .Selected}} selected{{end}}>{{ .V }}</option>
                                   {{end}}
                                 </select>
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
-                          </tr>
                           {{else}}
-                          <tr>
-                            <td>
-                                <label class="col-sm-12 control-label camelcaseFix form_label">{{.DisplayName}}:</label>
-                            </td>
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <input class="form-control other" name="{{.Name}}" type="text" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}}>
+                                <input {{if .Required}} required {{end}} class="form-control other" name="{{.Name}}" type="text" value="{{.Value}}" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
-                          </tr>
                           {{end}}
                       {{end}}
                       <div class="fixed-bottom bg-black3 default-padding z-index9">
@@ -398,7 +364,7 @@
                     {{range .Rows}}
                       <tr>
                         <td onclick="$('#main_check').prop('checked', false);">
-                          <input  class="item_check" type="checkbox">
+                          <input class="item_check" type="checkbox">
                         </td>
                         {{ range $index, $value := . }}
                           {{if .IsFkeyRel }}{{else}}
@@ -694,6 +660,10 @@
             $(".return_url_hide").hide();
           }
           $('#InlineModelName').val(window.location.hash.split('#')[1]);
+
+          $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+          })
     </script>
   </body>
 </html>
