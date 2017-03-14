@@ -115,12 +115,21 @@
                 </a>
               {{ end }}
 
+              <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right" data-toggle="modal" data-target="#filter_modal" style="margin-right:2px;">
+                <i class="fa fa-table"></i> Excel
+              </a>
+              <a class="hidden-xs btn btn-success search pull-right" data-toggle="modal" data-target="#filter_modal" style="margin-right:3px;">
+                <i class="fa fa-table"></i> Excel
+              </a>
+
+              <!--
               <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right" href="/admin/export/?m={{.Schema.ModelName}}" style="margin-right:2px;">
                 <i class="fa fa-table"></i> Excel
               </a>
               <a class="hidden-xs btn btn-success search pull-right" href="/admin/export/?m={{.Schema.ModelName}}" style="margin-right:3px;">
                 <i class="fa fa-table"></i> Excel
               </a>
+              -->
             </div>
 
           <br>
@@ -152,10 +161,8 @@
                 </td>
                 {{ range $index, $value := . }}
                   {{if .IsFkeyRel }}{{else}}
-
-
                     {{if .IsBool}}
-                      <td>
+                      <td data-type="bool">
                         {{if .Value}}
                           <i class="fa fa-check-circle" aria-hidden="true" style="color:green;"></i>
                         {{else}}
@@ -163,19 +170,19 @@
                       </td>
                       {{end}}
                     {{else if .IsString}}
-                      <td>
+                      <td data-type="string">
                         {{.Value}}
                       </td>
                     {{else if .IsNumber}}
-                      <td>
+                      <td data-type="number">
                         {{.Value}}
                       </td>
                     {{else if .IsDate}}
-                      <td>
+                      <td data-type="date">
                         {{.Value}}
                       </td>
                     {{else if .IsID}}
-                      <td class="search pointer Row_id" data-id="{{.ID}}" onclick="$(this).find('a')[0].click();">
+                      <td class="search pointer Row_id" data-id="{{.ID}}" onclick="$(this).find('a')[0].click();"  data-type="id">
                         <a  class="ID bold no-style"
                         href="
                         {{if eq $isSchema "Layout"}}
@@ -187,23 +194,23 @@
                         >{{.Value}}</a>
                       </td>
                     {{else if .IsList}}
-                      <td class="camelcaseFix">
+                      <td class="camelcaseFix" data-type="list">
                         {{.Value}}
                       </td>
                     {{else if .IsFKey}}
-                      <td class="search pointer" onclick="$(this).find('a')[0].click();">
+                      <td class="search pointer" onclick="$(this).find('a')[0].click();"  data-type="key">
                         <a class="bold no-style" href="/admin/{{.FUrl}}">{{.Value}}</a>
                       </td>
                     {{else if .IsMultiLingual}}
-                      <td class="">
+                      <td class=""  data-type="multilingual">
                         {{.Value}}
                       </td>
                     {{else if .IsImage}}
-                        <td class="">
+                        <td class=""  data-type="image">
                           <img class="hvr-grow pointer image_trigger" style="max-width: 50px; height: auto;" src="{{.Value}}" />
                         </td>
                     {{else}}
-                      <td>
+                      <td data-type="other">
                         <span class="other">{{.Value}}</span>
                       </td>
                     {{end}}
@@ -256,25 +263,26 @@
         <br>
         <div class="modal-content">
           <form method="POST" action="">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title bold capitalized"><i class="fa fa-trash"></i>&nbsp;Confirm Delete</h4>
-          </div>
-          <div class="modal-body">
-            <h4>
-              <center>
-              Are you sure you want to delete the selected <span class="camelcaseFix" style="text-transform:lowercase;">{{.Schema.Name}}</span>/s?
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title bold capitalized"><i class="fa fa-trash"></i>&nbsp;Confirm Delete</h4>
+            </div>
+            <div class="modal-body">
+              <h4>
+                <center>
+                Are you sure you want to delete the selected <span class="camelcaseFix" style="text-transform:lowercase;">{{.Schema.Name}}</span>/s?
+              </center>
+            </h4>
+            <center>
+              <div style="max-height:600px;overflow-y:auto;" class="admin_font capitalized bold" id="list_container_listID"></div>
             </center>
-          </h4>
-          <center>
-            <div style="max-height:600px;overflow-y:auto;" class="admin_font capitalized bold" id="list_container_listID"></div>
-          </center>
-            <input id="listID" type="hidden" name="listID">
-          </div>
-          <div class="modal-footer">
-            <button type="submit" value="delete" name="delete" class="btn btn-primary" >Confirm Delete</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+              <input id="listID" type="hidden" name="listID">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" value="delete" name="delete" class="btn btn-primary" >Confirm Delete</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
         </div>
 
       </div>
@@ -290,11 +298,118 @@
     <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script> -->
     <!-- Conflict in jquery -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+
+    <div id="filter_modal" class="modal fade z-index99999" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <form action="/admin/export/" method="get">
+            <input type="hidden" name="m" value="{{ .Schema.ModelName }}" />
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Filter</h4>
+            </div>
+            <div class="modal-body">
+              <div id="filter_fields"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Export</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <script src="/static/assets/chosen/chosen.jquery.js"></script>
     <script src="/static/assets/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
-
-
     <script type="text/javascript">
+      (function(win, doc, $){
+          "using script";
+
+          var $filters = $("#filter_fields"),
+              fields = (function(){
+                var $tbl = $("#listtable"),
+                    $cols = $tbl.find("thead tr th"),
+                    $cells = $tbl.find("tbody tr:first td"),
+                    fields = [];
+
+                $cells.each(function(i, cell){
+                  if (i > 0) {
+                      var index = i - 1;
+                      //if (cell.hasAttribute("data-filter")) {
+                        var type = $(cell).data("type"),
+                            name = decodeURIComponent($($cols[i]).find("a").prop("href").split("o=")[1]);
+                        name = name.split(":");
+                        name = name[name.length - 1];
+                        fields.push({"name": name, "type": type});
+                      //}
+                  }
+                });
+
+                return fields
+              })(),
+
+              toActualColName = function(col){
+                return col.replace(/\.?([A-Z]+)/g, function (x,y){return "_" + y.toLowerCase()}).replace(/^_/, "");
+              };
+
+          var field = null,
+              field_name = "",
+              len = fields.length,
+              i = 0;
+          for (; i < len; i ++) {
+            field = fields[i];
+            field_name = field.name;
+            switch (field.type) {
+              case "string":
+                $filters.append("<div class='form-group'>" +
+                                    "<label class='camelcaseFix'>" + field_name + "</label>" +
+                                    "<input type='text' name='" + toActualColName(field_name) + "' class='form-control' data-filter-field />" +
+                                "</div>");
+                break;
+              case "number":
+                $filters.append("<div class='form-group'>" +
+                                    "<label class='camelcaseFix'>" + field_name + "</label>" +
+                                    "<input type='number' step='0.01' name='" + toActualColName(field_name) + "' class='form-control' data-filter-field />" +
+                                "</div>");
+                break;
+              case "bool":
+                $filters.append("<div class='form-group'>" +
+                                    "<label class='camelcaseFix'>" + field_name + "</label>" +
+                                    "<select name='" + toActualColName(field_name) + "' class='form-control' data-filter-field >" +
+                                      "<option value='all'>All</option>" +
+                                      "<option value='1'>" + field_name + "</option>" +
+                                      "<option value='0'>Not " + field_name + "</option>" +
+                                    "</select>" +
+                                "</div>");
+                break;
+              case "date":
+                $filters.append("<div class='form-group'>" +
+                                    "<label class='camelcaseFix'>" + field_name + "</label>" +
+                                    "<select name='" + toActualColName(field_name) + "' class='form-control' data-filter-field >" +
+                                      "<option value='any_date'>Any Date</option>" +
+                                      "<option value='today'>Today</option>" +
+                                      "<option value='past_7_days'>Past 7 Days</option>" +
+                                      "<option value='this_month'>This Month</option>" +
+                                      "<option value='this_year'>This Year</option>" +
+                                    "</select>" +
+                                "</div>");
+                /*
+                $filters.append("<div>" +
+                                    "<label>" + field_name + "</label>" +
+                                    "<label>From</label>" +
+                                    "<input type='text' name='" + field_name + "__gte' data-filter-field />" +
+                                    "<label>To</label>" +
+                                    "<input type='text' name='" + field_name + "__lte' data-filter-field />" +
+                                "</div>");
+                */
+                break;
+              default:
+
+            }
+          }
+      })(window, document, $);
+
       var pages = {{.Pagination}};
       var schemaname = "{{.Schema.Name}}";
     paginator('pagination_container', pages, schemaname);
@@ -440,6 +555,7 @@
       $( ".fixed_bottom_right" ).delay( 2000 ).fadeOut( 1000 );
       $('#listID').val("");
       $('#listModelName').val("");
+
     </script>
   </body>
 </html>
