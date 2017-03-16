@@ -1,36 +1,41 @@
 port     = 80
-initial  = true
+initial  = false
 timezone = Asia/Manila
 
 [backup]
 auto     = false
-backupto = 
+backupto =
 
 [update]
-auto = false
+auto = true
 
 [personal]
-username = 
-fullname = 
-address  = 
-mobile   = 
-email    = 
+username = admin
+fullname =
+address  =
+mobile   =
+email    =
 
 [restaurant]
-name            = 
-phone           = 
-issign          = false
+name            =
+phone           =
+issign          = true
 orderstaging    = false
+fastfood        = false
 vatvalue        = 0.12
 servicecharge   = 0.0
-tinnumber       = 
+tinnumber       =
 print_bill      = false
 printonrecieved = false
 printonready    = false
-address         = 
-sss             = 
-footer          = """THIS INVOICE RECEIPT SHALL BE VALID FOR
-FIVE(5) YEARS FROM THE DATE OF THE
-PERMIT TO USE"""
-header          = 
-
+address         =
+sss             =
+footer          = Thank you, and please come again.
+header          =
+accr_no         =
+accr_date_from  =
+accr_date_to    =
+serial          =
+permit          =
+trial_mode      = false
+serve_on_close  = true
