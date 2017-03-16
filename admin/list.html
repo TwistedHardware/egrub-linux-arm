@@ -84,7 +84,7 @@
             <a id="" href="/admin/" class="no-style breadcrumb-item fontwhite" >
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ><i class="fa fa-home"></i> Dashboard </span>
             </a>&nbsp;&nbsp;<span class="bread-dash">/</span>&nbsp;&nbsp;
-            <span id="Current_Position" class="no-style breadcrumb-item active camelcaseFix">{{.Schema.Name}}</span>
+            <span id="Current_Position" class="no-style breadcrumb-item active camelcaseFix">{{.Schema.ModelSchema.Name}}</span>
            </span>
         </div>
       </div>
@@ -100,26 +100,26 @@
               </div>
             </div>
             <div class="col-xs-6" style="padding:0px;">
-              {{$isSchema := .Schema.Name}}
+              {{$isSchema := .Schema.ModelSchema.Name}}
 
               {{ if eq .Schema.Name "Layout" }}
                 <a class="btn btn-primary search pull-right" href="/static/layout/">
-                  <i class="fa fa-plus"></i> Add New {{.Schema.Name}}
+                  <i class="fa fa-plus"></i> Add New {{.Schema.ModelSchema.Name}}
                 </a>
               {{ else }}
                 <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-primary search pull-right" href="/admin/{{.Schema.ModelName}}/new">
-                  <i class="fa fa-plus"></i> Add New <span class="camelcaseFix">{{.Schema.Name}}</span>
+                  <i class="fa fa-plus"></i> Add New <span class="camelcaseFix">{{.Schema.ModelSchema.Name}}</span>
                 </a>
                 <a class="hidden-xs btn btn-primary search pull-right" href="/admin/{{.Schema.ModelName}}/new">
-                  <i class="fa fa-plus"></i> Add New <span class="camelcaseFix">{{.Schema.Name}}</span>
+                  <i class="fa fa-plus"></i> Add New <span class="camelcaseFix">{{.Schema.ModelSchema.Name}}</span>
                 </a>
               {{ end }}
 
-              <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right" data-toggle="modal" data-target="#filter_modal" style="margin-right:2px;">
-                <i class="fa fa-table"></i> Excel
+              <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-info search pull-right" data-toggle="modal" data-target="#filter_modal" style="margin-right:2px;">
+                <i class="fa fa-filter"></i> Filter
               </a>
-              <a class="hidden-xs btn btn-success search pull-right" data-toggle="modal" data-target="#filter_modal" style="margin-right:3px;">
-                <i class="fa fa-table"></i> Excel
+              <a class="hidden-xs btn btn-info search pull-right" data-toggle="modal" data-target="#filter_modal" style="margin-right:3px;">
+                <i class="fa fa-filter"></i> Filter
               </a>
 
               <!--
@@ -141,80 +141,29 @@
               <th class="checkbox-container">
                 <input id="main_check" class="" type="checkbox">&nbsp;&nbsp;
               </th>
-              {{range .Schema.Columns}}
-              <!-- <th class="trigger_desc pointer"><a href="?o={{.}}&p=" class="camelcaseFix">{{.}}</a><i class="fa fa-sort-desc pull-right">&nbsp;&nbsp;</i></th> -->
-              <th class="trigger_desc pointer"><a href="?o={{.}}" class="camelcaseFix">{{.}}</a>
-                <span class="fa-stack fa-fw pull-right">
-                  <i class="fontdarkgray fa fa-sort-asc fa-stack-1x"></i>
-                  <i class="fontdarkgray fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-              </th>
+              {{$modelName := .Schema.Name}}
+              {{range .Schema.ModelSchema.Fields}}
+                {{if .ListDisplay}}
+                <!-- <th class="trigger_desc pointer"><a href="?o={{.}}&p=" class="camelcaseFix">{{.}}</a><i class="fa fa-sort-desc pull-right">&nbsp;&nbsp;</i></th> -->
+                <th class="trigger_desc pointer"><a href="?o={{.Name}}" class="camelcaseFix">{{if .ID}}{{$modelName}}{{else}}{{.Name}}{{end}}</a>
+                  <span class="fa-stack fa-fw pull-right">
+                    <i class="fontdarkgray fa fa-sort-asc fa-stack-1x"></i>
+                    <i class="fontdarkgray fa fa-sort-desc fa-stack-1x"></i>
+                  </span>
+                </th>
+                {{end}}
               {{end}}
             </tr>
           </thead>
           <tbody>
-            {{$name := .Schema.LUrl}}
+
             {{range .Schema.Rows}}
               <tr>
                 <td onclick="$('#main_check').prop('checked', false);">
                   <input  class="item_check" type="checkbox">
                 </td>
-                {{ range $index, $value := . }}
-                  {{if .IsFkeyRel }}{{else}}
-                    {{if .IsBool}}
-                      <td data-type="bool">
-                        {{if .Value}}
-                          <i class="fa fa-check-circle" aria-hidden="true" style="color:green;"></i>
-                        {{else}}
-                        <i class="fa fa-times-circle" aria-hidden="true" style="color:red;"></i>
-                      </td>
-                      {{end}}
-                    {{else if .IsString}}
-                      <td data-type="string">
-                        {{.Value}}
-                      </td>
-                    {{else if .IsNumber}}
-                      <td data-type="number">
-                        {{.Value}}
-                      </td>
-                    {{else if .IsDate}}
-                      <td data-type="date">
-                        {{.Value}}
-                      </td>
-                    {{else if .IsID}}
-                      <td class="search pointer Row_id" data-id="{{.ID}}" onclick="$(this).find('a')[0].click();"  data-type="id">
-                        <a  class="ID bold no-style"
-                        href="
-                        {{if eq $isSchema "Layout"}}
-                        /admin/svg/{{.ID}}
-                        {{else}}
-                        /admin/{{$name}}/{{.ID}}
-                        {{end}}
-                        "
-                        >{{.Value}}</a>
-                      </td>
-                    {{else if .IsList}}
-                      <td class="camelcaseFix" data-type="list">
-                        {{.Value}}
-                      </td>
-                    {{else if .IsFKey}}
-                      <td class="search pointer" onclick="$(this).find('a')[0].click();"  data-type="key">
-                        <a class="bold no-style" href="/admin/{{.FUrl}}">{{.Value}}</a>
-                      </td>
-                    {{else if .IsMultiLingual}}
-                      <td class=""  data-type="multilingual">
-                        {{.Value}}
-                      </td>
-                    {{else if .IsImage}}
-                        <td class=""  data-type="image">
-                          <img class="hvr-grow pointer image_trigger" style="max-width: 50px; height: auto;" src="{{.Value}}" />
-                        </td>
-                    {{else}}
-                      <td data-type="other">
-                        <span class="other">{{.Value}}</span>
-                      </td>
-                    {{end}}
-                  {{end}} <!-- End of Else  -->
+                {{ range . }}
+                  <td data-id="{{.}}" onclick="$(this).find('a')[0].click()">{{.}}</td>
                 {{end}} <!-- End of Index Range  -->
               </tr>
             {{end}} <!-- End of Rows Range  -->
@@ -222,13 +171,28 @@
         </table>
 
         <div class="fixed-bottom bg-footer default-padding z-index9 admin_font bold">
-          <button onclick="BuildDeleteList('item_check')" class="hidden-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
-          <button onclick="BuildDeleteList('item_check')" class="hidden-sm hidden-md hidden-lg btn-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
-          <!-- <div class=""> -->
-            <ul id="pagination_container" class="pagination pagination-sm" style="float:right;margin:0px;">
-
-            </ul>
+          <div class="col-sm-4 col-xs-12">
+            <button onclick="BuildDeleteList('item_check')" class="hidden-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
+            <button onclick="BuildDeleteList('item_check')" class="hidden-sm hidden-md hidden-lg btn-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
+            <!-- <div class=""> -->
+          </div>
+          <div class="col-sm-4 col-xs-12">
+            <center><ul id="pagination_container" class="pagination pagination-sm pagination-xs" style="margin:0px;"></ul></center>
+          </div>
+          <div class="col-sm-4 col-xs-12">
           <!-- </div> -->
+            <div style="display:inline-block;float:right;">
+              <form id="export_form" action="/admin/export/?m={{ .Schema.ModelName }}" method="get">
+                <button type="submit" class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right">
+                  <i class="fa fa-table"></i> Excel
+                </button>
+                <button type="submit" class="hidden-xs btn btn-success search pull-right">
+                  <i class="fa fa-table"></i> Excel
+                </button>
+              </form>
+            </div>
+          </div>
+
         </div>
         <div class="bottom-space col-sm-12">
         </div>
@@ -302,20 +266,73 @@
     <div id="filter_modal" class="modal fade z-index99999" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-          <form action="/admin/export/" method="get">
-            <input type="hidden" name="m" value="{{ .Schema.ModelName }}" />
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">Filter</h4>
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Filter</h4>
+          </div>
+          <div class="modal-body">
+            <div id="filter_fields">
+              {{range .Schema.ModelSchema.Fields}}
+                {{if .Filter}}
+                  {{ if .String }}
+                    <div class="form-group">
+                      <label class="camelcaseFix">{{ .DisplayName }}</label>
+                      <input type="text" name="{{ .Name }}" class="form-control" data-filter-field data-type="string" />
+                    </div>
+                    {{ else if .MultiLingual }}
+                      <div class="form-group">
+                        <label class="camelcaseFix">{{ .DisplayName }}</label>
+                        <input type="text" name="{{ .Name }}" class="form-control" data-filter-field data-type="string" />
+                      </div>
+                  {{ else if .Number }}
+                    <div class="form-group">
+                      <label class="camelcaseFix">{{ .DisplayName }}</label>
+                      <input type="number" step="0.01" name="{{ .Name }}" class="form-control" data-filter-field data-type="number" />
+                    </div>
+
+                  {{ else if .Bool }}
+                    <div class="form-group">
+                      <label class="camelcaseFix">{{ .DisplayName }}</label>
+                      <select name="{{ .Name }}" class="form-control" data-filter-field data-type="bool">
+                        <option value="">All</option>
+                        <option value="1">{{ .DisplayName }}</option>
+                        <option value="2">Not&nbsp;{{ .DisplayName }}</option>
+                      </select>
+                    </div>
+
+                  {{ else if .Date }}
+                    <div class="form-group">
+                      <label class="camelcaseFix">{{ .DisplayName }}</label>
+                      <select name="{{ .Name }}" class="form-control" data-filter-field data-type="date">
+                        <option value="any_date">Any Date</option>
+                        <option value="today">Today</option>
+                        <option value="past_7_days">Past 7 Days</option>
+                        <option value="this_month">This Month</option>
+                        <option value="last_month">Last Month</option>
+                        <option value="this_year">This Year</option>
+                      </select>
+                    </div>
+                  {{else}}
+                    {{ if eq (len .Choices) 0 }}
+                    {{else}}
+                      <div class="form-group">
+                        <label class="camelcaseFix">{{ .DisplayName }}</label>
+                        <select name="{{ .Name }}" class="form-control" data-filter-field data-type="list">
+                          {{ range .Choices }}
+                            <option value="{{ .K }}">{{ .V }}</option>
+                          {{ end }}
+                        </select>
+                      </div>
+                    {{end}}
+                  {{ end }}
+                {{end}}
+              {{end}}
             </div>
-            <div class="modal-body">
-              <div id="filter_fields"></div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success">Export</button>
-            </div>
-          </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="submit_filter" class="btn btn-info" data-dismiss="modal">Filter</button>
+          </div>
         </div>
       </div>
     </div>
@@ -326,88 +343,142 @@
       (function(win, doc, $){
           "using script";
 
-          var $filters = $("#filter_fields"),
-              fields = (function(){
-                var $tbl = $("#listtable"),
-                    $cols = $tbl.find("thead tr th"),
-                    $cells = $tbl.find("tbody tr:first td"),
-                    fields = [];
+          $("#filter_fields [data-filter-field]").each(function(i, el){
+            el.name = el.name.replace(/\.?([A-Z]+)/g, function (x,y){return "_" + y.toLowerCase()}).replace(/^_/, "");
+          });
 
-                $cells.each(function(i, cell){
-                  if (i > 0) {
-                      var index = i - 1;
-                      //if (cell.hasAttribute("data-filter")) {
-                        var type = $(cell).data("type"),
-                            name = decodeURIComponent($($cols[i]).find("a").prop("href").split("o=")[1]);
-                        name = name.split(":");
-                        name = name[name.length - 1];
-                        fields.push({"name": name, "type": type});
-                      //}
+          $("#filter_modal #submit_filter")[0].onclick = function(e){
+            (e.preventDefault) ? e.preventDefault() : e.returnValue = false;
+
+            var params = [],
+                getStringDate = function(dt){
+                  var y = dt.getFullYear(),
+                      m = dt.getMonth() + 1,
+                      d = dt.getDate();
+                  (m < 10) && (m = "0" + m);
+                  (d < 10) && (d = "0" + d);
+                  return [y,m,d].join("-");
+                },
+                getMonthLastDay = function(y, m){
+                  // NOTE: 0 day = get last day of previous month
+                  return new Date(y, parseInt(m), 0).getDate();
+                },
+                getLast7Days = function(dt){
+                  var dt = dt || new Date();
+                  dt.setDate(dt.getDate() - 7);
+                  return dt;
+                },
+                getLastMonth = function(){
+                  var now = new Date(),
+                      y = now.getFullYear(),
+                      m = now.getMonth() + 1;
+                  if (--m === 0) {
+                    m = 12;
+                    y--;
                   }
-                });
+                  m -= 1;
+                  return new Date(y, m, 1);
+                },
+                buildURL = function(params){
+                  var params = params || [],
+                      url_obj = win.location,
+                      url = url_obj.origin + url_obj.pathname + "/",
+                      curr_params = url_obj.search.substr(1).split("&"),
+                      curr_param = null,
+                      i = curr_params.length - 1;
+                  for (; i > 0; i --) {
+                    curr_param = curr_params[i];
+                    if (curr_param.indexOf("p=") !== -1 || curr_param.indexOf("o=") !== -1) {
+                      params.unshift(curr_param);
+                    }
+                  }
 
-                return fields
-              })(),
+                  if (params.length > 0) {
+                    url += "?" + params.join("&");
+                  }
+                  return url;
+                };
 
-              toActualColName = function(col){
-                return col.replace(/\.?([A-Z]+)/g, function (x,y){return "_" + y.toLowerCase()}).replace(/^_/, "");
-              };
+            $("[data-filter-field]").each(function(i, el){
+              var name = el.name,
+                  type = $(el).data("type"),
+                  value = el.value;
+              switch (true) {
+                case type == "string" && value !== "":
+                  params.push(name + "__contains=" + value);
+                  break;
+                case type == "bool" && value !== "":
+                case type == "list" && value !== "0":
+                case type == "number" && value !== "" && !isNaN(value):
+                  params.push(name + "=" + value);
+                  break;
+                case type == "date" && value !== "any_date":
 
-          var field = null,
-              field_name = "",
-              len = fields.length,
-              i = 0;
-          for (; i < len; i ++) {
-            field = fields[i];
-            field_name = field.name;
-            switch (field.type) {
-              case "string":
-                $filters.append("<div class='form-group'>" +
-                                    "<label class='camelcaseFix'>" + field_name + "</label>" +
-                                    "<input type='text' name='" + toActualColName(field_name) + "' class='form-control' data-filter-field />" +
-                                "</div>");
-                break;
-              case "number":
-                $filters.append("<div class='form-group'>" +
-                                    "<label class='camelcaseFix'>" + field_name + "</label>" +
-                                    "<input type='number' step='0.01' name='" + toActualColName(field_name) + "' class='form-control' data-filter-field />" +
-                                "</div>");
-                break;
-              case "bool":
-                $filters.append("<div class='form-group'>" +
-                                    "<label class='camelcaseFix'>" + field_name + "</label>" +
-                                    "<select name='" + toActualColName(field_name) + "' class='form-control' data-filter-field >" +
-                                      "<option value='all'>All</option>" +
-                                      "<option value='1'>" + field_name + "</option>" +
-                                      "<option value='0'>Not " + field_name + "</option>" +
-                                    "</select>" +
-                                "</div>");
-                break;
-              case "date":
-                $filters.append("<div class='form-group'>" +
-                                    "<label class='camelcaseFix'>" + field_name + "</label>" +
-                                    "<select name='" + toActualColName(field_name) + "' class='form-control' data-filter-field >" +
-                                      "<option value='any_date'>Any Date</option>" +
-                                      "<option value='today'>Today</option>" +
-                                      "<option value='past_7_days'>Past 7 Days</option>" +
-                                      "<option value='this_month'>This Month</option>" +
-                                      "<option value='this_year'>This Year</option>" +
-                                    "</select>" +
-                                "</div>");
-                /*
-                $filters.append("<div>" +
-                                    "<label>" + field_name + "</label>" +
-                                    "<label>From</label>" +
-                                    "<input type='text' name='" + field_name + "__gte' data-filter-field />" +
-                                    "<label>To</label>" +
-                                    "<input type='text' name='" + field_name + "__lte' data-filter-field />" +
-                                "</div>");
-                */
-                break;
-              default:
+                  switch (value) {
+                    case "today":
+                      params.push(name + "=" + getStringDate(new Date()));
+                      break;
+                    case "past_7_days":
+                      var now = new Date(),
+                          last_7_days = getLast7Days(new Date());
+                      params.push(name + "__gte=" + getStringDate(last_7_days));
+                      params.push(name + "__lte=" + getStringDate(now));
+                      break;
+                    case "this_month":
+                      var from = getStringDate(new Date()).split("-"),
+                          to = getStringDate(new Date()).split("-");
+                      from[2] = "01";
+                      to[2] = getMonthLastDay(to[0], to[1]);
+                      params.push(name + "__gte=" + from.join("-"));
+                      params.push(name + "__lte=" + to.join("-"));
+                      break;
+                    case "last_month":
+                      var from = getStringDate(getLastMonth()),
+                          to = from.split("-");
+                      to[2] = getMonthLastDay(to[0], to[1]);
+                      params.push(name + "__gte=" + from);
+                      params.push(name + "__lte=" + to.join("-"));
+                      break;
+                    case "this_year":
+                      var from = getStringDate(new Date()).split("-"),
+                          to = getStringDate(new Date()).split("-");
+                      from[1] = "01";
+                      from[2] = "01";
+                      to[1] = "12";
+                      to[2] = "31";
+                      params.push(name + "__gte=" + from.join("-"));
+                      params.push(name + "__lte=" + to.join("-"));
+                      break;
+                  }
 
+                  break;
+              }
+            });
+
+            //console.log(buildURL(params));
+            win.open(buildURL(params), "_self");
+          };
+
+          $("#export_form")[0].onsubmit = function(e){
+            (e.preventDefault) ? e.preventDefault() : (e.returnValue = false);
+            var url = this.action,
+                filters = win.location.search.substr(1).split("&") || [],
+                len = filters.length,
+                i = 0;
+
+            for (; i < len; i ++) {
+              if (filters[i] === "" || filters[i].indexOf("p=") !== -1 || filters[i].indexOf("o=") !== -1) {
+                filters.splice(i, 1);
+              }
             }
-          }
+
+            if (filters.length > 0) {
+              url += "&" + filters.join("&");
+            }
+
+            //console.log(url);
+            win.open(url, "_self");
+          };
       })(window, document, $);
 
       var pages = {{.Pagination}};
@@ -457,29 +528,31 @@
       $('a.camelcaseFix').each(function(index){
         var content_y = "";
         var y = $(this).closest('th').find('span');
-        if ($(this).text().search(":ID") >= 0){
-          var c = tableOrder($(this), 'ID');
-          var x = c.replace('o=','o=-');
-          $(this).attr("href", c);
-          if (x == search_){
-            $(this).attr("href", fixcamelcase_($(this)));
-            content_y = descOrg;
-          }else{
-            content_y = defaultOrg;
-          }
-        }else{
-          if ($(this).text().search(":_id") >= 0){
-            var c = tableOrder($(this), 'fKey');
-            var x = c.replace('o=','o=-');
-            $(this).attr("href", c);
-            if (x == search_){
-              $(this).attr("href", fixcamelcase_($(this)));
-              content_y = descOrg;
-            }else{
-              var content_y = "";
-              content_y = defaultOrg;
-            }
-          }else{
+        // if ($(this).text().search(":ID") >= 0){
+        //   var c = tableOrder($(this), 'ID');
+        //   var x = c.replace('o=','o=-');
+        //   $(this).attr("href", c);
+        //   if (x == search_){
+        //     $(this).attr("href", fixcamelcase_($(this)));
+        //     content_y = descOrg;
+        //   }else{
+        //     content_y = defaultOrg;
+        //   }
+        // }else{
+        //   if ($(this).text().search(":_id") >= 0){
+        //     var c = tableOrder($(this), 'fKey');
+        //     var x = c.replace('o=','o=-');
+        //     $(this).attr("href", c);
+        //     if (x == search_){
+        //       $(this).attr("href", fixcamelcase_($(this)));
+        //       content_y = descOrg;
+        //     }else{
+        //       var content_y = "";
+        //       content_y = defaultOrg;
+        //     }
+        //   }else{
+        var th_text = $(this).text().substr($(this).text().length - 2);
+        var new_th_text = $(this).text().slice(0,-2);
           var x= fixcamelcase_($(this)).replace('o=','o=-');
           $(this).attr("href", fixcamelcase_($(this)));
             if (x == search_){
@@ -489,7 +562,10 @@
 
               content_y = defaultOrg;
             }
-          }
+          // }
+        // }
+        if (isUpperCase(th_text) && th_text == "ID"){
+          $(this).text(new_th_text);
         }
         y.html(content_y);
       });
@@ -497,26 +573,28 @@
       $('a.camelcaseFix').each(function(index){
         var content_y = "";
         var y = $(this).closest('th').find('span');
-        if ($(this).text().search(":ID") >= 0){
-            var c = tableOrder($(this), 'ID');
-            $(this).attr("href", c);
-          if (c == search_){
-            $(this).attr("href", fixcamelcase_($(this)).replace('o=','o=-'));
-            content_y = ascOrg;
-          }else{
-            content_y = defaultOrg;
-          }
-        }else{
-          if ($(this).text().search(":_id") >= 0){
-            var c = tableOrder($(this), 'fKey');
-            $(this).attr("href", c);
-            if (c == search_){
-              $(this).attr("href", fixcamelcase_($(this)).replace('o=','o=-'));
-              content_y = ascOrg;
-            }else{
-              content_y = defaultOrg;
-            }
-          }else{
+        // if ($(this).text().search(":ID") >= 0){
+        //     var c = tableOrder($(this), 'ID');
+        //     $(this).attr("href", c);
+        //   if (c == search_){
+        //     $(this).attr("href", fixcamelcase_($(this)).replace('o=','o=-'));
+        //     content_y = ascOrg;
+        //   }else{
+        //     content_y = defaultOrg;
+        //   }
+        // }else{
+        //   if ($(this).text().search(":_id") >= 0){
+        //     var c = tableOrder($(this), 'fKey');
+        //     $(this).attr("href", c);
+        //     if (c == search_){
+        //       $(this).attr("href", fixcamelcase_($(this)).replace('o=','o=-'));
+        //       content_y = ascOrg;
+        //     }else{
+        //       content_y = defaultOrg;
+        //     }
+        //   }else{
+        var th_text = $(this).text().substr($(this).text().length - 2);
+        var new_th_text = $(this).text().slice(0,-2);
             var x= fixcamelcase_($(this));
             $(this).attr("href", fixcamelcase_($(this)));
             if (x == search_){
@@ -525,7 +603,10 @@
             }else{
               content_y = defaultOrg;
             }
-          }
+          // }
+        // }
+        if (isUpperCase(th_text) && th_text == "ID"){
+          $(this).text(new_th_text);
         }
         y.html(content_y);
       });
@@ -555,7 +636,7 @@
       $( ".fixed_bottom_right" ).delay( 2000 ).fadeOut( 1000 );
       $('#listID').val("");
       $('#listModelName').val("");
-
+      $('a.clickable').parent().addClass('search pointer');
     </script>
   </body>
 </html>

@@ -91,7 +91,7 @@
  <ul class="dropdown-menu" role="menu">
    <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=2>Ready</a></li>
    <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=3>Serve</a></li>
-   <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status="1">Cancel</a></li>
+   <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status="4">Cancel</a></li>
  </ul>
 </div>
 <div class="clr"></div>
@@ -208,7 +208,8 @@
                "elapsed_time" : data[i].elapsed_time,
                "allergies" : data[i].allergies,
                "serving_time" : data[i].serving_time,
-               "elapsed_time_seconds":data[i].elapsed_time_seconds
+               "elapsed_time_seconds":data[i].elapsed_time_seconds,
+               "order_type" : data[i].order_type
            }
            appendRequestInstance(args);
          }
@@ -252,7 +253,8 @@
      if (args['remarks'] != "") {
        remarks = $('<table>').addClass('table table-condensed').append(
                    $('<tr>').css('border','none').append(
-                     $('<td>').css('border','none').addClass(status).text(args['quantity'] + "x " + args['item_name'])
+                     $('<br/>'),
+                     $('<td>').css('border','none').addClass(status).text(args['quantity'] + "x " + args['item_name'] + "-[" + (args["order_type"] == "1" ? "Dine-In" : "Take-Out") + "]")
                    ),
                    $('<tr>').css('border','none').append(
                      $('<td>').css('border','none').addClass(status).append(
@@ -271,6 +273,12 @@
        remarks =  $('<table>').addClass('table table-condensed').append(
                    $('<tr>').css('border','none').append(
                      $('<td>').css('border','none').addClass(status).text(args['quantity'] + "x " + args['item_name'])
+                     .append(
+                       $('<strong>').append(
+                         $('<br/>'),
+                         $('<span>').text(" [" +(args["order_type"] == "1" ? "Dine-In" : "Take-Out") + "]").css('color',"red")
+                       )
+                     )
                    ),
                    $('<tr>').css('border','none').append(
                      $('<td>').css('border','none').addClass(status).append(

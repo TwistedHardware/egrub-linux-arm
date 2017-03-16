@@ -214,6 +214,7 @@ right:5px;max-width:40%
 .search:hover{
   box-shadow:0px 5px 1.4em #bbb;
 }
+
 .shadowed{
   box-shadow:0px 5px 1.4em #bbb;
 }
@@ -613,4 +614,11 @@ div.toptabs >div.col-sm-4 {
 	-webkit-transform: translateX(-50%) translateY(-50%); /* IE 9 */
 	transform: translateX(-50%) translateY(-50%); /* IE 9 */
 
+}
+@media screen and (max-width: 500px) {
+    .pagination-xs li > * {
+        font-size: 12px !important;
+        padding-top: 1px !important;
+        padding-bottom: 1px !important;
+    }
 }

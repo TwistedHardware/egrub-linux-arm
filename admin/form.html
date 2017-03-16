@@ -115,11 +115,11 @@
 
           <div class="tab-content">
             <ul class="nav nav-tabs admin_font nab-tabs capitalized bold">
-                <li class="active tab_button"><a style="margin:0px;" href="#{{.Schema.Name}}" class="camelcaseFix trigger_hash" aria-controls="mainDivTab" role="tab" data-toggle="tab">{{.Schema.Name}}</a></li>
+                <li id="trigger_{{.Schema.Name}}" class="active tab_button"><a style="margin:0px;" href="#{{.Schema.Name}}" class="camelcaseFix trigger_hash" aria-controls="mainDivTab" role="tab" data-toggle="tab">{{.Schema.Name}}</a></li>
                 {{ if eq .Schema.ModelID 0 }}
                 {{ else }}
                   {{ range .Schema.Inlines }}
-                  <li class="tab_button" onclick="update_inline('InlineModelName');"><a style="margin:0px;" href="#{{.Name}}" aria-controls="{{.Name}}" role="tab" data-toggle="tab" class="camelcaseFix  trigger_hash">{{.Name}}</a></li>
+                  <li id="trigger_{{.Name}}" class="tab_button" onclick="update_inline('InlineModelName');"><a style="margin:0px;" href="#{{.Name}}" aria-controls="{{.Name}}" role="tab" data-toggle="tab" class="camelcaseFix  trigger_hash">{{.Name}}</a></li>
                   {{end}}
                 {{end}}
             </ul>
@@ -232,7 +232,7 @@
                               <div class="col-sm-12">
                                 <!-- <input name="{{.Name}}" style="width: 20px; height: 20px;" type="checkbox" class="form-check-input checkbox-primary" {{if .Value}}checked{{end}} {{if .ReadOnly}} readonly {{end}}> -->
                                 <div onclick="$(this).find('input').click();" class="material-switch">
-                                  <input {{ if .Required }} required {{ end }} name="{{.Name}}" type="checkbox" {{if .Value}}checked{{end}} {{if .ReadOnly}} disabled {{end}} />
+                                  <input {{ if .Required }} required {{ end }} {{if eq .ReadOnly false}}name="{{.Name}}"{{end}} type="checkbox" {{if .Value}}checked{{end}} {{if .ReadOnly}} disabled {{end}} />
                                   <label  class="label-primary"></label>
                                 </div>
                                 {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
@@ -243,7 +243,7 @@
                           {{else if .List}}
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <select {{if .Required}} required {{end}} name="{{.Name}}" data-placeholder="Select" class="{{if .Required}}select_required {{end}}chosen-select form-control" tabindex="2" {{if .ReadOnly}} readonly {{end}}>
+                                <select {{if .Required}} required {{end}} name="{{.Name}}" data-placeholder="Select" class="{{if .Required}}select_required {{end}}chosen-select form-control" tabindex="2" {{if .ReadOnly}} readonly disabled {{end}}>
                                   {{range .Choices}}
                                     {{if eq .K 0}}
                                     <option value=""{{if .Selected}} selected{{end}}>{{ .V }}</option>
@@ -257,7 +257,7 @@
                           {{else if .FKey}}
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
-                                <select {{if .Required}} required {{end}} name="{{.Name}}" data-placeholder="Select" class="{{if .Required}}select_required {{end}}chosen-select form-control"  tabindex="2" {{if .ReadOnly}} readonly {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
+                                <select {{if .Required}} required {{end}} name="{{.Name}}" data-placeholder="Select" class="{{if .Required}}select_required {{end}}chosen-select form-control"  tabindex="2" {{if .ReadOnly}} readonly disabled {{end}} {{ if eq .Pattern "" }}{{ else }}pattern="{{ .Pattern }}" {{ if eq .PatternMsg "" }}{{ else }}oninvalid="setCustomValidity('{{.PatternMsg}}')"{{ end }}{{ end }}>
                                   {{range .Choices}}
                                     {{if eq .K 0}}
                                     <option value=""{{if .Selected}} selected{{end}}>{{ .V }}</option>
@@ -333,8 +333,8 @@
                 <br>
                 <div class="col-xs-6" style="padding:0px;">
                   <div class="input-group search " style="float:left;">
-                    <input type="text" class="form-control camelcaseFixPlaceHolder"
-                    id="search" placeholder="{{.Name}}">
+                    <input type="text" class="table_search form-control camelcaseFixPlaceHolder"
+                    id="{{.Name}}_search"  placeholder="{{.Name}}">
                     <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
                   </div>
                 </div>
@@ -345,90 +345,47 @@
                   <a class="hidden-xs btn btn-primary search pull-right camelcaseFix camelcaseFixHref" href="/admin/{{.ModelName}}/new?{{$MainModel}}ID={{$MainModelID}}&return_url=/admin/{{$MainModelS}}/{{$MainModelID}}">
                     <i class="fa fa-plus"></i> Add New {{.Name}}
                   </a>
-
-                  <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right" href="/admin/export/?m={{.ModelName}}" style="margin-right:2px;">
+                  <!-- TODO EXCEL -->
+                  <!-- <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right" href="/admin/export/?m={{.ModelName}}" style="margin-right:2px;">
                     <i class="fa fa-table"></i> Excel
                   </a>
                   <a class="hidden-xs btn btn-success search pull-right" href="/admin/export/?m={{.ModelName}}" style="margin-right:3px;">
                     <i class="fa fa-table"></i> Excel
-                  </a>
+                  </a> -->
                 </div>
 
                 <br>
                 <br>
                 <br>
-                <table id="listtable" class="table table-striped  table-bordered  table-hover table-condensed float-header">
+                <table id="{{.Name}}_listtable" class="listtable table table-striped  table-bordered  table-hover table-condensed float-header">
                   <thead class="admin_font">
                     <tr class="table-header capitalized">
                       <th class="checkbox-container">
                         <input id="main_check" class="" type="checkbox">&nbsp;&nbsp;
                       </th>
-                      {{range .Columns}}
-                      <!-- <th class="trigger_desc pointer"><a href="?o={{.}}&p=" class="camelcaseFix">{{.}}</a><i class="fa fa-sort-desc pull-right">&nbsp;&nbsp;</i></th> -->
-                      <th class="trigger_desc pointer camelcaseFix">{{.}}
-                        <!-- <span class="fa-stack fa-fw pull-right">
-                          <i class="fontdarkgray fa fa-sort-asc fa-stack-1x"></i>
-                          <i class="fontdarkgray fa fa-sort-desc fa-stack-1x"></i>
-                        </span> -->
-                      </th>
+                      {{$modelName := .ModelSchema.Name}}
+                      {{range $Inline.ModelSchema.Fields}}
+                        {{if .ListDisplay}}
+                        <!-- <th class="trigger_desc pointer"><a href="?o={{.Name}}" class="camelcaseFix">{{if .ID}}{{$modelName}}{{else}}{{.Name}}{{end}}</a> -->
+                        <th class="trigger_desc pointer"><span class="camelcaseFix">{{if .ID}}{{$modelName}}{{else}}{{.Name}}{{end}}</span>
+                          <!-- <span class="fa-stack fa-fw pull-right">
+                            <i class="fontdarkgray fa fa-sort-asc fa-stack-1x"></i>
+                            <i class="fontdarkgray fa fa-sort-desc fa-stack-1x"></i>
+                          </span> -->
+                        </th>
+                        {{end}}
                       {{end}}
                     </tr>
                   </thead>
                   <tbody>
-                    {{$name := .LUrl}}
-                    {{range .Rows}}
+
+                    {{range $Inline.Rows}}
                       <tr>
                         <td onclick="$('#main_check').prop('checked', false);">
-                          <input class="item_check" type="checkbox">
+                          <input  class="item_check" type="checkbox">
                         </td>
-                        {{ range $index, $value := . }}
-                          {{if .IsFkeyRel }}{{else}}
-                            {{if .IsBool}}
-                              <td>
-                                {{if .Value}}
-                                  <i class="fa fa-check-circle" aria-hidden="true" style="color:green;"></i>
-                                {{else}}
-                                <i class="fa fa-times-circle" aria-hidden="true" style="color:red;"></i>
-                              </td>
-                              {{end}}
-                            {{else if .IsString}}
-                              <td>
-                                {{.Value}}
-                              </td>
-                            {{else if .IsNumber}}
-                              <td>
-                                {{.Value}}
-                              </td>
-                            {{else if .IsDate}}
-                              <td>
-                                {{.Value}}
-                              </td>
-                            {{else if .IsID}}
-                              <td class="search pointer Row_id"  data-id="{{.ID}}" onclick="$(this).find('a')[0].click();">
-                                <a class="bold no-style" href="/admin/{{$name}}/{{.ID}}">{{.Value}}</a>
-                              </td>
-                            {{else if .IsList}}
-                              <td class="camelcaseFix">
-                                {{.Value}}
-                              </td>
-                            {{else if .IsFKey}}
-                              <td class="search pointer" onclick="$(this).find('a')[0].click();">
-                                <a class="bold no-style" href="/admin/{{.FUrl}}">{{.Value}}</a>
-                              </td>
-                            {{else if .IsMultiLingual}}
-                              <td class="">
-                                {{.Value}}
-                              </td>
-                            {{else if .IsImage}}
-                                <td class="">
-                                  <img style="max-width: 100px; height: auto;" src="{{.Value}}" />
-                                </td>
-                            {{else}}
-                              <td>
-                                <span class="other">{{.Value}}</span>
-                              </td>
-                            {{end}}
-                          {{end}} <!-- End of Else  -->
+                        {{ range . }}
+                          <td data-id="{{.}}" onclick="$(this).find('a')[0].click()">{{.}}</td>
                         {{end}} <!-- End of Index Range  -->
                       </tr>
                     {{end}} <!-- End of Rows Range  -->
@@ -438,6 +395,25 @@
                   <button onclick="BuildDeleteList('item_check')" class="hidden-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
                   <button onclick="BuildDeleteList('item_check')" class="hidden-sm hidden-md hidden-lg btn-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
 
+                  <div style="display:inline-block;float:right;">
+                    <form id="export_form" action="/admin/export/" method="get">
+                      <input type="hidden" name="m" value="{{ .ModelName }}" />
+                      <input type="hidden" name="{{ $MainModel }}Id" value="{{ $MainModelID }}" data-to-actual-name />
+
+                      <button type="submit" class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right">
+                        <i class="fa fa-table"></i> Excel
+                      </button>
+                      <button type="submit" class="hidden-xs btn btn-success search pull-right">
+                        <i class="fa fa-table"></i> Excel
+                      </button>
+                    </form>
+                  </div>
+                  <!-- <a class="hidden-sm hidden-md hidden-lg btn-xs btn btn-success search pull-right" href="/admin/export/?m={{.ModelName}}" style="margin-right:2px;">
+                    <i class="fa fa-table"></i> Export
+                  </a>
+                  <a class="hidden-xs btn btn-success search pull-right" href="/admin/export/?m={{.ModelName}}" style="margin-right:3px;">
+                    <i class="fa fa-table"></i> Export
+                  </a> -->
                 </div>
                 <div class="bottom-space col-sm-12">
                 </div>
@@ -508,20 +484,64 @@
         <strong>Info:</strong>&nbsp;&nbsp;Changes Successfully Applied to <span class="camelcaseFix">{{.Schema.Name}}</span>
       </div>
     {{end}}
+
     <script src="/static/assets/chosen/chosen.jquery.js"></script>
     <!-- <script type="text/javascript" src="/static/assets/mdb/js/mdb.min.js"></script> -->
     <script src="/static/assets/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
+    if (window.location.pathname.split("/")[3] == "new"){
+      if (window.location.search != ""){
+        var origin = window.location.search.substr(1).split("&return_url")[0].split("="),
+        originmodelName = origin[0],
+        originID = origin[1];
 
+        if (!isNaN(originID) && originID > 0){
+          $('select').filter(function() {
+          return $(this).attr('name').toLowerCase().indexOf(originmodelName) > -1;
+        }).val(originID).trigger("chosen:updated").prop("disabled", true).addClass('Origin_');
+        }
+      }
+    }
+      $("[data-to-actual-name]").each(function(i, el){
+        el.name = el.name.replace(/\.?([A-Z]+)/g, function (x,y){return "_" + y.toLowerCase()}).replace(/^_/, "");
+      });
 
     setHeaderTabs(arrayVariableHeader, '#headtab-container', 'col-sm-4');
     fixcamelcase('camelcaseFix','','');
     fixcamelcase('camelcaseFixPlaceHolder','', 'placeholder');
 
-    // $('.camelcaseFixHref').each(function(index,value){
-    //   var href_ = $(value).attr('href').toLowerCase();
-    //   $(value).attr('href', href_);
-    // });
+    $('.tab_button').each(function(){
+      $(this).click(function(){
+        $('.camelcaseFixHref').each(function(index,value){
+          if (window.location.hash != ""){
+            var href_ = $(value).attr('href').toLowerCase();
+            href_ = href_.split("#")[0];
+          }else{
+            var href_ = $(value).attr('href').toLowerCase();
+          }
+          $(value).attr('href', href_+ window.location.hash);
+        });
+        $('a.clickable').each(function(){
+          if (window.location.hash != ""){
+            var href_ = $(this).attr('href').toLowerCase();
+            href_ = href_.split("#")[0];
+          }else{
+            var href_ = $(this).attr('href').toLowerCase();
+          }
+          $(this).attr('href', href_+"?return_url=" + window.location.pathname + window.location.hash);
+        });
+      });
+    });
+
+    $('.camelcaseFixHref').each(function(index,value){
+      if (window.location.hash != ""){
+        var href_ = $(value).attr('href').toLowerCase();
+        href_ = href_.split("#")[0];
+      }else{
+        var href_ = $(value).attr('href').toLowerCase();
+      }
+      $(value).attr('href', href_+ window.location.hash);
+    });
 
     //THIS LINE IS FOR RETURNING TO ORIGINAL PAGE WHEN GOES TOO FAR AWAY FROM ORIGINAL PAGE
     if (window.location.search.indexOf("return_url")>=0){
@@ -568,12 +588,25 @@
       }
       floattableHeader('table.float-header');
 
-          $('th.trigger_desc.camelcaseFix').each(function(index){
+          $('th.trigger_desc').find('span').each(function(index){
             var a = "";
-            if ($(this).text().search(":ID") >= 0){
-              a = $(this).text().split(":")[0];
-            }else if ($(this).text().search(":_id") >= 0){
-              a = $(this).text().split(":")[0];
+            if ($(this).text().search("ID") >= 0){
+              var th_text = $(this).text().substr($(this).text().length - 2);
+              var new_th_text = $(this).text().slice(0,-2);
+              // TODO ORDERING
+                  // var x= fixcamelcase_($(this));
+                  // $(this).attr("href", fixcamelcase_($(this))+window.location.hash);
+                  // if (x == search_){
+                  //   // $(this).attr("href", fixcamelcase_($(this)).replace('o=','o=-')+window.location.hash);
+                  //   content_y = ascOrg;
+                  // }else{
+                  //   content_y = defaultOrg;
+                  // }
+                // }
+              // }
+              if (isUpperCase(th_text) && th_text == "ID"){
+                a = new_th_text;
+              }
             }else{
               a = $(this).text();
             }
@@ -654,9 +687,7 @@
 
 
           trigger_hash('trigger_hash');
-          if ($('table').hasClass('listtable')){
-          searchTable('listtable', 'search');
-          }
+
 
           $('.checkinventory').each(function(index){
             var me = $(this).attr('href');
@@ -676,29 +707,79 @@
           $('#InlineModelName').val(window.location.hash.split('#')[1]);
 
           $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip();
           });
 
+        $(document).ready( function() {
+          $('.select_required').each(function(index, el){
 
-          $('.select_required').each(function(index){
-            var a = $(this).prop('required');
-            if (a){
-              $(this).css("display", "inline")
+            if (el.hasAttribute("required")) {
+              if (el.hasAttribute("readonly")) {
+                $(this).css('display',"none");
+              }else{
+                  $(this).css("display", "inline");
+              }
+
+              $(this)
                 .css("position","absolute")
                 .css("height", "1px")
                 .css("width", "1px")
                 .css("z-index", "-1")
                 .attr("tabindex", "-1");
-              // $.validator.setDefaults({ ignore: ":hidden:not(.select_required)" });
-              // var x = 0;
-              // $(this).find('option').each(function() {
-              //     if(x == 0) {
-              //         $(this).val("");
-              //     }
-              //     x ++;
-              // });
             }
           });
+          $('.Origin_').each(function(index, el){
+              $(this).css("display", "none");
+              $(this)
+                .css("position","absolute")
+                .css("height", "1px")
+                .css("width", "1px")
+                .css("z-index", "-1")
+                .attr("tabindex", "-1");
+
+          });
+          $('.table_search').each(function(){
+            $(this).keyup(function(){
+              var hash = window.location.hash.replace("#","");
+              if ($('#'+hash+'_listtable').hasClass('listtable')){
+              searchTableInline(hash+'_listtable', $(this).attr('id'));
+              }
+            });
+          });
+
+        });
+        var hash_trigger = window.location.hash.replace("#","");
+        if (hash_trigger != ""){
+          $("#trigger_"+hash_trigger).find('a').click();
+          // hash_trigger = "";
+        }
+        $('a.clickable').parent().addClass('search pointer');
+
+
+
+    </script>
+    <script>
+    //TODO: LimitChoicesTo with AJAX and Triggers
+    // if("{{.Schema.Name}}" == "TransactionLine") {
+    //     $("select[name=ItemID]").change(function(){
+    //         UpdateUomOptions($(this).val());
+    //     });
+    // }
+    // function GetItemUoms(itemID) {
+    //     return [1,2,3,4];
+    // }
+    // function UpdateUomOptions(itemID) {
+    //     if("{{.Schema.Name}}" == "TransactionLine") {
+    //         $("select[name=UnitOfMeasureID] option").each(function(){
+    //             $(this).addClass('hidden');
+    //             if ($.inArray(parseInt($(this).val()), GetItemUoms(itemID)) >= 0) {
+    //                 $(this).removeClass('hidden');
+    //             }
+    //         });
+    //         $('select[name=UnitOfMeasureID]').trigger("chosen:updated");
+    //     }
+    // }
+
     </script>
   </body>
 </html>

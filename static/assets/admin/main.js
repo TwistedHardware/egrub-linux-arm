@@ -216,6 +216,39 @@ searchfield.onkeyup = function(e){
          }
          })(window, document);
 }
+function searchTableInline(table, search){
+  (function(win, doc){
+         "using strict";
+         var searchfield = doc.getElementById(search),
+             tablebody = doc.getElementById(table).tBodies[0];
+
+
+
+             var val   = searchfield.value.toLowerCase(),
+                 rows  = tablebody.rows,
+                 row   = null,
+                 r     = 0,
+                 cells = null,
+                 cell  = null,
+                 c     = 0,
+                 match = false;
+
+             for (; row = rows[r ++];) {
+                 cells = row.cells;
+                 match = false;
+                 for (c = 0; cell = cells[c ++];) {
+                     if ((cell.innerHTML+"").toString().toLowerCase().indexOf(val) > -1) {
+                         match = true;
+                         break;
+                     }
+                 }
+                 row.style.display = match ? "table-row" : "none";
+
+
+
+             }
+         })(window, document);
+}
 
 
 
@@ -301,7 +334,7 @@ function paginator(container_id, page_count){
             return p;
           })(),
           pages = [],
-          max_page = 10,
+          max_page = 5,
           mid_base = Math.ceil(max_page / 2),
           fp = 1,
           lp = page_count,
@@ -431,6 +464,12 @@ function trigger_hash(me){
   });
 };
 
+
+
+function isUpperCase(str) {
+    return str === str.toUpperCase();
+}
+
 function BuildDeleteList(me){
   var a = $('.'+me);
   var listID = "";
@@ -439,8 +478,8 @@ function BuildDeleteList(me){
   var x = 0;
   a.each(function(index){
     if ($(this).prop('checked')==true){
-       _id = $(this).closest('tr').find('td.search.pointer.Row_id').data('id');
-       _name = $(this).closest('tr').find('td.search.pointer.Row_id').find('a').text();
+       _id = $(this).closest('tr').find('a.Row_id').data('id');
+       _name = $(this).closest('tr').find('a.Row_id').text();
        if (x == 0){
          listID = _id;
          list_container_listID = _name;
