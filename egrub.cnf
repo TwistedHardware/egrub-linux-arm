@@ -1,0 +1,41 @@
+port     = 80
+initial  = true
+timezone = Asia/Manila
+
+[backup]
+auto     = false
+backupto =
+
+[update]
+auto = true
+
+[personal]
+username = admin
+fullname =
+address  =
+mobile   =
+email    =
+
+[restaurant]
+name            =
+phone           =
+issign          = true
+orderstaging    = false
+fastfood        = false
+vatvalue        = 0.12
+servicecharge   = 0.0
+tinnumber       =
+print_bill      = false
+printonrecieved = false
+printonready    = false
+address         =
+sss             =
+footer          = Thank you, and please come again.
+header          =
+accr_no         =
+accr_date_from  =
+accr_date_to    =
+serial          =
+permit          =
+trial_mode      = false
+serve_on_close = true
