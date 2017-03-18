@@ -283,6 +283,13 @@
                                 {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
                               </div>
                             </td>
+                          {{else if .Link}}
+                            <td style="width:80%;" class="search">
+                              <div class="col-sm-12">
+                                <a class="btn btn-primary" href="{{.Value}}">{{.Name}}</a><br/>
+                                {{ if eq .Help "" }}{{ else }}<span class="text-muted" style="font-size:12px;"><i class="fa fa-question-circle"></i> {{.Help}}</span>{{ end }}
+                              </div>
+                            </td>
                           {{else}}
                             <td style="width:80%;" class="search">
                               <div class="col-sm-12">
