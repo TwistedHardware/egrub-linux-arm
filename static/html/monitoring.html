@@ -145,6 +145,7 @@
 <script src="/static/assets/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/static/assets/bootstrapcontextmenu/context-menu.js"></script>
 <script src="/static/assets/socket.io-client/socket.io.js"></script>
+<script src="/static/js/d3.min.js"></script>
 <script>
  var server_address = window.location.hostname;
  //var socket = io.connect('http://192.168.149.53:3700');
@@ -155,6 +156,7 @@ var notified_80 = false;
   $(document).ready(function(){
     $('#nav-menu-all').addClass('active');
     retrieveRestoOrders();
+    //sampleD3();
     setInterval(function(){ IncrementTime() }, 1000);
 
     setInterval(function(){ playSound() }, 1000);
@@ -173,12 +175,17 @@ var notified_80 = false;
     }
   }
   socket.on("NotifyUpdate",function(data){
+    console.log("test");
+    // sampleD3();
+    console.log(data);
 		//retrieveRestoOrders();
     if (data['method'] == "checkout") {
       location.reload();
     }else {
-      var audio = new Audio('/static/sounds/new.mp3');
-      audio.play();
+      if (data["request_status"] == "1") {
+        var audio = new Audio('/static/sounds/new.mp3');
+        audio.play();
+      }
       setTimeout(reloadPage, 4000);
     }
 	});
@@ -209,6 +216,7 @@ var notified_80 = false;
               "order_item_id" : data[i].order_item_id,
               "table_id" : data[i].table_id,
               "remarks" : data[i].remarks,
+              "spicy_level" : data[i].spicy_level,
               "location" : data[i].type,
               "elapsed_time" : data[i].elapsed_time,
               "allergies" : data[i].allergies,
@@ -252,6 +260,16 @@ var notified_80 = false;
     if (args['remarks'] != "") {
       args['remarks'] = '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>&nbsp;' + args['remarks']
     }
+    if (args['spicy_level'] != -1) {
+      args['remarks'] += "<br />"
+      for (var i = 0; i < args['spicy_level']; i++) {
+        args['remarks'] += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>"
+      }
+      for (var i = args['spicy_level']; i < 3; i++) {
+        args['remarks'] += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>"
+      }
+    }
+
     if (args['remarks'] != "") {
       //remarks =  $('<tr>').css('border','none').append(
       //  $('<td>').css('border','none').addClass(status).append(
@@ -271,6 +289,7 @@ var notified_80 = false;
                     $('<td>').css('border','none').addClass(status).text(args['quantity'] + "x " + args['item_name'])
                     .append(
                       $('<strong>').append(
+                        $('<br/>'),
                         $('<span>').text(" [" +(args["order_type"] == "1" ? "Dine-In" : "Take-Out") + "]").css('color',"red")
                       )
                     )
@@ -498,6 +517,21 @@ var notified_80 = false;
       });
 	}
   $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
+
+  function sampleD3() {
+    var obj = $(".mo-container");
+    d3.json("/apiFunction/?method=GetMonitoringOrderItems",function(data){
+      var notif = d3.select(obj).selectAll("span").data(data.ordered_items,
+      function(d){
+        return d.order_item_id;
+      });
+      notif.enter().append('span').text(function(d){
+        return "Item: " +d.item + " Qty: " + d.quantity;
+      }).append("br");
+      notif.exit().remove();
+    });
+  }
+
 </script>
 
   </body>
