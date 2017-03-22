@@ -20,6 +20,28 @@
     <style type="text/css" media="all">
       /* fix rtl for demo */
       .chosen-rtl .chosen-drop { left: -9000px; }
+
+      .typed-cursor{
+          opacity: 0;
+          -webkit-animation: blink 0.7s infinite;
+          -moz-animation: blink 0.7s infinite;
+          animation: blink 0.7s infinite;
+      }
+      @keyframes blink{
+          0% { opacity:1; }
+          50% { opacity:0; }
+          100% { opacity:1; }
+      }
+      @-webkit-keyframes blink{
+          0% { opacity:1; }
+          50% { opacity:0; }
+          100% { opacity:1; }
+      }
+      @-moz-keyframes blink{
+          0% { opacity:1; }
+          50% { opacity:0; }
+          100% { opacity:1; }
+      }
     </style>
 
 
@@ -35,7 +57,16 @@
     <script src="/static/assets/js/staticdata.js"></script>
     <link href="/static/assets/css/bootstrap-toggle.min.css" rel="stylesheet">
     <script src="/static/assets/js/bootstrap-toggle.min.js"></script>
-
+    <script src="/static/assets/js/highcharts.js"></script>
+    <script src="/static/assets/js/highcharts-more.js"></script>
+    <script src="/static/assets/js/solid-gauge.js"></script>
+    <script src="/static/assets/js/highcharts-3d.js"></script>
+    <!-- <script src="https://code.highcharts.com/modules/exporting.js"></script> -->
+    <style>
+    .highcharts-yaxis-grid .highcharts-grid-line {
+    	display: none;
+    }
+    </style>
 
   </head>
   <body>
@@ -118,7 +149,10 @@
           <div class="col-sm-12 bhoechie-tab-container">
               <div class="col-sm-2 bhoechie-tab-menu">
                 <div class="list-group">
-                  <a href="#network" class="list-group-item active text-center">
+                  <a href="/settings/" class="list-group-item active text-center">
+                    <h4 class="fa fa-cube fa-fw fa-2x"></h4><br/>System
+                  </a>
+                  <a href="#network" class="list-group-item text-center">
                     <h4 class="fa fa-connectdevelop fa-fw fa-2x"></h4><br/>Network
                   </a>
                   <a href="#backup" class="list-group-item text-center">
@@ -140,7 +174,45 @@
               </div>
               <div class="col-sm-10 bhoechie-tab">
                   <!-- flight section -->
-                  <div class="bhoechie-tab-content active" id="tab-network">
+
+                  <div class="bhoechie-tab-content active" id="tab-system" style="z-index:99;">
+                    <table class="table table-bordered table-condensed" style="margin:0px;padding:0px;">
+                      <thead class="admin_font">
+                        <tr class="table-header capitalized">
+                          <th colspan="2">
+                            <h2 class="bold">
+                              &nbsp;<i class="fa fa-pie-chart"></i>&nbsp;System Info
+                            </h2>
+                          </th>
+                        </tr>
+                      </thead>
+                    </table>
+                    <pre id="container-system_tex" class="col-sm-12" style="z-index:-1;color:#444; padding-top:0px;margin-top:-3px; font-family:monospace; vertical-align:text-bottom;">
+<b>        ______           __
+  ___  / ____/______  __/ /_
+ / _ \/ / __/ ___/ / / / __ \
+/  __/ /_/ / /  / /_/ / /_/ /
+\___/\____/_/   \__,_/_.___/
+</b>
+VERSION: <b>{{.SysInfo.Version}}</b>
+UPTIME : <b>{{.SysInfo.Uptime}}</b>
+IP     : <b>{{.SysInfo.IP}}</b>
+TIME   : <b>{{.SysInfo.Time}}</b>
+> <span class="typedTag"></span></pre>
+
+                    <div id="cpu_container" class="col-sm-12" style="margin: 0 auto">
+                      <div id="container-cpu_temp" class="col-sm-6" style="height: 170px; float: left"></div>
+                      <div id="container-system_load" class="col-sm-6" style="height: 170px; float: left"></div>
+                    </div>
+                    <div class="col-sm-12">
+                      <hr>
+                      <div class="col-sm-4" style="height:300px;" id="container-mem" ></div>
+                      <!-- <div class="col-sm-4" style="height:300px;" id="container-swap" ></div> -->
+                      <div class="col-sm-4" style="height:300px;" id="container-storage" ></div>
+                      <div class="col-sm-4" style="height:300px;" id="container-usb" ></div>
+                    </div>
+                  </div>
+                  <div class="bhoechie-tab-content" id="tab-network">
                       <form class="form" method="POST" action="" autocomplete="off">
                         <input name="FORM" type="hidden" value="network"/>
 
@@ -805,7 +877,27 @@
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
     <script src="/static/assets/chosen/chosen.jquery.js"></script>
     <script src="/static/assets/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/assets/js/typed.js"></script>
     <script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function(){
+        Typed.new('.typedTag', {
+          strings: [
+            "start eGrub --awesome-mode=on",
+            "this is the settings page",
+            "in here you can check your system status",
+            "you can also modify the network settings",
+            "network settings include you WIFI SSID and password",
+            "Don't forget to set your personal information like email and phone",
+            "it's also important to set your restaurant settings",
+            "if you are not sure about what these settings are check egrub.net",
+            "you can also call us or email us at support@egrub.net"
+          ],
+          typeSpeed: 80,
+          cursorChar: '&#9608;',
+          loop: true
+        });
+    });
 
     $(document).ready(function() {
       // Check if there is an requested tab
@@ -926,6 +1018,391 @@
                 return false;
             }
         }
+
+    </script>
+
+
+<!-- HIGHCHARTS -->
+    <script>
+
+          var gaugeOptions = {
+
+            chart: {
+                type: 'solidgauge'
+            },
+
+            title: null,
+
+            pane: {
+                center: ['50%', '85%'],
+                size: '140%',
+                startAngle: -90,
+                endAngle: 90,
+                background: {
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+                    innerRadius: '60%',
+                    outerRadius: '100%',
+                    shape: 'arc'
+                }
+            },
+
+            tooltip: {
+                enabled: false
+            },
+
+            // the value axis
+            yAxis: {
+                stops: [
+                    [0.1, '#33ee33'], // green
+                    // [0.3, '#DDDF0D'], // yellow
+                    [0.7, '#DDDF0D'], // red
+                    [0.9, '#cc0000'] // darkred
+                ],
+                lineWidth: 0,
+                minorTickInterval: null,
+                tickAmount: 2,
+                title: {
+                    y: -70
+                },
+                labels: {
+                    y: 16
+                }
+            },
+
+            plotOptions: {
+                solidgauge: {
+                    dataLabels: {
+                        y: 5,
+                        borderWidth: 0,
+                        useHTML: true
+                    }
+                }
+            }
+        };
+
+        var cputemp = {{.SysInfo.Temperature}};
+        var sysemload = {{.SysInfo.SystemLoad}};
+        var memory = {"Capacity":512,"Used":82,"Percent":"16%","Free":84,"Unit":"MB"};
+        // var swap = {"Capacity":439.5,"Used":43.371,"Percent":"10%","Free":90,"Unit":"GB"};
+        var usb = {"Capacity":439.5,"Used":43.371,"Percent":"10%","Free":90,"Unit":"GB"};
+        var storage = {"Capacity":439.5,"Used":43.371,"Percent":"10%","Free":90,"Unit":"MB"};
+
+        // The CPU 2 gauge
+        var cpulist_content = "";
+        var cpumarker = [];
+
+
+        cputempmarker = Highcharts.chart('container-cpu_temp', Highcharts.merge(gaugeOptions, {
+            yAxis: {
+                min: 0,
+                max: 100,
+                // title: {
+                //     text: 'CPU'
+                // },
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            series: [{
+                name: 'CPU Temperature',
+                data: [cputemp],
+                dataLabels: {
+                    format: '<div style="text-align:center"><span style="font-size:15px;color:' +
+                        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.0f}°C</span><br/>' +
+                           '<span style="font-size:12px;color:#2f70a8;">Temperature</span></div>'
+                },
+                tooltip: {
+                    valueSuffix: 'Usage'
+                }
+            }]
+
+          }));
+        systemloadmarker = Highcharts.chart('container-system_load', Highcharts.merge(gaugeOptions, {
+            yAxis: {
+                min: 0,
+                max: 100
+                // title: {
+                //     text: 'CPU ' + marker
+                // }
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            series: [{
+                name: 'SYSTEM LOAD',
+                data: [sysemload],
+                dataLabels: {
+                    format: '<div style="text-align:center"><span style="font-size:15px;color:' +
+                        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.0f}%</span><br/>' +
+                           '<span style="font-size:12px;color:#2f70a8;">System Load</span></div>'
+                },
+                tooltip: {
+                    valueSuffix: 'Usage'
+                }
+            }]
+
+          }));
+
+        var memorymarker = Highcharts.chart('container-mem', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 45
+                }
+            },
+            title: {
+                text: 'Memory'
+            },
+            subtitle: {
+                text: memory.Used+' '+memory.Unit+'('+memory.Percent+') of '+memory.Capacity +' '+memory.Unit
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 40
+                }
+            },
+            colors:[
+              '#7cb5ec',//'#90ed7d',
+              '#f7a35c',//
+
+            ],
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Percentage',
+                data: [
+                    ['Free', memory.Free],
+                    ['Used', parseInt(100 - memory.Free)]
+                ]
+            }]
+        });
+
+      // var swapmarker = Highcharts.chart('container-swap', {
+      //       chart: {
+      //           type: 'pie',
+      //           options3d: {
+      //               enabled: true,
+      //               alpha: 45
+      //           }
+      //       },
+      //       title: {
+      //           text: 'Swap'
+      //       },
+      //       subtitle: {
+      //         text: swap.Used+' GiB('+swap.Percent+') of '+swap.Capacity + ' GiB'
+      //       },
+      //       plotOptions: {
+      //           pie: {
+      //               innerSize: 100,
+      //               depth: 40
+      //           }
+      //       },
+      //       credits: {
+      //           enabled: false
+      //       },
+      //       series: [{
+      //           name: 'Percentage',
+      //           data: [
+      //               ['Free', swap.Free],
+      //               ['Used', parseInt(100 - swap.Free)]
+      //           ]
+      //       }]
+      //   });
+
+      var storagemarker = Highcharts.chart('container-storage', {
+          chart: {
+              type: 'pie',
+              options3d: {
+                  enabled: true,
+                  alpha: 45,
+                  beta: 0
+              }
+          },
+          title: {
+              text: 'Storage'
+          },
+          subtitle: {
+            text: storage.Used+' '+storage.Unit+'('+storage.Percent+') of '+storage.Capacity + ' '+storage.Unit
+          },
+          tooltip: {
+              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+              pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  depth: 35,
+                  dataLabels: {
+                      enabled: true,
+                      format: '{point.name}'
+                  }
+              }
+          },
+          colors:[
+            '#7cb5ec',//'#90ed7d',
+            '#f7a35c',//
+
+          ],
+          credits: {
+              enabled: false
+          },
+          series: [{
+              type: 'pie',
+              name: 'Percentage',
+              data: [
+                  ['Free', storage.Free],
+                  ['Used', parseInt(100 - storage.Free)]
+                  // {
+                  //     name: 'Chrome',
+                  //     y: 12.8,
+                  //     sliced: true,
+                  //     selected: true
+                  // },
+                  // ['Safari', 8.5],
+                  // ['Opera', 6.2],
+                  // ['Others', 0.7]
+              ]
+          }]
+      });
+
+      var usbmarker = Highcharts.chart('container-usb', {
+          chart: {
+              type: 'pie',
+              options3d: {
+                  enabled: true,
+                  alpha: 45,
+                  beta: 0
+              }
+          },
+          title: {
+              text: 'USB'
+          },
+          subtitle: {
+            text: usb.Used+' '+usb.Unit+'('+usb.Percent+') of '+usb.Capacity +' '+usb.Unit
+          },
+          tooltip: {
+              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+              pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  depth: 35,
+                  dataLabels: {
+                      enabled: true,
+                      format: '{point.name}'
+                  }
+              }
+          },
+          colors:[
+            '#7cb5ec',//'#90ed7d',
+            '#f7a35c',//
+
+          ],
+          credits: {
+              enabled: false
+          },
+          series: [{
+              type: 'pie',
+              name: 'Percentage',
+              data: [
+                  ['Free', usb.Free],
+                  ['Used', parseInt(100 - usb.Free)]
+                  // {
+                  //     name: 'Chrome',
+                  //     y: 12.8,
+                  //     sliced: true,
+                  //     selected: true
+                  // },
+                  // ['Safari', 8.5],
+                  // ['Opera', 6.2],
+                  // ['Others', 0.7]
+              ]
+          }]
+      });
+
+
+
+
+
+              // Bring life to the dials FOR AJAX CALLS UPDATING
+              setInterval(function () {
+                  // Speed
+
+                  // for (i = 0; i < cpulist.length; i++) {
+                  //   var point,
+                  //       newVal,
+                  //       orgcpu,
+                  //       inc;
+                  //   if (cpumarker[i]) {
+                  //       point = cpumarker[i].series[0].points[0];
+                  //       inc = 0.2;
+                  //       orgcpu = cpulist[i]
+                  //       newVal = point.y
+                  //       if (newVal >= orgcpu) {
+                  //           newVal = newVal - inc;
+                  //       }else{
+                  //         newVal = newVal + inc;
+                  //       }
+                  //
+                  //       point.update(newVal);
+                  //   }
+                  // }
+
+                  // FOR PIECHART UPDATE
+
+                  // if (memorymarker) {
+                  //     point = memorymarker.series[0].data[0];
+                  //     orgmemoryFree = parseFloat(memory.Free).toFixed(3)
+                  //     inc = 0.2;
+                  //     newVal = point.y
+                  //     if (newVal >= orgmemoryFree) {
+                  //         newVal = newVal - inc;
+                  //     }else{
+                  //       newVal = newVal + inc;
+                  //     }
+                  //     point.update(newVal);
+                  //
+                  //     point = memorymarker.series[0].data[1];
+                  //     newVal = parseFloat(100 - newVal).toFixed(3);
+                  //     point.update(newVal);
+                  // }
+                  // if (swapmarker) {
+                  //     point = swapmarker.series[0].data[0];
+                  //     inc = Math.random() - 10;
+                  //     newVal = point.y + inc;
+                  //
+                  //     if (newVal < 0 || newVal > 90) {
+                  //         newVal = point.y - inc;
+                  //     }
+                  //
+                  //     point.update(newVal);
+                  //     point = swapmarker.series[0].data[1];
+                  //     newVal = 100 - newVal;
+                  //     point.update(newVal);
+                  // }
+                  // if (storagemarker) {
+                  //     point = storagemarker.series[0].data[0];
+                  //     inc = Math.random() - 10;
+                  //     newVal = point.y + inc;
+                  //
+                  //     if (newVal < 0 || newVal > 90) {
+                  //         newVal = point.y - inc;
+                  //     }
+                  //
+                  //     point.update(newVal);
+                  //     point = storagemarker.series[0].data[1];
+                  //     newVal = 100 - newVal;
+                  //     point.update(newVal);
+                  // }
+              }, 2000);
 
     </script>
   </body>
