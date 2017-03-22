@@ -194,10 +194,10 @@
 /  __/ /_/ / /  / /_/ / /_/ /
 \___/\____/_/   \__,_/_.___/
 </b>
-VERSION: <b>{{.SysInfo.Version}}</b>
-UPTIME : <b>{{.SysInfo.Uptime}}</b>
-IP     : <b>{{.SysInfo.IP}}</b>
-TIME   : <b>{{.SysInfo.Time}}</b>
+VERSION: <b>{{.Status.Version}}{{if .Status.Demo}} DEMO VERSION{{end}}</b>
+UPTIME : <b>{{.Status.Uptime}}</b>
+IP     : <b>{{.Status.IP}}</b>
+TIME   : <b>{{.Status.Time}}</b>
 > <span class="typedTag"></span></pre>
 
                     <div id="cpu_container" class="col-sm-12" style="margin: 0 auto">
@@ -1080,12 +1080,12 @@ TIME   : <b>{{.SysInfo.Time}}</b>
             }
         };
 
-        var cputemp = {{.SysInfo.Temperature}};
-        var sysemload = {{.SysInfo.SystemLoad}};
-        var memory = {"Capacity":512,"Used":82,"Percent":"16%","Free":84,"Unit":"MB"};
+        var cputemp = {{.Status.CPUTemp}};
+        var sysemload = {{.Status.CPULoad}};
+        var memory = {"Capacity":{{.Status.MemoryTotal}},"Used":{{.Status.MemoryUsed}},"Percent":"{{.Status.MemoryPercentage}}%","Free":{{.Status.MemoryFree}},"CapacityUnit":"{{.Status.MemoryTotalUnit}}", "UsedUnit":"{{.Status.MemoryUsedUnit}}"};
         // var swap = {"Capacity":439.5,"Used":43.371,"Percent":"10%","Free":90,"Unit":"GB"};
         var usb = {"Capacity":439.5,"Used":43.371,"Percent":"10%","Free":90,"Unit":"GB"};
-        var storage = {"Capacity":439.5,"Used":43.371,"Percent":"10%","Free":90,"Unit":"MB"};
+        var storage = {"Capacity":{{.Status.StorageTotal}},"Used":{{.Status.StorageUsed}},"Percent":"{{.Status.StoragePercentage}}%","Free":{{.Status.StorageFree}},"CapacityUnit":"{{.Status.StorageTotalUnit}}", "UsedUnit":"{{.Status.StorageUsedUnit}}"};
 
         // The CPU 2 gauge
         var cpulist_content = "";
@@ -1159,12 +1159,19 @@ TIME   : <b>{{.SysInfo.Time}}</b>
                 text: 'Memory'
             },
             subtitle: {
-                text: memory.Used+' '+memory.Unit+'('+memory.Percent+') of '+memory.Capacity +' '+memory.Unit
+                text: memory.Used+' '+memory.UsedUnit+'('+memory.Percent+') of '+memory.Capacity +' '+memory.CapacityUnit
             },
             plotOptions: {
                 pie: {
-                    innerSize: 100,
-                    depth: 40
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    minSize: 130,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}',
+                        distance: 5,
+                    }
                 }
             },
             colors:[
@@ -1229,7 +1236,7 @@ TIME   : <b>{{.SysInfo.Time}}</b>
               text: 'Storage'
           },
           subtitle: {
-            text: storage.Used+' '+storage.Unit+'('+storage.Percent+') of '+storage.Capacity + ' '+storage.Unit
+            text: storage.Used+' '+storage.UsedUnit+'('+storage.Percent+') of '+storage.Capacity + ' '+storage.CapacityUnit
           },
           tooltip: {
               pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -1239,9 +1246,11 @@ TIME   : <b>{{.SysInfo.Time}}</b>
                   allowPointSelect: true,
                   cursor: 'pointer',
                   depth: 35,
+                  minSize: 130,
                   dataLabels: {
                       enabled: true,
-                      format: '{point.name}'
+                      format: '{point.name}',
+                      distance: 5,
                   }
               }
           },
@@ -1272,61 +1281,63 @@ TIME   : <b>{{.SysInfo.Time}}</b>
           }]
       });
 
-      var usbmarker = Highcharts.chart('container-usb', {
-          chart: {
-              type: 'pie',
-              options3d: {
-                  enabled: true,
-                  alpha: 45,
-                  beta: 0
-              }
-          },
-          title: {
-              text: 'USB'
-          },
-          subtitle: {
-            text: usb.Used+' '+usb.Unit+'('+usb.Percent+') of '+usb.Capacity +' '+usb.Unit
-          },
-          tooltip: {
-              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-          },
-          plotOptions: {
-              pie: {
-                  allowPointSelect: true,
-                  cursor: 'pointer',
-                  depth: 35,
-                  dataLabels: {
-                      enabled: true,
-                      format: '{point.name}'
-                  }
-              }
-          },
-          colors:[
-            '#7cb5ec',//'#90ed7d',
-            '#f7a35c',//
-
-          ],
-          credits: {
-              enabled: false
-          },
-          series: [{
-              type: 'pie',
-              name: 'Percentage',
-              data: [
-                  ['Free', usb.Free],
-                  ['Used', parseInt(100 - usb.Free)]
-                  // {
-                  //     name: 'Chrome',
-                  //     y: 12.8,
-                  //     sliced: true,
-                  //     selected: true
-                  // },
-                  // ['Safari', 8.5],
-                  // ['Opera', 6.2],
-                  // ['Others', 0.7]
-              ]
-          }]
-      });
+      // var usbmarker = Highcharts.chart('container-usb', {
+      //     chart: {
+      //         type: 'pie',
+      //         options3d: {
+      //             enabled: true,
+      //             alpha: 45,
+      //             beta: 0
+      //         }
+      //     },
+      //     title: {
+      //         text: 'USB'
+      //     },
+      //     subtitle: {
+      //       text: usb.Used+' '+usb.Unit+'('+usb.Percent+') of '+usb.Capacity +' '+usb.Unit
+      //     },
+      //     tooltip: {
+      //         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      //     },
+      //     plotOptions: {
+      //         pie: {
+      //             allowPointSelect: true,
+      //             cursor: 'pointer',
+      //             depth: 35,
+      //             minSize: 130,
+      //             dataLabels: {
+      //                 enabled: true,
+      //                 format: '{point.name}',
+      //                 distance: 5,
+      //             }
+      //         }
+      //     },
+      //     colors:[
+      //       '#7cb5ec',//'#90ed7d',
+      //       '#f7a35c',//
+      //
+      //     ],
+      //     credits: {
+      //         enabled: false
+      //     },
+      //     series: [{
+      //         type: 'pie',
+      //         name: 'Percentage',
+      //         data: [
+      //             ['Free', usb.Free],
+      //             ['Used', parseInt(100 - usb.Free)]
+      //             // {
+      //             //     name: 'Chrome',
+      //             //     y: 12.8,
+      //             //     sliced: true,
+      //             //     selected: true
+      //             // },
+      //             // ['Safari', 8.5],
+      //             // ['Opera', 6.2],
+      //             // ['Others', 0.7]
+      //         ]
+      //     }]
+      // });
 
 
 
