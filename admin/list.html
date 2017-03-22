@@ -416,7 +416,7 @@
 
                   switch (value) {
                     case "today":
-                      params.push(name + "=" + getStringDate(new Date()));
+                      params.push(name + "__gte=" + getStringDate(new Date()));
                       break;
                     case "past_7_days":
                       var now = new Date(),
