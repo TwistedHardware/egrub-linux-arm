@@ -558,3 +558,24 @@ function hide_loading(duration){
 }
 
 $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
+
+function notifyDemo() {
+  setTimeout(function(){
+    $.notify('Demo eGrub Cube', {
+      autoHide: false,
+      clickToHide: true,
+      elementPosition: "center",
+      className:"info",
+    });
+  }, 1000);
+  setTimeout(function(){
+    $.notify('NOT FOR SALE', {
+      autoHide: false,
+      clickToHide: true,
+      elementPosition: "center",
+      className:"warn",
+    });
+  }, 2000);
+}
+
+$("body").append('<script src="/static/js/notify.min.js"></script>');

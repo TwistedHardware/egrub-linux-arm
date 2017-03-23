@@ -200,6 +200,7 @@
         <script src="/static/js/jquery.datetimepicker.js"></script>
         <script src="/static/js/magicsuggest-min.js"></script>
         <script src="/static/js/datatables.min.js"></script>
+        <script src="/static/assets/admin/main.js"></script>
         <script>
             (function(win, doc){
                 "use strict";
@@ -1219,6 +1220,8 @@
                 });
             })(window, document);
             $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
+            console.log({{.Demo}});
+            {{if .Demo}}notifyDemo();{{end}}
         </script>
     </body>
 </html>

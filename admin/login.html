@@ -194,6 +194,8 @@
       $('#save_trigger').click(function(){
         show_loading();
       });
+
+      {{if .Demo}}notifyDemo();{{end}}
     </script>
   </body>
 </html>

@@ -87,6 +87,7 @@
   <script src="/static/js/branding/index.js"></script>
   <script src="/static/js/branding/theme.js"></script>
   <script src="/static/js/branding/xml.js"></script>
+  <script src="/static/assets/admin/main.js"></script>
 
   <script type="text/javascript">
 
@@ -232,6 +233,6 @@
 
           frm.submit();
       }
-
+      {{if .Demo}}notifyDemo();{{end}}
   </script>
 </html>

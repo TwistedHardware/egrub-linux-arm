@@ -721,6 +721,8 @@
         $("#myModal").modal("hide");
       }
       $("#btnCropImage").on("click", cropImage);
+
+      {{if .Demo}}notifyDemo();{{end}}
     </script>
   </body>
 </html>

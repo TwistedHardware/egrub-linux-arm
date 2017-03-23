@@ -34,9 +34,9 @@
 
 
 
-    <div class="top-space col-sm-12">
-    </div>
-    <div class="fixed-top bg-black3 default-padding z-index9">
+    <!-- <div class="top-space col-sm-12">
+    </div> -->
+    <div class="z-index9 fixed-top bg-black3 default-padding">
       <div class="">
         <div class="pull-right" style="display: block-inline;">
           <div class="admin-button ">
@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-      <div class="container justify-content-md-center">
+      <div class="container justify-content-md-center" style="margin-top: 65px;">
         <center>
           <br>
           <h1 class="admin_font bold">eGrub Dashboard</h1>
@@ -146,7 +146,9 @@
 
       $(function () {
         $('[data-toggle="tooltip"]').tooltip()
-      })
+      });
+
+      {{if .Demo}}notifyDemo();{{end}}
     </script>
   </body>
 </html>

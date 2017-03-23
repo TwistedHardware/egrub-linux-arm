@@ -40,11 +40,11 @@
                  <li hidden><a href="/"><span  style = "font-size : 18px;" class = "fa fa-history">&nbsp;Table History</span></a></li>
 
                  <li><a href = "/branding/" target="_blank"><span  style = "font-size : 18px;" class = "fa fa-paint-brush">&nbsp;Theme Editor</span></a></li>
-                 <li><a href = "/layout_editor/"><span  style = "font-size : 18px;" class = "fa fa-object-ungroup">&nbsp;Layout Editor</span></a></li>
+                 <!--li><a href = "/layout_editor/"><span  style = "font-size : 18px;" class = "fa fa-object-ungroup">&nbsp;Layout Editor</span></a></li-->
                  <li><a href = "/report/"><span  style = "font-size : 18px;" class = "fa fa-table">&nbsp;Report</span></a></li>
                  <li><a href = "/admin/"><span  style = "font-size : 18px;" class = "fa fa-lock">&nbsp;Admin</span></a></li>
 
-                 <li><a href = "#" onclick = "$('#confirm-logout').modal('show');"><span  style = "font-size : 18px;" class = "fa fa-sign-out">&nbsp;Log Out</span></a></li>
+                 <!--li><a href = "#" onclick = "$('#confirm-logout').modal('show');"><span  style = "font-size : 18px;" class = "fa fa-sign-out">&nbsp;Log Out</span></a></li-->
                </ul>
              </li>
            </ul>
@@ -134,6 +134,7 @@
 <script src="/static/assets/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/static/assets/bootstrapcontextmenu/context-menu.js"></script>
 <script src="/static/assets/socket.io-client/socket.io.js"></script>
+<script src="/static/assets/admin/main.js"></script>
 <script>
   var server_address = window.location.hostname;
  //var socket = io.connect('http://192.168.149.53:3700');
@@ -484,6 +485,8 @@
        });
    }
    $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
+
+   {{if .Demo}}notifyDemo();{{end}}
 </script>
 
   </body>
