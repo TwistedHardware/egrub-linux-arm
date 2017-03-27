@@ -212,9 +212,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
+            {{if eq .Schema.ModelSchema.Name "Layout"}}
+            {{else}}
             <button type="button" class="btn btn-default btn-xs" id="crop_image">
               <span class="fa fa-crop"></span>
             </button>
+            {{end}}
             <h4 class="modal-title">Modal Header</h4>
           </div>
           <div class="modal-body">
@@ -567,13 +570,17 @@
       return a;
     }
   }
-
+  var SchemaMarker = {{.Schema.ModelSchema.Name}};
   $('.image_trigger').click(function(){
     var a = $(this).attr('src');
     var header = $(this).parent().parent().find('td').find('a.ID');
     console.log(header);
     var content = "";
-    var rawFile = a.substr(0,a.lastIndexOf(".")) + "_raw" + a.substr(a.lastIndexOf("."));
+    if (SchemaMarker == "Layout"){
+      var rawFile = a;
+    }else{
+      var rawFile = a.substr(0,a.lastIndexOf(".")) + "_raw" + a.substr(a.lastIndexOf("."));
+    }
     content += '<center><img src="'+rawFile+'" style="max-width:70%;max-height:80%;" id="imgRawImage"/></center>';
     $('.modal-body').html(content);
     $('.modal-title').text(header.text());
