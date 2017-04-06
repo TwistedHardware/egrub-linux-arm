@@ -122,6 +122,9 @@
                 <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Bills &amp; Sales Chart" data-report="cust-bills"><i class="fa fa-money fa-3x fa-fw"></i></div>
                 <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Preperation Time Chart" data-report="prep-time"><i class="fa fa-clock-o fa-3x fa-fw"></i></div>
                 <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Item Sales Table" data-report="item-table"><i class="fa fa-table fa-3x fa-fw"></i></div>
+                <div class="report-toggle" onclick="$('#eod-modal').modal('show')" data-toggle="tooltip" data-placement="right" title="EOD Report (z-read)"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
+                <div class="report-toggle" onclick="$('#x-read-modal').modal('show');" data-toggle="tooltip" data-placement="right" title="X Reading Report"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
+                <div class="report-toggle" onclick="$('#terminal-read-modal').modal('show');" data-toggle="tooltip" data-placement="right" title="Terminal Reading Report"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
                 <a href="../" data-toggle="tooltip" data-placement="right" title="back" class="back"><i class="fa fa-home fa-2x fa-fw"></i></a>
             </div>
             <div class="content-wrapper">
@@ -191,6 +194,59 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="eod-modal">
+         <div class="modal-dialog modal-sm">
+           <div class="modal-content">
+             <div class="modal-header">
+               <button class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Confirm</h4>
+             </div>
+             <div class="modal-body">
+               <span id="modal-message" class="text-success">Are you sure to serve print End-Of-Day Report?</span>
+             </div>
+             <div class="modal-footer">
+               <button class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+               <button class="btn btn-success pull-right" id="eod-trigger">Print</button>
+             </div>
+           </div>
+         </div>
+        </div>
+
+        <div class="modal fade" id="x-read-modal">
+         <div class="modal-dialog modal-sm">
+           <div class="modal-content">
+             <div class="modal-header">
+               <button class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Confirm</h4>
+             </div>
+             <div class="modal-body">
+               <span id="modal-message" class="text-success">Are you sure to print X-Reading Report?</span>
+             </div>
+             <div class="modal-footer">
+               <button class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+               <button class="btn btn-success pull-right" id="x-read-trigger">Print</button>
+             </div>
+           </div>
+         </div>
+        </div>
+
+        <div class="modal fade" id="terminal-read-modal">
+         <div class="modal-dialog modal-sm">
+           <div class="modal-content">
+             <div class="modal-header">
+               <button class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Confirm</h4>
+             </div>
+             <div class="modal-body">
+               <span id="modal-message" class="text-success">Are you sure to print Terminal Reading Report?</span>
+             </div>
+             <div class="modal-footer">
+               <button class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+               <button class="btn btn-success pull-right" id="terminal-read-trigger">Print</button>
+             </div>
+           </div>
+         </div>
+        </div>
 
         <script src="/static/assets/js/jquery.min.js"></script>
         <script src="/static/assets/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -202,6 +258,77 @@
         <script src="/static/js/datatables.min.js"></script>
         <script src="/static/assets/admin/main.js"></script>
         <script>
+        $('#eod-trigger').click(function(){
+          $('#modal-message').html("<center><i class='fa fa-spinner fa-spin fa-2x'></i><p>Printing</p></center>");
+          $.ajax({
+              "url": "/apiFunction/",
+              "data": {"method":"generate_eod"},
+              "method": "GET",
+              "dataType": "json",
+              "method": "GET",
+              "beforeSend": function(xhr){
+                  if (xhr.overrideMimeType) {
+                      xhr.overrideMimeType("application/json");
+                  }
+              },
+              "success": function(response){
+                $('#eod-modal').modal('hide');
+              },
+              "error": function(x,y){
+                  console.log(JSON.stringify(x));
+                  $('#modal-message').html("<pre>Error: "+JSON.stringify(x)+"</pre>");
+                  $('#eod-trigger').text('Print Again');
+              }
+            });
+        });
+
+        $('#x-read-trigger').click(function(){
+          $('#modal-message').html("<center><i class='fa fa-spinner fa-spin fa-2x'></i><p>Printing</p></center>");
+          $.ajax({
+              "url": "/apiFunction/",
+              "data": {"method":"PrintXread"},
+              "method": "GET",
+              "dataType": "json",
+              "method": "GET",
+              "beforeSend": function(xhr){
+                  if (xhr.overrideMimeType) {
+                      xhr.overrideMimeType("application/json");
+                  }
+              },
+              "success": function(response){
+                $('#x-read-modal').modal('hide');
+              },
+              "error": function(x,y){
+                  console.log(JSON.stringify(x));
+                  $('#modal-message').html("<pre>Error: "+JSON.stringify(x)+"</pre>");
+                  $('#x-read-trigger').text('Print Again');
+              }
+            });
+        });
+
+        $('#terminal-read-trigger').click(function(){
+          $('#modal-message').html("<center><i class='fa fa-spinner fa-spin fa-2x'></i><p>Printing</p></center>");
+          $.ajax({
+              "url": "/apiFunction/",
+              "data": {"method":"PrintTerminalread"},
+              "method": "GET",
+              "dataType": "json",
+              "method": "GET",
+              "beforeSend": function(xhr){
+                  if (xhr.overrideMimeType) {
+                      xhr.overrideMimeType("application/json");
+                  }
+              },
+              "success": function(response){
+                $('#x-read-modal').modal('hide');
+              },
+              "error": function(x,y){
+                  console.log(JSON.stringify(x));
+                  $('#modal-message').html("<pre>Error: "+JSON.stringify(x)+"</pre>");
+                  $('#terminal-read-trigger').text('Print Again');
+              }
+            });
+        });
             (function(win, doc){
                 "use strict";
 
