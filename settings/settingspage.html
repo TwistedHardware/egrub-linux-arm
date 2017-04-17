@@ -379,7 +379,6 @@ TIME   : <b>{{.Status.Time}}</b>
                             <td class="settings-label">
                               <div class="form-group form-inline">
                                 <label for="">PASSWORD</label>
-
                               </div>
                             </td>
                             <td>
@@ -387,6 +386,31 @@ TIME   : <b>{{.Status.Time}}</b>
                                 <span class="input-group-addon pointer" onclick="$('#password').toggle(); return false;"><i class="fa fa-lock fa-fw"></i></span>
                                 <input id="password" type="text" class="form-control" name="Password" value="{{.NetPassword}}" placeholder="Password - wifi password" style="display:none;">
                               </div>
+                            </td>
+                          </tr>
+                          <tr class="search">
+                            <td class="settings-label">
+                              <div class="form-group">
+                                <label for="">Channel</label>
+                              </div>
+                            </td>
+                            <td>
+                              <select id="channel" type="text" data-placeholder="Select" class="form-control" name="Channel" placeholder="Channel">
+                                <option value="1" {{if eq .NetChannel "1"}}selected{{end}}>1</option>
+                                <option value="2" {{if eq .NetChannel "2"}}selected{{end}}>2</option>
+                                <option value="3" {{if eq .NetChannel "3"}}selected{{end}}>3</option>
+                                <option value="4" {{if eq .NetChannel "4"}}selected{{end}}>4</option>
+                                <option value="5" {{if eq .NetChannel "5"}}selected{{end}}>5</option>
+                                <option value="6" {{if eq .NetChannel "6"}}selected{{end}}>6</option>
+                                <option value="7" {{if eq .NetChannel "7"}}selected{{end}}>7</option>
+                                <option value="8" {{if eq .NetChannel "8"}}selected{{end}}>8</option>
+                                <option value="9" {{if eq .NetChannel "9"}}selected{{end}}>9</option>
+                                <option value="10" {{if eq .NetChannel "10"}}selected{{end}}>10</option>
+                                <option value="11" {{if eq .NetChannel "11"}}selected{{end}}>11</option>
+                                <option value="12" {{if eq .NetChannel "12"}}selected{{end}}>12</option>
+                                <option value="13" {{if eq .NetChannel "13"}}selected{{end}}>13</option>
+                                <option value="14" {{if eq .NetChannel "14"}}selected{{end}}>14</option>
+                              </select>
                             </td>
                           </tr>
                         </table>
