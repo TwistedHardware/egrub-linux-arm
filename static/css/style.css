@@ -10,6 +10,19 @@ a:link{
 	margin 			: 30px;
 }
 
+.mo-content>div{
+  border: 1px solid #555;
+  border-bottom: none;
+  overflow: hidden;
+}
+.mo-content>div:last-child{
+  border-bottom: 1px solid #555;
+}
+
+.mo-content >div>span {
+  display: block;
+}
+
 .mo-instance{
 	width 			: 200px;
 	height 			: auto;
@@ -37,11 +50,40 @@ a:link{
     color               : #d40000;
 }
 
-.mo-content{
+.preparing {
+  background-color: #fcf8e3;
+}
+
+.ready {
+  background-color: #d9edf7;
+}
+
+.served {
+  background-color: #dff0d8;
+}
+
+.cancelled {
+  background-color: #f2dede;
+}
+
+.mo-content {
 	max-height 		: 400px;
 	min-height 		: 400px;
 	overflow-y		: auto;
-	margin 			: 10px;
+	/*margin 			: 10px;*/
+	padding 			: 5px;
+}
+
+.mo-content div {
+  padding: 2px;
+}
+
+.mo-content div span {
+  margin-bottom: 2px;
+}
+
+.mo-content div span > i {
+  margin-right: 2px;
 }
 
 .mo-footer{
