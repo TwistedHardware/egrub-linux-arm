@@ -383,7 +383,7 @@
                 .style("font-weight", "bold")
                 .style("color", "#f00")
                 .text(function(d){
-                  return "[" + (d.type == 1 ? "Dine-In" : "Take-Out") + "]";
+                  return "[" + (d.order_type == 1 ? "Dine-In" : "Take-Out") + "]";
                 });
             rows.append("span")
                 .text(function(d){
