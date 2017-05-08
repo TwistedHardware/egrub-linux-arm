@@ -171,14 +171,43 @@
         $('#nav-menu-{{ .LocationID }}').addClass('active');
         retrieveRestoOrders();
         setInterval(function(){ IncrementTime(); }, 1000);
-        setInterval(function(){ playSound(); }, 1000);
+        setInterval(function(){ playSound(); }, 50);
         //setInterval(function(){ retrieveRestoOrders(); }, 3000);
       });
 
+      console.log(typeof new Audio('/static/sounds/100p.mp3'));
+
+      var itemAlamList = {};
       function playSound(){
         if ($("span[data-attr-100='true']").length > 0) {
+
+          //*
+          $("span[data-attr-100='true']").each(function(i, el){
+            var item_ID = $(el).parent().parent().attr("data-attr-id"),
+                audio = null;
+
+
+            if (itemAlamList[item_ID] && typeof itemAlamList[item_ID] === "object" && "play" in itemAlamList[item_ID]) {
+              audio = itemAlamList[item_ID];
+            } else {
+              audio = itemAlamList[item_ID] = new Audio("/static/sounds/100p.mp3");
+            }
+
+            try {
+              if (audio.paused) {
+                audio.play();
+              }
+            } catch (err) {
+              // new Audio("/static/sounds/100p.mp3").play()
+            }
+          });
+          //*/
+
+          /*
           var audio = new Audio('/static/sounds/100p.mp3');
           audio.play();
+          //*/
+
         } else if ($("span[data-attr-80='true'][data-attr-80-notified='false']").length > 0) {
           $("span[data-attr-80='true']").attr("data-attr-80-notified", "true");
           var audio = new Audio('/static/sounds/80p.mp3');
@@ -428,8 +457,8 @@
                 });
             rows.append("span")
                 .html(function(d){
-                  return '<i class="bell-container fa fa-bell-o" style="color: red;"></i>' +
-                  '<span class="elapsed_time" data-attr-100="true" data-serving-time="'+d.serving_time+'" data-attr-seconds="'+d.elapsed_time_seconds+'" style="color: red;">'+d.elapsed_time+'</span>';
+                  return '<i class="bell-container"></i>' +
+                  '<span class="elapsed_time" data-serving-time="'+d.serving_time+'" data-attr-seconds="'+d.elapsed_time_seconds+'">'+d.elapsed_time+'</span>';
                 });
                 // .append("span")
                 // .attr("class", "table table-condensed")
@@ -554,9 +583,19 @@
                       return;
                     }
 
+                    var item_ID = $(context).data("attr-id"),
+                        status = $(e.target).data("attr-status");
+
+                    if (status == 3 || status == 4) {
+                      if (itemAlamList[item_ID] && typeof itemAlamList[item_ID] === "object" && "pause" in itemAlamList[item_ID]) {
+                        itemAlamList[item_ID].pause();
+                        itemAlamList[item_ID] = {"play":function(){}};
+                      }
+                    }
+
                     var args = {
-                      "request_id": $(context).data("attr-id"),
-                      "request_status": $(e.target).data("attr-status"),
+                      "request_id": item_ID,
+                      "request_status": status,
                       "session_bundle": $(context).closest(".mo-instance").attr("data-attr-order-no"),
                       "table_no": $(context).closest(".mo-instance").attr("data-attr-table-no"),
                       "table_id": $(context).closest(".mo-instance").attr("data-attr-table-id"),
@@ -841,12 +880,13 @@
   }
   function IncrementTime(){
       $('.elapsed_time').each(function(){
+        console.log("111");
         $(this).attr('data-attr-seconds',parseInt($(this).attr('data-attr-seconds')) + 1)
-        if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time')) && $(this).parent().parent().parent().parent().parent().parent().attr('data-attr-status')==1) {
+        if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time')) && $(this).parent().parent().attr('data-attr-status')==1) {
           $(this).css('color','red');
           $(this).attr('data-attr-100', 'true');
           $(this).prev().addClass('fa fa-bell-o').css("color", "red");
-        }else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time'))*0.8 && $(this).parent().parent().parent().parent().parent().parent().attr('data-attr-status')==1) {
+        }else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time'))*0.8 && $(this).parent().parent().attr('data-attr-status')==1) {
           if($(this).attr('data-attr-80-notified') == null){
             $(this).attr('data-attr-80', 'true');
             $(this).attr('data-attr-80-notified', 'false');
