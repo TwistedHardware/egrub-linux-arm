@@ -180,7 +180,6 @@
       var itemAlamList = {};
       function playSound(){
         if ($("span[data-attr-100='true']").length > 0) {
-
           //*
           $("span[data-attr-100='true']").each(function(i, el){
             var item_ID = $(el).parent().parent().attr("data-attr-id"),
@@ -224,9 +223,9 @@
             var audio = new Audio('/static/sounds/new.mp3');
             audio.play();
           }
-          console.log("START UPDATE");
+          //console.log("START UPDATE");
           retrieveRestoOrders();
-          console.log("END UPDATE");
+          //console.log("END UPDATE");
           //setTimeout(reloadPage, 4000);
         }
       });
@@ -363,7 +362,7 @@
             var new_data = rows.enter()
                 .append("div")
                 .attr("data-attr-id", function(d){ return d.order_item_id; })
-                .attr("data-attr-status", function(d){ return d.status; })
+                //.attr("data-attr-status", function(d){ return d.status; })
                 .attr("data-attr-item-name", function(d){ return d.item_name; })
                 .attr("data-toggle", "context")
                 .attr("data-target", "#context-menu");
@@ -509,7 +508,8 @@
             // rows = rows.merge(new_data);
 
             // 1st row
-            rows.attr("class", function(d){
+            rows.attr("data-attr-status", function(d){ return d.status; })
+                .attr("class", function(d){
                   switch (d.status) {
                     case 1: return "preparing";
                     case 2: return "ready";
@@ -574,8 +574,9 @@
                     if($(e.target).hasClass("no-context-menu")) {
                       return;
                     }
+                    console.log($(context).attr("data-attr-status"));
                     this.getMenu().find("li").removeClass();
-                    this.getMenu().find("li > a[data-attr-status='" + $(context).data("attr-status") + "']").parent().addClass("disabled");
+                    this.getMenu().find("li > a[data-attr-status='" + $(context).attr("data-attr-status") + "']").parent().addClass("disabled");
                     return true;
                   },
                   "onItem": function (context, e) {
@@ -586,10 +587,19 @@
                     var item_ID = $(context).data("attr-id"),
                         status = $(e.target).data("attr-status");
 
-                    if (status == 3 || status == 4) {
+                    var fakePlayClicked = false;
+                    if (status == 2 || status == 3 || status == 4) {
                       if (itemAlamList[item_ID] && typeof itemAlamList[item_ID] === "object" && "pause" in itemAlamList[item_ID]) {
                         itemAlamList[item_ID].pause();
-                        itemAlamList[item_ID] = {"play":function(){}};
+
+                        setTimeout(function(){
+                          itemAlamList[item_ID] = null;
+                          delete itemAlamList[item_ID];
+                        }, 5000)
+
+                        itemAlamList[item_ID] = {"play":function(){
+
+                        }};
                       }
                     }
 
@@ -880,9 +890,15 @@
   }
   function IncrementTime(){
       $('.elapsed_time').each(function(){
-        console.log("111");
         $(this).attr('data-attr-seconds',parseInt($(this).attr('data-attr-seconds')) + 1)
-        if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time')) && $(this).parent().parent().attr('data-attr-status')==1) {
+        if ($(this).parent().parent().attr('data-attr-status')!=1) {
+          $(this).removeAttr('data-attr-seconds')
+          $(this).css('color','black');
+          $(this).attr('data-attr-100', 'false');
+          $(this).prev().removeClass('fa fa-bell-o').css("color", "black");
+        }
+
+        else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time')) && $(this).parent().parent().attr('data-attr-status')==1) {
           $(this).css('color','red');
           $(this).attr('data-attr-100', 'true');
           $(this).prev().addClass('fa fa-bell-o').css("color", "red");
