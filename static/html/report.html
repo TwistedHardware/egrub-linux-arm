@@ -272,7 +272,16 @@
                   }
               },
               "success": function(response){
-                $('#eod-modal').modal('hide');
+                if (response.status == false) {
+                  $('#modal-message').html("<pre>Error: Z-Read already printed this day.Please try again tommorrow. </pre>");
+                  $('#eod-trigger').text('Close');
+                  $('#eod-trigger').unbind();
+                  $('#eod-trigger').on('click',function(){
+                    $('#eod-modal').modal('hide');
+                  });
+                }else {
+                  $('#eod-modal').modal('hide');
+                }
               },
               "error": function(x,y){
                   console.log(JSON.stringify(x));

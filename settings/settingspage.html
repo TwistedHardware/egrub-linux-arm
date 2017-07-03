@@ -814,6 +814,28 @@ TIME   : <b>{{.Status.Time}}</b>
                     </tr>
                     <tr class="search">
                       <td class="settings-label">
+                        <label for="">Vatable Service Charge</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list-ol fa-fw"></i></span>
+                          <input name="vatableservicecharge" type="checkbox" {{.VatableServiceCharge}} data-toggle="toggle">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Service Charge on Subtotal</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list-ol fa-fw"></i></span>
+                          <input name="ServiceChargeOnSubTotal" type="checkbox" {{.ServiceChargeOnSubTotal}} data-toggle="toggle">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
                         <label for="">Vat</label>
                       </td>
                       <td>
@@ -823,7 +845,7 @@ TIME   : <b>{{.Status.Time}}</b>
                         </div>
                       </td>
                     </tr>
-                    <tr class="search">
+                    <tr class="search" hidden>
                       <td class="settings-label">
                         <label for="">Trial Mode</label>
                       </td>
@@ -845,6 +867,17 @@ TIME   : <b>{{.Status.Time}}</b>
                         </div>
                       </td>
                     </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Non-VAT</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list-ol fa-fw"></i></span>
+                          <input name="non_vat" type="checkbox" {{.NonVat}} data-toggle="toggle">
+                        </div>
+                      </td>
+                    </tr>
                     <thead class="admin_font">
                       <tr class="table-header capitalized">
                         <th colspan="2">
@@ -862,6 +895,94 @@ TIME   : <b>{{.Status.Time}}</b>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil-square-o fa-fw"></i></span>
                           <textarea name="receipt_header1" class="form-control" rows="5">{{.RestaurantInfo.Receipt.Header1}}</textarea>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Machine #</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+                          <input name="machine_no" type="text" value="{{.RestaurantInfo.MachineNo}}" class="form-control">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Accr #</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+                          <input name="accr_no" type="text" value="{{.RestaurantInfo.AccrNo}}" class="form-control">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Date Issued</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+                          <input name="date_issued" type="text" value="{{.RestaurantInfo.AccrDateIssued}}" class="form-control">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Valid Until</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+                          <input name="valid_until" type="text" value="{{.RestaurantInfo.AccrValidDate}}" class="form-control">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Serial #</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+                          <input name="serial_no" type="text" value="{{.RestaurantInfo.SerialNo}}" class="form-control">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">PTU #</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+                          <input name="ptu_no" type="text" value="{{.RestaurantInfo.PtuNo}}" class="form-control">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Date Issued</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+                          <input name="ptu_date_issued" type="text" value="{{.RestaurantInfo.PtuDateIssued}}" class="form-control">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
+                        <label for="">Valid Until</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+                          <input name="ptu_date_valid" type="text" value="{{.RestaurantInfo.PtuValidDate}}" class="form-control">
                         </div>
                       </td>
                     </tr>

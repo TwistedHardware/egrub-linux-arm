@@ -195,6 +195,7 @@
             try {
               if (audio.paused) {
                 audio.play();
+                Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
               }
             } catch (err) {
               // new Audio("/static/sounds/100p.mp3").play()
@@ -211,6 +212,7 @@
           $("span[data-attr-80='true']").attr("data-attr-80-notified", "true");
           var audio = new Audio('/static/sounds/80p.mp3');
           audio.play();
+          Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
         }
       }
 
@@ -222,6 +224,7 @@
           if (data["request_status"] == "1") {
             var audio = new Audio('/static/sounds/new.mp3');
             audio.play();
+            Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
           }
           //console.log("START UPDATE");
           retrieveRestoOrders();
@@ -315,9 +318,9 @@
                       )[0];
                   return el;
                 })
-                .style("opacity", 0)
-                .transition()
-                .duration(duration)
+                // .style("opacity", 1)
+                // .transition()
+                // .duration(duration)
                 .style("opacity", 1);
 
 
