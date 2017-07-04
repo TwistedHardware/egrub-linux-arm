@@ -112,6 +112,11 @@
                 bottom: 10px;
                 left: 15%;
             }
+            a[data-export-to-excel] {
+                float: left;
+                color: #00ee00;
+                font-weight: bold;
+            }
         </style>
         <title>Report</title>
     </head>
@@ -122,6 +127,7 @@
                 <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Bills &amp; Sales Chart" data-report="cust-bills"><i class="fa fa-money fa-3x fa-fw"></i></div>
                 <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Preperation Time Chart" data-report="prep-time"><i class="fa fa-clock-o fa-3x fa-fw"></i></div>
                 <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Item Sales Table" data-report="item-table"><i class="fa fa-table fa-3x fa-fw"></i></div>
+                <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Sales Average" data-report="sales-ave"><i class="fa fa-users fa-3x fa-fw"></i></div>
                 <div class="report-toggle" onclick="$('#eod-modal').modal('show')" data-toggle="tooltip" data-placement="right" title="EOD Report (z-read)"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
                 <div class="report-toggle" onclick="$('#x-read-modal').modal('show');" data-toggle="tooltip" data-placement="right" title="X Reading Report"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
                 <div class="report-toggle" onclick="$('#terminal-read-modal').modal('show');" data-toggle="tooltip" data-placement="right" title="Terminal Reading Report"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
@@ -356,6 +362,14 @@
                             }
                         },
                         "success": function(response){
+                            Chart.plugins.register({
+                                "beforeDraw": function(chartInstance) {
+                                    var ctx = chartInstance.chart.ctx;
+                                    ctx.fillStyle = "white";
+                                    ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+                                }
+                            });
+
                             var kitchen_loc = response.location || [],
                                 category = response.category || [],
                                 items = response.items || [],
@@ -465,6 +479,14 @@
                                                 $kitchen_loc_container.show();
                                                 $category_container.show();
                                                 $item_container.show();
+                                            },
+                                            "sales-ave": function(){
+                                                $title.text("Sales Average");
+                                                $group_by_container.show();
+                                                $report_type_container.hide();
+                                                $kitchen_loc_container.hide();
+                                                $category_container.hide();
+                                                $item_container.hide();
                                             }
                                         };
 
@@ -678,7 +700,8 @@
                                             var urls = {
                                                     "item-sales": "/apiFunction/",
                                                     "cust-bills": "/apiFunction/",
-                                                    "prep-time": "/apiFunction/"
+                                                    "prep-time": "/apiFunction/",
+                                                    "sales-ave": "/apiFunction/"
                                                 };
 
                                             $.ajax({
@@ -986,6 +1009,114 @@
                                                                 break;
 
 
+                                                            // *** Handle Sales Average Report ***
+                                                            case "sales-ave":
+                                                                if (!response.data || !response.data.length) {
+                                                                    report = null;
+                                                                    break;
+                                                                }
+
+                                                                var title = "Sales Average as of "
+                                                                          + moment(ReportOptionModal.Get("date_from").val()).format(date_format) + " to "
+                                                                          + moment(ReportOptionModal.Get("date_to").val()).format(date_format),
+                                                                    data = response.data[0] || {"cust_count":0, "total_sales":0,"sales_average":0};
+                                                                report = {
+                                                                    "type": "bar",
+                                                                    "data": {
+                                                                        "labels": data.dates,
+                                                                        "datasets": [
+                                                                            {
+                                                                                "type": "bar",
+                                                                                "label": "Customer",
+                                                                                "data": data.cust_count,
+                                                                                "backgroundColor": "rgba(0, 0, 230, 0.2)",
+                                                                                "borderColor": "rgba(0, 0, 230, 0.7)",
+                                                                                "fill": false,
+                                                                                "spanGaps": true,
+                                                                                "borderWidth": 2,
+                                                                                "yAxisID": "A"
+                                                                            },
+                                                                            {
+                                                                                "type": "line",
+                                                                                "label": "Sales",
+                                                                                "data": data.total_sales,
+                                                                                "backgroundColor": "rgba(0, 200, 0, 0.2)",
+                                                                                "borderColor": "rgba(0, 200, 0, 0.7)",
+                                                                                "fill": true,
+                                                                                "spanGaps": true,
+                                                                                "borderWidth": 1,
+                                                                                "yAxisID": "B"
+                                                                            },
+                                                                            {
+                                                                                "type": "line",
+                                                                                "label": "Sales Ave.",
+                                                                                "data": data.sales_average,
+                                                                                "backgroundColor": "rgba(200, 0, 0, 0.2)",
+                                                                                "borderColor": "rgba(200, 0, 0, 0.7)",
+                                                                                "fill": false,
+                                                                                "spanGaps": true,
+                                                                                "borderWidth": 2,
+                                                                                "yAxisID": "B"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "options": {
+                                                                        "maintainAspectRatio": false,
+                                                                        "responsive": true,
+                                                                        "title": {
+                                                                            "display": true,
+                                                                            "text": title
+                                                                        },
+                                                                        "tooltips": {
+                                                                          "mode": "label"
+                                                                        },
+                                                                        "scales": {
+                                                                            "yAxes": [
+                                                                                {
+                                                                                    "id": "A",
+                                                                                    "type": "linear",
+                                                                                    "display": true,
+                                                                                    "position": "left",
+                                                                                    "gridLines": {
+                                                                                        "display": false
+                                                                                    },
+                                                                                    "ticks": {
+                                                                                        "beginAtZero": true
+                                                                                    },
+                                                                                    "labels": {
+                                                                                        "show": true,
+                                                                                    },
+                                                                                    "scaleLabel": {
+                                                                                        "display": true,
+                                                                                        "labelString": "Bills"
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "id": "B",
+                                                                                    "type": "linear",
+                                                                                    "display": true,
+                                                                                    "position": "right",
+                                                                                    "gridLines": {
+                                                                                        "display": false
+                                                                                    },
+                                                                                    "ticks": {
+                                                                                        "beginAtZero": true
+                                                                                    },
+                                                                                    "labels": {
+                                                                                        "show": true,
+                                                                                    },
+                                                                                    "scaleLabel": {
+                                                                                        "display": true,
+                                                                                        "labelString": "Sales"
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                };
+                                                                break;
+
+
                                                             default:
                                                                 report = {"error":1};
                                                                 break;
@@ -1031,6 +1162,7 @@
                                                 action = doc.createElement("div"),
                                                 btn_settings = doc.createElement("a"),
                                                 btn_close = doc.createElement("button"),
+                                                btn_xl = doc.createElement("a"),
 
                                                 container = doc.createElement("div"),
                                                 table = doc.createElement("table");
@@ -1047,9 +1179,15 @@
                                                 .attr("type", "button")
                                                 .attr("data-report-remove", "");
 
+                                            $(btn_xl)
+                                                .attr("href", "#")
+                                                .attr("data-export-to-excel", "")
+                                                .append("<i class='fa fa-file-excel-o fa-fw'></i>");
+
                                             $(action)
                                                 .addClass("action")
                                                 .append(btn_settings)
+                                                .append(btn_xl)
                                                 .append(btn_close);
 
                                             $(table)
@@ -1301,6 +1439,21 @@
                                                         });
                                                     }});
                                                     break;
+                                                case "sales-ave":
+                                                    ReportOptionModal.Show("sales-ave", {"ongenerate": function(config){
+                                                        GraphReport.Create({
+                                                            "report": "sales-ave",
+                                                            "report_type": "bar",
+                                                            "param": {
+                                                                "method":"get_sales_ave_chart",
+                                                                "date_from": config.date_from,
+                                                                "date_to": config.date_to,
+                                                                "time_frame": config.group_by,
+                                                                "group_by": config.group_by
+                                                            }
+                                                        });
+                                                    }});
+                                                    break;
                                                 default:
                                                     return;
                                             }
@@ -1334,6 +1487,53 @@
                                             */
                                         }
                                         break;
+                                    case "i":
+                                        target = target.parentNode;
+                                    case "a":
+                                        if (target.hasAttribute("data-export-to-excel")) {
+                                            e.preventDefault();
+                                            //*
+                                            var tbl_report = $(target).closest(".report-wrapper").find("table")[0],
+                                                template = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+                                                                 "xmlns:x='urn:schemas-microsoft-com:office:excel' " +
+                                                                 "xmlns='http://www.w3.org/TR/REC-html40'>" +
+                                                                 "<head>" +
+                                                                    "<!--[if gte mso 9]>" +
+                                                                        "<xml>" +
+                                                                            "<x:ExcelWorkbook>" +
+                                                                                "<x:ExcelWorksheets>" +
+                                                                                    "<x:ExcelWorksheet>" +
+                                                                                        "<x:Name>{worksheet}</x:Name>" +
+                                                                                        "<x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>" +
+                                                                                    "</x:ExcelWorksheet>" +
+                                                                                "</x:ExcelWorksheets>" +
+                                                                            "</x:ExcelWorkbook>" +
+                                                                        "</xml>" +
+                                                                    "<![endif]-->" +
+                                                                "</head>" +
+                                                                "<body>" +
+                                                                    "<table>{table}</table>" +
+                                                                "</body>" +
+                                                            "</html>",
+                                                base64 = function(s) {
+                                                    return win.btoa(unescape(encodeURIComponent(s)));
+                                                },
+                                                format = function(t, c) {
+                                                    return t.replace(/{(\w+)}/g, function(m, p) { return c[p]; });
+                                                },
+                                                uri = "data:application/vnd.ms-excel;base64,",
+                                                context = {
+                                                    "worksheet": "report",
+                                                    "table": tbl_report.innerHTML
+                                                },
+                                                downloader = doc.createElement("a");
+
+                                            downloader.download = "report.xls";
+                                            downloader.href = uri + base64(format(template, context));
+                                            downloader.click();
+
+                                            //*/
+                                        }
 
                                     /* *** below code reserve for "Report Update" ***
                                     case "i":
