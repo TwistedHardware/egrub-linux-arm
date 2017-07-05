@@ -400,9 +400,9 @@
                   </tbody>
                 </table>
                 <div class="fixed-bottom bg-footer default-padding z-index9 admin_font bold">
-                  <button onclick="BuildDeleteList('item_check')" class="hidden-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
-                  <button onclick="BuildDeleteList('item_check')" class="hidden-sm hidden-md hidden-lg btn-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
 
+                  <button onclick="BuildDeleteList('item_check')" class="{{if eq $modelName "OrderItem"}}hidden {{end}}hidden-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
+                  <button onclick="BuildDeleteList('item_check')" class="{{if eq $modelName "OrderItem"}}hidden {{end}}hidden-sm hidden-md hidden-lg btn-xs btn btn-danger capitalized"><i class="fa fa-trash fa-fw"></i>&nbsp;Delete Selected</button>
                   <div style="display:inline-block;float:right;">
                     <form id="export_form" action="/admin/export/" method="get">
                       <input type="hidden" name="m" value="{{ .ModelName }}" />
