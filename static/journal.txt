@@ -5803,3 +5803,41 @@ Valid Until: 08/08/2020
 THIS INVOICE RECEIPT SHALL BE 
 VALID FOR FIVE(5) YEARS FROM THE 
 DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+ admin
+2017-07-06
+---------------------------------
+Beginning Balance: 100.00
+Ending Balance: 6356.32
+Counter ID Start: 00000002
+Counter ID End: 00000012
+
+Gross Sales: 6256.32
+Regular Discount: 317.86
+Senior Discount: 532.14
+Pwd Discount: 56.25
+
+Non-VAT Sales: 3223.21
+Zero Rated Sales: 
+VAT Sales: 2700.00
+VAT: 388.02
+
+No. of Issued Receipt: 11
+No. of Void Transaction: 0
+No. of Cash Transaction: 
+No. of Card Transaction: 
+
+Total Cash: 6256.38
+Total Card: 0.00
+
+---------------------------------
