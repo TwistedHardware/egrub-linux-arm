@@ -5841,3 +5841,123 @@ Total Cash: 6256.38
 Total Card: 0.00
 
 ---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+ admin
+2017-07-06
+---------------------------------
+Beginning Balance: 100.00
+Ending Balance: 4839.96
+Counter ID Start: 00000002
+Counter ID End: 00000012
+
+Gross Sales: 4739.96
+Regular Discount: 264.29
+Senior Discount: 391.07
+Pwd Discount: 26.79
+
+Non-VAT Sales: 2223.21
+Zero Rated Sales: 
+VAT Sales: 2217.86
+VAT: 314.42
+Service Charge: 402.32
+
+No. of Issued Receipt: 11
+No. of Void Transaction: 0
+No. of Cash Transaction: 11
+No. of Card Transaction: 0
+
+Total Cash: 6256.38
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+ admin
+2017-07-06
+---------------------------------
+Beginning Balance: 100.00
+Ending Balance: 4839.96
+Counter ID Start: 00000002
+Counter ID End: 00000012
+
+Gross Sales: 4739.96
+Regular Discount: 264.29
+Senior Discount: 391.07
+Pwd Discount: 26.79
+
+Non-VAT Sales: 2223.21
+Zero Rated Sales: 0.00
+VAT Sales: 2217.86
+VAT: 314.42
+Service Charge: 402.32
+
+No. of Issued Receipt: 11
+No. of Void Transaction: 0
+No. of Cash Transaction: 11
+No. of Card Transaction: 0
+
+Total Cash: 6256.38
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+Z Reading Report
+
+2017-07-06
+---------------------------------
+Beginning Balance: 0.00
+Ending Balance: 4739.96
+Counter ID Start: 00000002
+Counter ID End: 00000012
+
+Gross Sales: 4739.96
+Regular Discount: 264.29
+Senior Discount: 391.07
+Pwd Discount: 26.79
+
+Non-VAT Sales: 2223.21
+Zero Rated Sales: 0.00
+VAT Sales: 2217.86
+VAT: 314.42
+Service Charge: 402.32
+
+No. of Issued Receipt: 11
+No. of Void Transaction: 0
+No. of Cash Transaction: 11
+No. of Card Transaction: 0
+
+Total Cash: 6256.38
+Total Card: 0.00
+
+Reset Counter : 4
+Next Z Counter : 8
+Accumulated Grand Total : 4959.96
+---------------------------------
+Z Reading End
