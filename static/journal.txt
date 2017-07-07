@@ -6602,3 +6602,28 @@ Next Z Counter : 8
 Accumulated Grand Total : 10876.91
 ---------------------------------
 Z Reading End
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+X Reading Report
+
+2017-07-07 10:14:00
+---------------------------------
+Beginning Balance: 0.00
+Ending Balance: 1177.00
+Counter ID Start: 00000013
+Counter ID End: 00000013
+No. of Pax: 1
+
+Gross Sales: 1177.00
+Total Cash: 1177.00
+Total Card: 0.00
+
+---------------------------------
+X Reading End
