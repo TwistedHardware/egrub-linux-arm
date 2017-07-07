@@ -6627,3 +6627,413 @@ Total Card: 0.00
 
 ---------------------------------
 X Reading End
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+X Reading Report
+
+2017-07-07 10:55:00
+---------------------------------
+Beginning Balance: 1.00
+Ending Balance: 711.00
+Counter ID Start: 00000018
+Counter ID End: 00000018
+No. of Pax: 1
+
+Gross Sales: 710.00
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+X Reading End
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 10:59:00
+---------------------------------
+Beginning Balance: 1.00
+Ending Balance: 9418.50
+Counter ID Start: 00000003
+Counter ID End: 00000009
+
+Gross Sales: 9417.50
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 7735.71
+VAT: 928.29
+Service Charge: 753.50
+
+No. of Issued Receipt: 7
+No. of Void Transaction: 0
+No. of Cash Transaction: 4
+No. of Card Transaction: 3
+No. of Pax: 7
+
+Total Cash: 6092.90
+Total Card: 3437.50
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 11:14:00
+---------------------------------
+Beginning Balance: 3000.00
+Ending Balance: 3000.00
+Counter ID Start: 00000000
+Counter ID End: 00000000
+
+Gross Sales: 0.00
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 0.00
+VAT: 0.00
+Service Charge: 0.00
+
+No. of Issued Receipt: 0
+No. of Void Transaction: 0
+No. of Cash Transaction: 0
+No. of Card Transaction: 0
+No. of Pax: 0
+
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 11:16:00
+---------------------------------
+Beginning Balance: 3000.00
+Ending Balance: 3000.00
+Counter ID Start: 00000000
+Counter ID End: 00000000
+
+Gross Sales: 0.00
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 0.00
+VAT: 0.00
+Service Charge: 0.00
+
+No. of Issued Receipt: 0
+No. of Void Transaction: 0
+No. of Cash Transaction: 0
+No. of Card Transaction: 0
+No. of Pax: 0
+
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+X Reading Report
+
+2017-07-07 11:17:00
+---------------------------------
+Beginning Balance: 1.00
+Ending Balance: 711.00
+Counter ID Start: 00000018
+Counter ID End: 00000018
+No. of Pax: 1
+
+Gross Sales: 710.00
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+X Reading End
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 11:18:00
+---------------------------------
+Beginning Balance: 3000.00
+Ending Balance: 3000.00
+Counter ID Start: 00000000
+Counter ID End: 00000000
+
+Gross Sales: 0.00
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 0.00
+VAT: 0.00
+Service Charge: 0.00
+
+No. of Issued Receipt: 0
+No. of Void Transaction: 0
+No. of Cash Transaction: 0
+No. of Card Transaction: 0
+No. of Pax: 0
+
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 11:30:00
+---------------------------------
+Beginning Balance: 3000.00
+Ending Balance: 3000.00
+Counter ID Start: 00000000
+Counter ID End: 00000000
+
+Gross Sales: 0.00
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 0.00
+VAT: 0.00
+Service Charge: 0.00
+
+No. of Issued Receipt: 0
+No. of Void Transaction: 0
+No. of Cash Transaction: 0
+No. of Card Transaction: 0
+No. of Pax: 0
+
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 11:31:00
+---------------------------------
+Beginning Balance: 3000.00
+Ending Balance: 3000.00
+Counter ID Start: 00000000
+Counter ID End: 00000000
+
+Gross Sales: 0.00
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 0.00
+VAT: 0.00
+Service Charge: 0.00
+
+No. of Issued Receipt: 0
+No. of Void Transaction: 0
+No. of Cash Transaction: 0
+No. of Card Transaction: 0
+No. of Pax: 0
+
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 11:38:00
+---------------------------------
+Beginning Balance: 1.00
+Ending Balance: 1.00
+Counter ID Start: 00000000
+Counter ID End: 00000000
+
+Gross Sales: 0.00
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 0.00
+VAT: 0.00
+Service Charge: 0.00
+
+No. of Issued Receipt: 0
+No. of Void Transaction: 0
+No. of Cash Transaction: 0
+No. of Card Transaction: 0
+No. of Pax: 0
+
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 11:38:00
+---------------------------------
+Beginning Balance: 0.00
+Ending Balance: 0.00
+Counter ID Start: 00000000
+Counter ID End: 00000000
+
+Gross Sales: 0.00
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 0.00
+VAT: 0.00
+Service Charge: 0.00
+
+No. of Issued Receipt: 0
+No. of Void Transaction: 0
+No. of Cash Transaction: 0
+No. of Card Transaction: 0
+No. of Pax: 0
+
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
+
+Egrub Cafe
+Batangas City
+Operated By: IntegrityNet
+Permit No.: 87654321
+Tin: 00-123-123-00586
+Accreditation No.: 123456786666
+Serial No.: 106400014
+Machine No.: 
+End of Shift
+
+Parico Abegail
+2017-07-07 11:39:00
+---------------------------------
+Beginning Balance: 1.00
+Ending Balance: 1.00
+Counter ID Start: 00000000
+Counter ID End: 00000000
+
+Gross Sales: 0.00
+Regular Discount: 0.00
+Senior Discount: 0.00
+Pwd Discount: 0.00
+
+Non-VAT Sales: 0.00
+Zero Rated Sales: 0.00
+VAT Sales: 0.00
+VAT: 0.00
+Service Charge: 0.00
+
+No. of Issued Receipt: 0
+No. of Void Transaction: 0
+No. of Cash Transaction: 0
+No. of Card Transaction: 0
+No. of Pax: 0
+
+Total Cash: 0.00
+Total Card: 0.00
+
+---------------------------------
