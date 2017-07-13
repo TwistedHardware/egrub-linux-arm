@@ -48,6 +48,7 @@
       {name:'Layout', url:'', tooltip:'Update restaurant table layout', cat:'', icon:''},
       {name:'ThemeEditor', url:'/branding/', tooltip:'', cat:'', icon:''},
       {name:'Language', url:'', tooltip:'', cat:'', icon:''},
+      {name:'Log', url:'', tooltip:'View and Monitor Activity Logs', cat:'', icon:''},
 
       {name:'Transaction', url:'', tooltip:'Manage and monitor warehouse transactions.', cat:'inv', icon:''},
       {name:'Item', url:'', tooltip:'Manage Inventory items.', cat:'inv', icon:''},
@@ -56,7 +57,7 @@
       {name:'WarehouseLine', url:'', tooltip:'Manage warehouse item stocks', cat:'inv', icon:''},
       {name:'Warehouse', url:'', tooltip:'Manage warehouse(s)', cat:'inv', icon:''},
       {name:'UnitOfMeasure', url:'', tooltip:'Create unit of measure, Ex; Kilograms(kg)', cat:'inv', icon:''},
-      
+
       {name:'UnitOfMeasureConversion', url:'', tooltip:'Manage conversions of 1 unit to another', cat:'inv', icon:''},
 
 

@@ -34,7 +34,7 @@
               <li class = "dropdown">
                 <a class = "dropdown-toggle" data-toggle = "dropdown" href = "#"><span class = "fa fa-cogs"></span></a>
                 <ul class = "dropdown-menu">
-                  <li><a href="/active_order/"><span  style = "font-size : 18px;" class = "fa fa-hourglass-half">&nbsp;Active Session</span></a></li>
+                  <li hidden><a href="/active_order/"><span  style = "font-size : 18px;" class = "fa fa-hourglass-half">&nbsp;Active Session</span></a></li>
                   <li hidden><a href="/"><span  style = "font-size : 18px;" class = "fa fa-history">&nbsp;Table History</span></a></li>
                   <li><a href = "/branding/" target="_blank"><span  style = "font-size : 18px;" class = "fa fa-paint-brush">&nbsp;Theme Editor</span></a></li>
                   <li><a href = "/report/"><span  style = "font-size : 18px;" class = "fa fa-table">&nbsp;Report</span></a></li>
@@ -195,7 +195,7 @@
             try {
               if (audio.paused) {
                 audio.play();
-                Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+                //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
               }
             } catch (err) {
               // new Audio("/static/sounds/100p.mp3").play()
@@ -212,7 +212,7 @@
           $("span[data-attr-80='true']").attr("data-attr-80-notified", "true");
           var audio = new Audio('/static/sounds/80p.mp3');
           audio.play();
-          Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+          //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
         }
       }
 
@@ -224,7 +224,7 @@
           if (data["request_status"] == "1") {
             var audio = new Audio('/static/sounds/new.mp3');
             audio.play();
-            Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+            //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
           }
           //console.log("START UPDATE");
           retrieveRestoOrders();
