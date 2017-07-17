@@ -9396,3 +9396,410 @@ Valid Until: 08/08/2020
 THIS INVOICE RECEIPT SHALL BE 
 VALID FOR FIVE(5) YEARS FROM THE 
 DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+VAT Reg.
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 106400014
+ OFFICIAL RECEIPT
+=================================
+OR No.:000000035
+Bill No.: 122
+Waiter:admin 
+Cashier:admin 
+Table 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+DINE IN
+2017-07-14 04:49:00 PM
+
+Item           Qty Price   Amount
+Shrimp Poppers 1   350.00  350.00
+Calamares      1   300.00  300.00
+---------------------------------
+Sub Total                  650.00
+QTY                             2
+
+VATable Sale               580.36
+VAT-Exempt Sale              0.00
+VAT-Zero Rated Sale          0.00
+
+Service Charge              58.04
+VAT Amount (12%)            76.61
+
+Amount Due                 715.00
+Card                         0.00
+Other                        0.00
+Cash                       500.00
+Change                       0.00
+---------------------------------
+Thank you, and please come again.
+
+THIS SERVES AS YOUR OFFICIAL 
+RECEIPT
+Cust Name:TEST
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+SC/PWD TIN:______________________
+OSCA ID NO./PWD ID NO.:__________
+Signature:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: 
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2020
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+VAT Reg.
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 106400014
+ OFFICIAL RECEIPT
+=================================
+OR No.:000000038
+Bill No.: 122
+Waiter:admin 
+Cashier:admin 
+Table 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+DINE IN
+2017-07-14 05:03:00 PM
+
+Item           Qty Price   Amount
+Gambas Ala Jilo1   350.00  350.00
+Calamares      1   300.00  300.00
+Shrimp Poppers 1   350.00  350.00
+---------------------------------
+Sub Total                 1000.00
+QTY                             3
+
+VATable Sale               892.86
+VAT-Exempt Sale              0.00
+VAT-Zero Rated Sale          0.00
+
+Service Charge              89.29
+VAT Amount (12%)           117.86
+
+Amount Due                1100.00
+Card                         0.00
+Other                        0.00
+Cash                      1100.00
+Change                       0.01
+---------------------------------
+Thank you, and please come again.
+
+THIS SERVES AS YOUR OFFICIAL 
+RECEIPT
+Cust Name:TEST1
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+SC/PWD TIN:______________________
+OSCA ID NO./PWD ID NO.:__________
+Signature:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: 
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2020
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+VAT Reg.
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 106400014
+ OFFICIAL RECEIPT
+=================================
+OR No.:000000041
+Bill No.: 122
+Waiter:admin 
+Cashier:admin 
+Table 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+DINE IN
+2017-07-14 05:37:00 PM
+
+Item           Qty Price   Amount
+Shrimp Poppers 1   350.00  350.00
+Calamares      1   300.00  300.00
+Gambas Ala Jilo1   350.00  350.00
+Fish and Fr... 1   320.00  320.00
+---------------------------------
+Sub Total                 1320.00
+QTY                             4
+
+VATable Sale              1178.57
+VAT-Exempt Sale              0.00
+VAT-Zero Rated Sale          0.00
+
+Service Charge             117.86
+VAT Amount (12%)           155.57
+
+Amount Due                1452.00
+Card                       500.00
+Other                        0.00
+Cash                       952.00
+Change                       0.00
+---------------------------------
+Thank you, and please come again.
+
+THIS SERVES AS YOUR OFFICIAL 
+RECEIPT
+Cust Name:TEST2
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+SC/PWD TIN:______________________
+OSCA ID NO./PWD ID NO.:__________
+Signature:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: 
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2020
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+VAT Reg.
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 106400014
+ OFFICIAL RECEIPT
+=================================
+OR No.:000000042
+Bill No.: 122
+Waiter:admin 
+Cashier:admin 
+Table 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+DINE IN
+2017-07-14 05:44:00 PM
+
+Item           Qty Price   Amount
+Shrimp Poppers 1   350.00  350.00
+Calamares      1   300.00  300.00
+---------------------------------
+Sub Total                  650.00
+QTY                             2
+
+VATable Sale               580.36
+VAT-Exempt Sale              0.00
+VAT-Zero Rated Sale          0.00
+
+Service Charge              58.04
+VAT Amount (12%)            76.61
+
+Amount Due                 715.00
+Card                         0.00
+Other                      715.00
+Cash                         0.00
+Change                       0.00
+---------------------------------
+Thank you, and please come again.
+
+THIS SERVES AS YOUR OFFICIAL 
+RECEIPT
+Cust Name:YTRU
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+SC/PWD TIN:______________________
+OSCA ID NO./PWD ID NO.:__________
+Signature:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: 
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2020
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+VAT Reg.
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 106400014
+ OFFICIAL RECEIPT
+=================================
+OR No.:000000045
+Bill No.: 122
+Waiter:admin 
+Cashier:admin 
+Table 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+DINE IN
+2017-07-14 05:47:00 PM
+
+Item           Qty Price   Amount
+Vegetarian ... 1   250.00  250.00
+Cream of Mu... 1   200.00  200.00
+Valero Ceas... 1   250.00  250.00
+---------------------------------
+Sub Total                  700.00
+QTY                             3
+
+VATable Sale               625.00
+VAT-Exempt Sale              0.00
+VAT-Zero Rated Sale          0.00
+
+Service Charge              62.50
+VAT Amount (12%)            82.50
+
+Amount Due                 770.00
+Card                       100.00
+Other                      170.00
+Cash                       500.00
+Change                       0.00
+---------------------------------
+Thank you, and please come again.
+
+THIS SERVES AS YOUR OFFICIAL 
+RECEIPT
+Cust Name:YTU
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+SC/PWD TIN:______________________
+OSCA ID NO./PWD ID NO.:__________
+Signature:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: 
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2020
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 106400014
+=================================
+Bill No.: 123
+Waiter:admin 
+Table 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+TAKE OUT
+2017-07-15 10:51:00 AM
+
+Item           Qty Price   Amount
+Vegetarian ... 1   250.00  250.00
+Valero Ceas... 1   250.00  250.00
+Cream of Mu... 1   200.00  200.00
+---------------------------------
+Sub Total                  700.00
+QTY                             3
+
+VATable Sale               401.79
+VAT-Exempt Sale            223.21
+VAT-Zero Rated Sale          0.00
+
+PWD (20%)                  -44.64
+VAT Amount (12%)            48.21
+Service Charge               0.00
+
+Amount Due                 628.57
+---------------------------------
+Thank you, and please come again.
+
+Cust Name:_______________________
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: 
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2017
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
