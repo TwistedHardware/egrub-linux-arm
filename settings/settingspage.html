@@ -803,6 +803,17 @@ TIME   : <b>{{.Status.Time}}</b>
                     </tr>
                     <tr class="search">
                       <td class="settings-label">
+                        <label for="">Kiosk Mode</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-list-ol fa-fw"></i></span>
+                          <input name="kioskmode" type="checkbox" {{.KioskMode}} data-toggle="toggle">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
                         <label for="">Service Charge</label>
                       </td>
                       <td>
