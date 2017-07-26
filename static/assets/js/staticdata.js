@@ -22,7 +22,9 @@
 
 
     var arrayVariable = [
-      {name:'KitchenView', url:'/', tooltip:'', cat:'', icon:''},
+      {name:'KitchenView', url:'/monitoring/', tooltip:'', cat:'', icon:''},
+
+      {name:'Expediter', url:'/expediter/', tooltip:'ensures fast and efficient food preparation and serving flow', cat:'', icon:''},
       {name:'Order', url:'', tooltip:'', cat:'', icon:''},
       {name:'MenuItem', url:'', tooltip:'', cat:'', icon:''},
 

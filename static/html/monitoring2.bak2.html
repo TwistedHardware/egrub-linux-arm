@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="stylesheet" type="text/css" href="/static/assets/bootstrap/3.3.7/css/bootstrap.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="/static/assets/fa/css/font-awesome.min.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" media="all"/>
+    <link rel="shortcut icon" href="img/vector_beer_logo_2.png">
+    <title>Monitoring Page</title>
+  </head>
+  <body class="dashboard">
+    <header role="banner">
+      <nav role="navigation" class="navbar navbar-inverse">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+              <span style="font-family: 'Consolas', serif ;font-size: 26px;color: white"><img style="margin-top: -10px;" src="/static/logo.png"></span>
+            </a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-left">
+              {{range .KitchenLocation}}
+                <li id="nav-menu-{{.ID}}"><a href="/monitoring/{{.ID}}"><span class="fa fa-cutlery"></span>&nbsp;{{.Name}}</a></li>
+              {{end}}
+              <li id="nav-menu-all"><a href="/monitoring/"><span class="fa fa-cutlery"></span>&nbsp;All</a></li>
+            </ul>
+            <ul class = "nav navbar-nav navbar-right">
+              <li class = "dropdown">
+                <a class = "dropdown-toggle" data-toggle = "dropdown" href = "#"><span class = "fa fa-cogs"></span></a>
+                <ul class = "dropdown-menu">
+                  <li hidden><a href="/active_order/"><span  style = "font-size : 18px;" class = "fa fa-hourglass-half">&nbsp;Active Session</span></a></li>
+                  <li hidden><a href="/"><span  style = "font-size : 18px;" class = "fa fa-history">&nbsp;Table History</span></a></li>
+                  <li><a href = "/branding/" target="_blank"><span  style = "font-size : 18px;" class = "fa fa-paint-brush">&nbsp;Theme Editor</span></a></li>
+                  <li><a href = "/report/"><span  style = "font-size : 18px;" class = "fa fa-table">&nbsp;Report</span></a></li>
+                  <li><a href = "/admin/"><span  style = "font-size : 18px;" class = "fa fa-lock">&nbsp;Admin</span></a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class = "modal fade" id = "confirm-logout" tabindex = "-1" role = "dialog">
+      <div class = "modal-dialog modal-sm">
+        <div class = "modal-content">
+          <div class = "modal-header">
+            <button class = "close" data-dismiss = "modal" >&times;</button>
+            <h4 class = "modal-title">Confirm Logout</h4>
+          </div>
+          <div class = "modal-body">
+            <span>Are you sure you want to logout?</span>
+            </br>
+            </br>
+            <div class = "form-horizontal">
+              <div class = "form-group">
+                <div class = "col-xs-12 col-sm-6">
+                  <button class = "btn btn-danger btn-block" data-dismiss = "modal" />No!</button>
+                </div>
+                <div class = "col-xs-12 col-sm-6">
+                  <a href = "/logout/" class = "btn btn-success btn-block">Yes!</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1></h1>
+    <div class="legend">
+      <ul>
+        <li><i class="fa fa-square legend-warning"></i> PREPARING</li>
+        <li><i class="fa fa-square text-info"></i> READY</li>
+        <li><i class="fa fa-square text-success"></i> SERVED</li>
+        <li><i class="fa fa-square text-danger"></i> CANCELLED</li>
+      </ul>
+    </div>
+    <div id="context-menu">
+      <ul class="dropdown-menu" role="menu">
+        <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=2>Ready</a></li>
+        <!-- <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=3>Serve</a></li> -->
+        <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status="4">Cancel</a></li>
+      </ul>
+    </div>
+    <div class="clr"></div>
+    {{ if eq .LocationID "all" }}
+      {{ range .KitchenLocation }}
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="panel panel-info">
+            <div class="panel-heading"><strong><span style="font-size : 18px;">{{.Name}}</span></strong></div>
+            <div class="panel-body">
+              <div class="mo-container-{{.ID}}"></div>
+            </div>
+          </div>
+        </div>
+      {{ end }}
+    {{ else }}
+      {{ $LocID := .LocationID }}
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <strong>
+              <span style="font-size : 18px;">{{ .Name }}</span>
+            </strong>
+          </div>
+          <div class="panel-body">
+            <div class="mo-container-{{ $LocID }}"></div>
+          </div>
+        </div>
+      </div>
+    {{ end }}
+    <div class="mo-container"></div>
+    <div class="modal fade" id="serve-order-modal">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Confirm</h4>
+          </div>
+          <div class="modal-body">
+            <span id="modal-message" class="text-success">Are you sure to serve order?</span>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default pull-left" data-dismiss="modal">No</button>
+            <button class="btn btn-success pull-right" id = "btn-update-status">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="remarks-modal">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Order Remarks</h4>
+          </div>
+          <div class="modal-body">
+            <span id="span-remarks"></span>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default pull-right" data-dismiss="modal">
+              <i class="fa fa-close fa-fw"></i>&nbsp;Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/assets/js/jquery.min.js"></script>
+    <script src="/static/assets/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/static/assets/bootstrapcontextmenu/context-menu.js"></script>
+    <script src="/static/assets/socket.io-client/socket.io.js"></script>
+    <script src="/static/js/d3.min.js"></script>
+    <script src="/static/assets/admin/main.js"></script>
+    <script>
+      var server_address = window.location.hostname;
+      var socket = io.connect('http://' + server_address + ':' + window.location.port);
+      var is_annoy = false;
+      var is_80p = false;
+      var notified_80 = false;
+
+      $(document).ready(function(){
+        $('#nav-menu-{{ .LocationID }}').addClass('active');
+        retrieveRestoOrders();
+        setInterval(function(){ IncrementTime(); }, 1000);
+        setInterval(function(){ playSound(); }, 50);
+        //setInterval(function(){ retrieveRestoOrders(); }, 3000);
+      });
+
+      console.log(typeof new Audio('/static/sounds/100p.mp3'));
+
+      var itemAlamList = {};
+      function playSound(){
+        if ($("span[data-attr-100='true']").length > 0) {
+          //*
+          $("span[data-attr-100='true']").each(function(i, el){
+            var item_ID = $(el).parent().parent().attr("data-attr-id"),
+                audio = null;
+
+
+            if (itemAlamList[item_ID] && typeof itemAlamList[item_ID] === "object" && "play" in itemAlamList[item_ID]) {
+              audio = itemAlamList[item_ID];
+            } else {
+              audio = itemAlamList[item_ID] = new Audio("/static/sounds/100p.mp3");
+            }
+
+            try {
+              if (audio.paused) {
+                audio.play();
+                //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+              }
+            } catch (err) {
+              // new Audio("/static/sounds/100p.mp3").play()
+            }
+          });
+          //*/
+
+          /*
+          var audio = new Audio('/static/sounds/100p.mp3');
+          audio.play();
+          //*/
+
+        } else if ($("span[data-attr-80='true'][data-attr-80-notified='false']").length > 0) {
+          $("span[data-attr-80='true']").attr("data-attr-80-notified", "true");
+          var audio = new Audio('/static/sounds/80p.mp3');
+          audio.play();
+          //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+        }
+      }
+
+      socket.on("NotifyUpdate",function(data){
+        if (data['method'] == "checkout") {
+          //retrieveRestoOrders();
+          //location.reload();
+        } else {
+          if (data["request_status"] == "1") {
+            var audio = new Audio('/static/sounds/new.mp3');
+            audio.play();
+            //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+          }
+          //console.log("START UPDATE");
+          retrieveRestoOrders();
+          //console.log("END UPDATE");
+          //setTimeout(reloadPage, 4000);
+        }
+      });
+
+      function reloadPage(){
+        location.reload();
+      }
+
+      var retrieveRestoOrdersProcessing = false;
+      function retrieveRestoOrders() {
+        // if (retrieveRestoOrdersProcessing) {
+        //   return;
+        // }
+
+        retrieveRestoOrdersProcessing = true;
+        d3.json("/apiFunction/?method=GetMonitoringOrderItems", function(response){
+
+          var duration = 500,
+              tmp_data = response.ordered_items,
+              tmp = null,
+              data = {},
+              i = 0,
+              len = tmp_data.length;
+
+          // transform data
+          for (; i < len; i ++) {
+            tmp = tmp_data[i];
+            tmp["item_name"] = tmp.item;
+            tmp["customer_name"] = tmp.customer;
+            tmp["source"] = tmp.type;
+            tmp["location"] = tmp.type;
+
+            delete tmp.item;
+            delete tmp.customer;
+            delete tmp.type;
+
+            var kl_id = tmp.location,
+                order_key = [tmp.customer_name, tmp.table_id, tmp.table_no, tmp.order].join("|");
+
+            if (!data[kl_id]) {
+              data[kl_id] = {};
+            }
+
+            if (!data[kl_id][order_key]) {
+              data[kl_id][order_key] = [];
+            }
+
+            data[kl_id][order_key].push(tmp);
+          }
+
+          var kl_id = null;
+          var kl_list =[];
+          {{ range .KitchenLocation}}
+          kl_list.push({{.ID}});
+          {{ end }}
+
+          for (var index=0;index<kl_list.length;index++) {
+            kl_id = kl_list[index] ;
+            var orders = data[kl_id],
+                $kl_container = $(".mo-container-" + kl_id);
+
+            if ($kl_container.length === 0) {
+
+            }
+
+            var container = d3.select($kl_container[0])
+                .selectAll(".mo-instance")
+                .data(d3.entries(orders), function(d){
+                  return d.key;
+                });
+
+            var tempContainer = container.enter()
+                .append(function(d){
+                  var key_parts = d.key.split("|"),
+                      customer_name = key_parts[0],
+                      table_id = key_parts[1],
+                      table_no = key_parts[2],
+                      order_id = key_parts[3],
+                      el = $(
+                        "<div class='mo-instance' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>" +
+                          "<div class='mo-title'>Table" + table_no + "</div>" +
+                          "<div class='mo-title-customer-name'>" + customer_name + "</div>" +
+                          "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'>" +
+                          "</div>" +
+                          "<div class='mo-footer'></div>" +
+                        "</div>"
+                      )[0];
+                  return el;
+                })
+                // .style("opacity", 1)
+                // .transition()
+                // .duration(duration)
+                .style("opacity", 1);
+
+
+            container.exit()
+                .transition()
+                .duration(duration)
+                .style("opacity", 0)
+                .remove();
+
+            container = container.merge(tempContainer);
+
+            var rows = container.select(".mo-content").selectAll("div").data(function(d){
+                  return d.value;
+                }, function(d){
+                  return d.order_item_id;
+                });
+
+            // console.log("ABDULLAH");
+            // console.log(container);
+            // console.log(tempContainer);
+            // console.log(rows);
+
+            // var new_data = container.select(".mo-content table tbody").selectAll("tr").data(function(d){
+            //       return d.value;
+            //     }, function(d){
+            //       return d.order_item_id;
+            //     })
+
+            var old_data = rows.exit()
+                .attr("class", "served")
+                .transition()
+                .duration(duration)
+                .style("left","-15px")
+                .transition()
+                .duration(duration)
+                .style("left", function(d){
+                  return 185*2.5 + "px";
+                })
+                .style("opacity", 0)
+                .remove();
+
+            var new_data = rows.enter()
+                .append("div")
+                .attr("data-attr-id", function(d){ return d.order_item_id; })
+                //.attr("data-attr-status", function(d){ return d.status; })
+                .attr("data-attr-item-name", function(d){ return d.item_name; })
+                .attr("data-toggle", "context")
+                .attr("data-target", "#context-menu");
+                // .append("td")
+                // .text(function(d){return d.item_name;});
+
+
+            // new_data = rows.merge(new_data);
+
+
+            //*
+
+            new_data.style("position", "relative")
+                .style("left", "-200px")
+                .style("transform", "rotate(18deg)")
+                .transition()
+                .delay(function(d,i) {
+                  return Math.floor(duration / 2) * i + (index * duration);
+                })
+                .duration(duration*2)
+                .style("left", "35px")
+                .style("transform", "rotate(0deg)")
+                //.style("height", "100px")
+                // .style("height", function(d){
+                //   return "100px";
+                // })
+                // .transition()
+                // .delay(Math.floor(duration*2))
+                // .duration(duration)
+                .transition()
+                .duration(duration)
+                .style("left", "0px")
+                .style("position", "relative");
+
+            rows = rows.merge(new_data);
+
+            rows = rows.merge(old_data);
+
+            // 1st span
+            rows.selectAll("span").remove();
+            rows.append("span")
+                .text(function(d){
+                  return d.quantity + " x " + d.item_name;
+                });
+            rows.append("span")
+                .style("font-weight", "bold")
+                .style("color", "#f00")
+                .text(function(d){
+                  return "[" + (d.order_type == 1 ? "Dine-In" : "Take-Out") + "]";
+                });
+            rows.append("span")
+                .text(function(d){
+                  // Allergies
+                  var html_str = "",
+                      allergies = d.allergies;
+                  if (allergies.length > 0) {
+                    html_str = "<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;";
+                    html_str += allergies.join("<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;");
+                  }
+
+                  return html_str;
+                });
+            rows.append("span")
+                .html(function(d){
+                  // remarks
+                  var html_str = "";
+                  if (d.remarks.length && d.remarks != "") {
+                    html_str = "<i class='fa fa-sticky-note-o' aria-hidden='true'></i>&nbsp;" + d.remarks;
+                  }
+                  return html_str;
+                });
+            rows.append("span")
+                .html(function(d){
+                  // Spicy
+                  var html_str = "",
+                      spicy_level = d.spicy_level,
+                      len = spicy_level,
+                      i = 0;
+
+                  if (spicy_level === -1) {
+                    return html_str;
+                  }
+
+                  for (; i < len; i ++) {
+                    html_str += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>";
+                  }
+                  while (i++ < 3) {
+                    html_str += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>";
+                  }
+                  return html_str;
+                });
+            rows.append("span")
+                .html(function(d){
+                  return '<i class="bell-container"></i>' +
+                  '<span class="elapsed_time" data-serving-time="'+d.serving_time+'" data-attr-seconds="'+d.elapsed_time_seconds+'">'+d.elapsed_time+'</span>';
+                });
+                // .append("span")
+                // .attr("class", "table table-condensed")
+                // .append("tbody")
+                // .append("tr")
+                // .style("border", "none")
+                // .append("td")
+                // .style("border", "none");
+
+
+            // current_selection = current_selection.append("strong");
+            //
+            // current_selection.append("br")
+            // current_selection.append("span").style("color", "#f00");
+            //
+            // // 2nd tr
+            // current_selection = rows.select("td table tbody")
+            //     .append("tr")
+            //     .style("border", "none")
+            //     .append("td")
+            //     .style("border", "none");
+            //
+            // current_selection.append("span")
+            //     .style("display", "block")
+            //     .style("font-weight", "bold");
+            //
+            // current_selection.append("span").style("font-weight", "bold");
+            //
+            // // 3rd tr
+            // current_selection = rows.select("td table tbody")
+            //     .append("tr")
+            //     .style("border", "none")
+            //     .append("td")
+            //     .style("border", "none");
+            //
+            // current_selection.append("span")
+            //     .attr("class", "bell-container fa fa-bell-o")
+            //     .style("color", "#f00");
+            //
+            // current_selection.append("span")
+            //     .attr("class", "elapsed_time")
+            //     .attr("data-attr-100", "true")
+            //     .style("color", "#f00");
+
+
+
+            // *** START UPDATE ***
+            // rows = rows.merge(new_data);
+
+            // 1st row
+            rows.attr("data-attr-status", function(d){ return d.status; })
+                .attr("class", function(d){
+                  switch (d.status) {
+                    case 1: return "preparing";
+                    case 2: return "ready";
+                    case 3: return "served";
+                  }
+                  return "cancelled";
+                });
+                // .select("td")
+                // .attr("class", function(d){
+                //   return d.allergies.length === 0 ? "" : "allergy-order";
+                // })
+                // .select("table tbody tr td")
+                // .attr("class", function(d){
+                //   switch (d.status) {
+                //     case 1: return "warning";
+                //     case 2: return "info";
+                //     case 3: return "success";
+                //   }
+                //   return "danger";
+                // });
+
+            // current_selection.select("span")
+            //     .text(function(d){
+            //       return d.quantity + "x " + d.item_name;
+            //     });
+
+            // current_selection.select("strong span")
+            //     .text(function(d){
+            //       return "[" + (d.order_type == 1 ? "Dine-In" : "Take-Out") + "]";
+            //     });
+
+            // 2nd row
+
+            // 3rd row
+            // rows.select("td table tbody tr:nth-child(3) td")
+            //     .attr("class", function(d){
+            //       switch (d.status) {
+            //         case 1: return "warning";
+            //         case 2: return "info";
+            //         case 3: return "success";
+            //       }
+            //       return "danger";
+            //     })
+            //     .select("span:nth-child(2)")
+            //     .attr("data-serving-time", function(d){
+            //       return d.serving_time;
+            //     })
+            //     .attr("data-attr-seconds", function(d){
+            //       return d.elapsed_time_seconds;
+            //     })
+            //     .text(function(d){
+            //       return d.elapsed_time;
+            //     });
+
+            rows.each(function(d){
+              var el = this;
+              if (!el.hasAttribute("data-has-context-menu")) {
+                el.setAttribute("data-has-context-menu", "1");
+                $(el).contextmenu({
+                  "target": "#context-menu",
+                  "before": function(e, context) {
+                    if($(e.target).hasClass("no-context-menu")) {
+                      return;
+                    }
+                    console.log($(context).attr("data-attr-status"));
+                    this.getMenu().find("li").removeClass();
+                    this.getMenu().find("li > a[data-attr-status='" + $(context).attr("data-attr-status") + "']").parent().addClass("disabled");
+                    return true;
+                  },
+                  "onItem": function (context, e) {
+                    if($(e.target).parent().hasClass("disabled")){
+                      return;
+                    }
+
+                    var item_ID = $(context).data("attr-id"),
+                        status = $(e.target).data("attr-status");
+
+                    var fakePlayClicked = false;
+                    if (status == 2 || status == 3 || status == 4) {
+                      if (itemAlamList[item_ID] && typeof itemAlamList[item_ID] === "object" && "pause" in itemAlamList[item_ID]) {
+                        itemAlamList[item_ID].pause();
+
+                        setTimeout(function(){
+                          itemAlamList[item_ID] = null;
+                          delete itemAlamList[item_ID];
+                        }, 5000)
+
+                        itemAlamList[item_ID] = {"play":function(){
+
+                        }};
+                      }
+                    }
+
+                    var args = {
+                      "request_id": item_ID,
+                      "request_status": status,
+                      "session_bundle": $(context).closest(".mo-instance").attr("data-attr-order-no"),
+                      "table_no": $(context).closest(".mo-instance").attr("data-attr-table-no"),
+                      "table_id": $(context).closest(".mo-instance").attr("data-attr-table-id"),
+                      "type": "DRINKS",
+                      "item_name": $(context).attr("data-attr-item-name")
+                    };
+
+                    updateStatus(args);
+                  }
+                });
+              }
+            });
+
+
+
+          }
+
+          retrieveRestoOrdersProcessing = false;
+        });
+      }
+
+      function retrieveRestoOrders_ORIG(){
+        // *** get data via jquery.ajax ***
+        $('.mo-container-1').empty();
+        $('.mo-container-2').empty();
+        $.ajax({
+          "url": "/apiFunction/?method=GetMonitoringOrderItems",
+          "type": "POST",
+          "success": function(data) {
+            data = data.ordered_items;
+            for(var i=0;i<data.length;i++){
+              var args = {
+                    "table_no": data[i].table_no,
+                    "item_name": data[i].item,
+                    "order": data[i].order,
+                    "quantity": data[i].quantity,
+                    "status": data[i].status,
+                    "customer_name": data[i].customer,
+                    "source": data[i].type,
+                    "order_item_id": data[i].order_item_id,
+                    "table_id": data[i].table_id,
+                    "remarks": data[i].remarks,
+                    "spicy_level": data[i].spicy_level,
+                    "location": data[i].type,
+                    "elapsed_time": data[i].elapsed_time,
+                    "allergies": data[i].allergies,
+                    "serving_time": data[i].serving_time,
+                    "elapsed_time_seconds": data[i].elapsed_time_seconds,
+                    "order_type": data[i].order_type
+                  };
+              appendRequestInstance(args);
+            }
+          },
+          "error": function(xhr, errmsg, err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + " <a href='#' class='close'>&times;</a></div>");
+          }
+        });
+      }
+
+  function appendRequestInstance(args){
+    if(!checkIfMonitoringIntanceExist(args)){
+        appendMonitoringInstance(args);
+    }
+    var status = "";
+    if(args['status']==1){
+      status = "warning";
+    }else if (args['status']==2){
+      status = "info";
+    }else if (args['status']==3){
+      status = "success";
+    }else{
+      status = "danger";
+    }
+    var remarks = "";
+    if (args['allergies'].length > 0) {
+      for (var i=0;i<args['allergies'].length;i++) {
+        args['allergies'][i] = '<i class="fa fa-ban text-danger" aria-hidden="true"></i>&nbsp;' + args['allergies'][i]
+      }
+    }
+    if (args['remarks'] != "") {
+      args['remarks'] = '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>&nbsp;' + args['remarks']
+    }
+    if (args['spicy_level'] != -1) {
+      args['remarks'] += "<br />"
+      for (var i = 0; i < args['spicy_level']; i++) {
+        args['remarks'] += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>"
+      }
+      for (var i = args['spicy_level']; i < 3; i++) {
+        args['remarks'] += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>"
+      }
+    }
+
+    if (args['remarks'] != "") {
+      remarks = $('<table>').addClass('table table-condensed').append(
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).text(args['quantity'] + "x " + args['item_name'])
+                    .append(
+                      $('<strong>').append(
+                        $('<br/>'),
+                        $('<span>').text(" [" +(args["order_type"] == "1" ? "Dine-In" : "Take-Out") + "]").css('color',"red")
+                      )
+                    )
+                  ),
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).append(
+                      $('<span style="display: block;">').html(args['remarks']).css('font-weight','bold'),
+                      $('<span>').html(args['allergies'].join("<br />")).css('font-weight','bold')
+                    )
+                  ),
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).append(
+                      $('<span>').text(' ').addClass('bell-container'),
+                      $('<span>').attr('data-serving-time',args['serving_time']).attr('data-attr-seconds',args['elapsed_time_seconds']).addClass('elapsed_time').text(args['elapsed_time'])
+                    )
+                  )
+                )
+    }else {
+
+      remarks =  $('<table>').addClass('table table-condensed').append(
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).text(args['quantity'] + "x " + args['item_name'])
+                    .append(
+                      $('<strong>').append(
+                        $('<br/>'),
+                        $('<span>').text(" [" +(args["order_type"] == "1" ? "Dine-In" : "Take-Out") + "]").css('color',"red")
+                      )
+                    )
+                  ),
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).append(
+                      $('<span>').html(args['allergies'].join("<br />")).css('font-weight','bold')
+                    )
+                  ),
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).append(
+                      $('<span>').text('  ').addClass('bell-container'),
+                      $('<span>').attr('data-serving-time',args['serving_time']).attr('data-attr-seconds',args['elapsed_time_seconds']).addClass('elapsed_time').text(args['elapsed_time'])
+                    )
+                  )
+                )
+    }
+    if($('#order-table-'+args.source+'-'+args['order']).find('tr[data-attr-id='+args['order_item_id']+']').length > 0){
+      return;
+    }
+    extraClasses = "";
+    if (args["allergies"].length > 0) {
+      extraClasses += "allergy-order";
+    }
+    $('#order-table-'+args.source+'-'+args['order']).append(
+      $('<tr>')
+      .attr('data-attr-id',args['order_item_id'])
+      .attr('data-attr-status',args['status'])
+      .attr('data-attr-item-name',args['item_name'])
+      .append(
+        $('<td class="' + extraClasses + '">').append(
+          remarks
+        )
+      )
+      .addClass(status)
+      .attr('data-toggle','context')
+      .attr('data-target','#context-menu')
+      .contextmenu({
+        target: '#context-menu',
+        before: function(e,context) {
+          if($(e.target).hasClass('no-context-menu')) {
+            return;
+          }
+          this.getMenu().find("li").removeClass();
+          this.getMenu().find("li > a[data-attr-status='" + $(context).data("attr-status") + "']").parent().addClass("disabled");
+          return true;
+        },
+        onItem: function (context, e) {
+          if($(e.target).parent().hasClass('disabled')){
+            return;
+          }
+          if($(e.target).attr('data-attr-status') == "1" && true == false){
+            $('#btn-update-status').unbind();
+            $('#btn-update-status').on('click',function(){
+              args = {
+                "request_id":$(context).data("attr-id"),
+                "request_status":$(e.target).data("attr-status"),
+                "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
+                "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
+                "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
+                "type" : "DRINKS",
+                "item_name" : $(context).attr('data-attr-item-name')
+              };
+              updateStatus(args);
+            });
+            $('#modal-message').removeClass().addClass('text-danger');
+            $('#modal-message').text('Are you sure to cancel order?');
+            $('#serve-order-modal').modal('show');
+            return;
+          }
+          if($(e.target).attr('data-attr-status') == 3 && true==false){
+            $('#btn-update-status').on('click',function(){
+              args = {
+                "request_id":$(context).data("attr-id"),
+                "request_status":$(e.target).data("attr-status"),
+                "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
+                "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
+                "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
+                "type" : "DRINKS",
+                "item_name" : $(context).attr('data-attr-item-name')
+              };
+              updateStatus(args);
+            });
+            $('#modal-message').removeClass().addClass('text-success');
+            $('#modal-message').text('Are you sure to serve order?');
+            $('#serve-order-modal').modal('show');
+            return;
+          }
+          var args = {
+            "request_id":$(context).data("attr-id"),
+            "request_status":$(e.target).data("attr-status"),
+            "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
+            "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
+            "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
+            "type" : "DRINKS",
+            "item_name" : $(context).attr('data-attr-item-name')
+          };
+          updateStatus(args);
+        }
+      })
+    );
+  }
+
+  function updateStatus(args){
+    var result = $.ajax({
+          "url": "/apiFunction/?method=UpdateOrderItemStatus",
+          "dataType": "json",
+          "data": {
+            "order_item": args['request_id'],
+            "status": args['request_status']
+          },
+          "async": false
+        }).responseText;
+
+    var jsn = JSON.parse(result);
+    if(jsn.status === "OK"){
+      socket.emit("broadcastUpdate", args);
+      //location.reload();
+      retrieveRestoOrders();
+    } else {
+      alert("Failed Updating Status!");
+    }
+  }
+
+
+  function checkIfMonitoringIntanceExist(args){
+    var is_exists = false;
+    if($('.mo-container-'+args['location']).find(".mo-instance[data-attr-order-no='"+args['order']+"']").length > 0){
+      is_exists = true;
+    }
+    return is_exists;
+  }
+
+  function appendMonitoringInstance(args){
+    $('.mo-container-'+args['location']).append(
+      $('<div>').addClass('mo-instance')
+      .attr('data-attr-table-no',args['table_no'])
+      .attr('data-attr-table-id',args['table_id'])
+      .attr('data-attr-order-no',args['order']).append(
+        $('<div>').addClass('mo-title').text("Table " + args['table_no']),
+        $('<div>').addClass('mo-title-customer-name').text("(" + args['customer_name'] + ")"),
+        $('<div>').addClass('mo-content').append(
+          $('<table>').addClass('table table-bordered table-condensed').append(
+            $('<tbody>').attr('id','order-table-'+args['location']+'-' + args['order']).append(
+
+            )
+          )
+        ),
+        $('<div>').addClass('mo-footer').append(
+        )
+      ).fadeIn("slow")
+    );
+  }
+
+  function openRemark(param){
+    $('#span-remarks').text(param['remarks']);
+    $('#remarks-modal').modal('show');
+  }
+  function IncrementTime(){
+      $('.elapsed_time').each(function(){
+        $(this).attr('data-attr-seconds',parseInt($(this).attr('data-attr-seconds')) + 1)
+        if ($(this).parent().parent().attr('data-attr-status')!=1) {
+          $(this).removeAttr('data-attr-seconds')
+          $(this).css('color','black');
+          $(this).attr('data-attr-100', 'false');
+          $(this).prev().removeClass('fa fa-bell-o').css("color", "black");
+        }
+
+        else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time')) && $(this).parent().parent().attr('data-attr-status')==1) {
+          $(this).css('color','red');
+          $(this).attr('data-attr-100', 'true');
+          $(this).prev().addClass('fa fa-bell-o').css("color", "red");
+        }else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time'))*0.8 && $(this).parent().parent().attr('data-attr-status')==1) {
+          if($(this).attr('data-attr-80-notified') == null){
+            $(this).attr('data-attr-80', 'true');
+            $(this).attr('data-attr-80-notified', 'false');
+            $(this).prev().addClass('fa fa-bell-o').css("color", "black");
+          }
+        }
+        var c_time = $(this).text().split(':');
+  			var c_hour = c_time[0]
+  			var c_min =c_time[1];
+  			var c_sec =c_time[2];
+  			c_sec = parseInt(parseInt(c_sec) + 1);
+
+  			if(c_sec == "60"){
+  				c_sec = "00";
+  				c_min = parseInt(parseInt(c_min) + 1 );
+  			}else if(parseInt(c_sec) < 10){
+  				c_sec = "0" + c_sec;
+  			}
+
+  			if(c_min == "60"){
+  				c_min = "00";
+  				c_hour = parseInt(parseInt(c_hour) + 1);
+  			}else if(parseInt (c_min) <10){
+  				c_min = "0" + parseInt(c_min);
+  			}
+
+  			c_time = c_hour+ ":" + c_min + ":" + c_sec;
+  			$(this).text(c_time);
+      });
+	}
+      $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
+
+      {{if .Demo}} notifyDemo(); {{end}}
+    </script>
+  </body>
+</html>

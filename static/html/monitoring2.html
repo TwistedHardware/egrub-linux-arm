@@ -6,21 +6,147 @@
     <link rel="stylesheet" type="text/css" href="/static/assets/bootstrap/3.3.7/css/bootstrap.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="/static/assets/fa/css/font-awesome.min.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css" media="all"/>
+    <!-- <link rel="stylesheet" href="/static/assets/admin/main.css"> -->
+
     <link rel="shortcut icon" href="img/vector_beer_logo_2.png">
-    <title>Monitoring Page</title>
+    <title>Kitchen Display</title>
+    <style>
+    .bold{
+      font-weight: bold;
+    }
+    .order_completed h4{
+      margin-top: 0px !important;
+      padding-top: 0px !important;
+    }
+    .bgRightbtn{
+      /*position: absolute;*/
+      width:100%;
+      /*height: 100%;*/
+      /*right:0px;*/
+      /*top:0px;*/
+      min-height: 50px;
+      border: none !important;
+      font-weight: 600;
+      /*box-shadow: 0px 0px 10px #999;*/
+      /*border-radius: 2px;*/
+      /*width:20px;*/
+    }
+    .mo-item{
+      height: auto;
+    }
+    .mo-content{
+      background-color: #f2dede;
+    }
+    .mo-content div{
+      border: none;
+      /*box-shadow:0px 0px 100px #aaa;*/
+      margin-top:1.5px;
+    }
+    .mo-content div:last-child{
+      border: none;
+    }
+    .bump-all-btn {
+      min-width:100%;
+      /*margin-bottom:px;*/
+    }
+    .mo-footer{
+      padding:0px !important;
+      margin: 0px !important;
+    }
+
+
+    .swing_in {
+        animation-name: rotate;
+        animation-duration: 0.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+
+    .swing_out {
+        animation-name: swing_out;
+        animation-duration: 1s;
+        animation-iteration-count: 1;
+        animation-timing-function: linear;
+    }
+
+
+
+
+
+
+    @keyframes swing_out {
+        /*from {transform: rotate(0deg);}
+        to {transform: rotate(80deg);}*/
+      0% {
+        /*background: orange;*/
+        transform: rotate(20deg);
+        min-width:100%;
+      }
+      20% {
+        /*background: orange;*/
+        margin-left:-10px;
+        margin-top: -5px;
+        /*position:absolute;*/
+      }
+      70% {
+        opacity: 1;
+      }
+      /* You could think of as "step 2" */
+      100% {
+        transform: rotate(0deg);
+        margin-left:100%;
+        margin-top: +5px;
+        opacity: 0;
+        min-width:100%;
+        /*display: none;*/
+        /*background: black;*/
+      }
+    }
+
+    /*@keyframes swing_out_2 {
+        from {left: 0px;}
+        to {left: 2000px;}
+    }*/
+    .corner-filter-status{
+      background-color: rgba(0,0,0,1);
+      position: fixed;
+      bottom:0px;
+      right:0px;
+      color:white;
+      padding:10px;
+      opacity: 0.9;
+      z-index: 54 !important;
+      /*width:100px;*/
+    }
+    .corner-filter-status:hover{
+      opacity: 1;
+      /*width:100px;*/
+    }
+    .mo-content span.bigger_font, .recall-content h4.bigger_font{
+      font-size: 16px;
+      font-weight: 600;
+    }
+    </style>
+    <script>
+    var category  = "";
+    var status  = "";
+    </script>
   </head>
   <body class="dashboard">
     <header role="banner">
-      <nav role="navigation" class="navbar navbar-inverse">
+      <nav role="navigation" class="navbar navbar-inverse" >
         <div class="container">
-          <div class="navbar-header">
+          <div class="navbar-header" style="width">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">
-              <span style="font-family: 'Consolas', serif ;font-size: 26px;color: white"><img style="margin-top: -10px;" src="/static/logo.png"></span>
+            <a class="navbar-brand" href="/monitoring/">
+              <span  style="font-size: 26px;color: #ddd;" class="admin_font letter-spaced">
+                <!-- font-family: 'Consolas', serif ; -->
+                <img class="" style="margin-top: -10px;" src="/static/logo.png">&nbsp;&nbsp;KDS</span>
             </a>
           </div>
           <div class="navbar-collapse collapse">
@@ -42,9 +168,43 @@
                 </ul>
               </li>
             </ul>
+            <!-- FILTERING -->
+            <ul class = "nav navbar-nav navbar-right letter-spaced capitalized admin_font bold" id="filter_category" data-current-filter="">
+              <li class = "dropdown">
+                <a class = "dropdown-toggle" data-toggle = "dropdown" href = "#"><span class="selected_category_trigger">Category</span> <i class="fa fa-angle-down"></i></a>
+                <ul class = "dropdown-menu">
+                {{ range .Category }}
+                  <li style='cursor:pointer;' class="selected_category bold" data-filter="category" data-category-id="{{ .ID }}" >
+                    <a onclick="updateCategoryText('{{ . }}');" class="format_name bold" ><span class="bold">{{ . }}</span></a></li>
+                {{ end }}
+                </ul>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu" data-filter="status" data-status-id="2">
+                <a onclick="updateStatusText('Ready');" style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-success btn btn-sm capitalized">Ready</button></a>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu" data-filter="status" data-status-id="1">
+                <a onclick="updateStatusText('Preparing');" style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-warning btn btn-sm capitalized">Preparing</button></a>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu" data-filter="none" data-status-id="all">
+                <a onclick="updateFilterAll();" style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-default btn btn-sm capitalized">All</button></a>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu" data-filter="status" data-status-id="3">
+                <a onclick="updateStatusText('Served');" style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-info btn btn-sm capitalized">Recall</button></a>
+              </li>
+            </ul>
+            <!-- <ul class = "nav navbar-nav navbar-right">
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu">
+                <a style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-success btn btn-sm">Ready</button></a>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu">
+                <a style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-warning btn btn-sm">Preparing</button></a>
+              </li>
+            </ul> -->
+            <!-- FILTERING END -->
           </div>
         </div>
       </nav>
+
     </header>
 
     <div class = "modal fade" id = "confirm-logout" tabindex = "-1" role = "dialog">
@@ -74,29 +234,42 @@
     </div>
 
     <h1></h1>
-    <div class="legend">
+    <div class="legend capitalized admin_font letter-spaced">
       <ul>
-        <li><i class="fa fa-square legend-warning"></i> PREPARING</li>
-        <li><i class="fa fa-square text-info"></i> READY</li>
-        <li><i class="fa fa-square text-success"></i> SERVED</li>
-        <li><i class="fa fa-square text-danger"></i> CANCELLED</li>
+        <li><i class="shadowed fa fa-square recieved-text"></i> RECIEVED</li>
+        <li><i class="shadowed fa fa-square preparing-text"></i> PREPARING</li>
+        <li><i class="shadowed fa fa-square ready-text"></i> COMPLETED</li>
+        <li><i class="shadowed fa fa-square served-text"></i> SERVED</li>
+
+
+        <!-- <li><i class="fa fa-square cancelled-text"></i> CANCELLED</li> -->
+      </ul>
+    </div>
+    <div class="legend  admin_font capitalized pull-right" >
+      <ul>
+        <!-- <li><span style="font-size:25px;font-weight:600 !important;" >R</span> TO RECIEVED</li> -->
+        <li><span class="capitalized" style="font-weight:600 !important;padding:0px;margin-top:-10px !important;font-size:23px;" >P</span>&nbsp;&nbsp;to set as preparing</li>
+        <li><span class="capitalized" style="font-weight:600 !important;padding:0px;margin-top:-10px !important;font-size:23px;" >C</span>&nbsp;&nbsp;to set as completed</li>
+        <li><span class="capitalized" style="font-weight:600 !important;padding:0px;margin-top:-10px !important;font-size:23px;" >Bump</span>&nbsp;&nbsp;to set as served</li>
+        <!-- <li><i class="fa fa-square cancelled-text"></i> CANCELLED</li> -->
       </ul>
     </div>
     <div id="context-menu">
       <ul class="dropdown-menu" role="menu">
-        <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=2>Ready</a></li>
-        <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=3>Serve</a></li>
-        <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status="4">Cancel</a></li>
+        <!-- <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=2>Ready</a></li> -->
+        <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=3>Bump</a></li>
+        <!-- <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status="4">Cancel</a></li> -->
       </ul>
     </div>
     <div class="clr"></div>
     {{ if eq .LocationID "all" }}
       {{ range .KitchenLocation }}
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-          <div class="panel panel-info">
-            <div class="panel-heading"><strong><span style="font-size : 18px;">{{.Name}}</span></strong></div>
+          <div class="panel panel-info panel-custom">
+            <div class="panel-heading"><strong><span style="font-size : 18px;" class="capitalized admin_font letter-spacing">{{.Name}}</span></strong></div>
             <div class="panel-body">
-              <div class="mo-container-{{.ID}}"></div>
+              <div class="mo-container-toggler mo-container-{{.ID}}"></div>
+              <div class="mo-container-served recall-container-{{.ID}}"></div>
             </div>
           </div>
         </div>
@@ -104,19 +277,35 @@
     {{ else }}
       {{ $LocID := .LocationID }}
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="panel panel-info">
+        <div class="panel panel-info  panel-custom">
           <div class="panel-heading">
             <strong>
-              <span style="font-size : 18px;"></span>
+              <span style="font-size : 18px;" class="capitalized admin_font letter-spacing">
+                {{ range .KitchenLocation }}
+                {{ $id := printf "%v" .ID }}
+                <!-- {{ $id }} -->
+                  {{ if eq  $id $LocID }}
+                    {{ .Name }}
+                  {{ end }}
+                {{ end }}
+              </span>
             </strong>
           </div>
           <div class="panel-body">
-            <div class="mo-container-{{ $LocID }}"></div>
+            <div class="mo-container-toggler mo-container-{{ $LocID }}"></div>
+            <div class="mo-container-served recall-container-{{ $LocID }}"></div>
           </div>
         </div>
       </div>
     {{ end }}
+
+
+    <div class="corner-filter-status admin_font bold letter-spaced">
+      <h4 style="margin-top:0px;">Filtering: <span style="font-size:-10px;" class="filter_mode" >None</span></h4>
+      <center><span class="filter_value capitalized">All active orders displayed</span></center>
+    </div>
     <div class="mo-container"></div>
+
     <div class="modal fade" id="serve-order-modal">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -161,11 +350,486 @@
     <script src="/static/js/d3.min.js"></script>
     <script src="/static/assets/admin/main.js"></script>
     <script>
+
+    function updateFilterStatus(value,mode){
+      $(".corner-filter-status").animate({
+          opacity: 0
+          // left: "+=50",
+          // height: "toggle"
+        }, 300, function() {
+          // Animation complete.
+          $(".corner-filter-status").animate({
+              opacity: 1
+              // left: "+=50",
+              // height: "toggle"
+            }, 300);
+        });
+      // console.log(data);
+      $('.filter_value').text(value);
+      $('.filter_mode').text(mode);
+
+    }
+    function prettyDate(time){
+      var delta = Math.round((+new Date - time) / 1000);
+
+            var minute = 60,
+              hour = minute * 60,
+              day = hour * 24,
+              week = day * 7;
+
+            var fuzzy;
+
+            if (delta < 30) {
+              fuzzy = 'just then.';
+            } else if (delta < minute) {
+              fuzzy = delta + ' seconds ago.';
+            } else if (delta < 2 * minute) {
+              fuzzy = 'a minute ago.'
+            } else if (delta < hour) {
+              fuzzy = Math.floor(delta / minute) + ' minutes ago.';
+            } else if (Math.floor(delta / hour) == 1) {
+              fuzzy = '1 hour ago.'
+            } else if (delta < day) {
+              fuzzy = Math.floor(delta / hour) + ' hours ago.';
+            } else if (delta < day * 2) {
+              fuzzy = 'yesterday';
+            } else{
+              fuzzy = 'yesterday';
+            }
+
+            return fuzzy;
+      }
+    function RecallServedOrders(){
+      d3.json("/apiFunction/?method=GetServedOrderItems", function(response){
+        var duration = 500,
+            tmp_data = response,
+            tmp = null,
+            data = {},
+            i = 0,
+            len = tmp_data.length;
+        // transform data
+        for (i; i < len; i ++) {
+          var j;
+          if (i > 0){
+             j = i-1;
+          }else{
+            j = 0;
+          }
+
+          tmp = tmp_data[i];
+          // console.log(tmp);
+          tmp["item_name"] = tmp.Name;
+          tmp["customer_name"] = tmp.Customer;
+          tmp["source"] = tmp.KitchenLocation;
+          tmp["location"] = tmp.KitchenLocation;
+          tmp["waiter_name"] = tmp.Waiter;
+          tmp["with_not_ready"] = false;
+
+          if (tmp.Status != 2){
+              tmp["with_not_ready"] = true;
+          }
+
+          // console.log(order_item_flag);
+
+          delete tmp.Name;
+          delete tmp.Customer;
+          delete tmp.KitchenLocation;
+          delete tmp.Waiter;
+
+          var kl_id = tmp.location,
+              // kl_id = 1,
+              order_key = [tmp.customer_name, tmp.Table, tmp.TableNumber, tmp.OrderID, tmp.waiter_name].join("|");
+
+              // console.log(order_key);
+
+          if (!data[kl_id]) {
+            data[kl_id] = {};
+          }
+
+          if (!data[kl_id][order_key]) {
+            data[kl_id][order_key] = [];
+          }
+
+          data[kl_id][order_key].push(tmp);
+        }
+
+        var kl_id = null;
+        var kl_list =[];
+        {{ range .KitchenLocation}}
+        kl_list.push({{.ID}});
+        {{ end }}
+
+        for (var index=0;index<kl_list.length;index++) {
+          kl_id = kl_list[index];
+          var orders = data[kl_id],
+              $kl_container = $(".recall-container-" + kl_id);
+
+          if ($kl_container.length === 0) {
+
+          }
+
+          var container = d3.select($kl_container[0])
+              .selectAll(".recall-instance")
+              .data(d3.entries(orders), function(d){
+                return d.key;
+              });
+
+          var tempContainer = container.enter()
+              .append(function(d){
+
+                var with_not_ready = false;
+                $.each(d.value, function(i, v){
+                  if (v.with_not_ready) {
+                    with_not_ready = true;
+                    return false;
+                  }
+                });
+
+                var key_parts = d.key.split("|"),
+                    customer_name   = key_parts[0],
+                    table_id        = key_parts[1],
+                    table_no        = key_parts[2],
+                    order_id        = key_parts[3],
+                    waiter_name     = key_parts[4];
+                    var a = window.location.pathname;
+                    if (a == "/" || a == "/monitoring" || a == "/monitoring/" || a == "/monitoring/all"){
+                      var el = $("<div class='recall-instance col-xs-12 col-sm-6 col-md-6' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
+                      "<div class='recall-instance-padding col-sm-12'>"+
+                        "<div class='recall-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                        "<div class='recall-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                        // "<div class='row'>" +
+                        "<div class='recall-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                          // "<div class='mo-content-2 col-sm-4'>" +
+                          //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                          // "</div>" +
+                        // "</div>" +
+                        "<div class='recall-footer'>"+
+                        "<span>"+
+                        "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                        // "<i class='fa fa-user-o'></i> "+
+                         "<img src='/static/images/waiter.png'> "+
+                        waiter_name +"</h4>"+
+                        "</span>"+
+                        "<button id='recall_all-"+order_id+"' type='button' onclick='recall_all(this);'"+
+                        " class='pointer bump-all-btn btn-primary btn"+
+                        " '>"+
+                        "<h4 class='admin_font bold capitalized'>Recall All</h4></button>"+
+                        "</div>" +
+                      "</div>"+
+                    "</div>"
+                  )[0];
+                  return el;
+
+                    }else{
+                      var el = $("<div class='recall-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
+                      "<div class='recall-instance-padding col-sm-12'>"+
+                        "<div class='recall-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                        "<div class='recall-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                        // "<div class='row'>" +
+                        "<div class='recall-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                          // "<div class='mo-content-2 col-sm-4'>" +
+                          //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                          // "</div>" +
+                        // "</div>" +
+                        "<div class='recall-footer'>"+
+                        "<span>"+
+                        "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                        // "<i class='fa fa-user-o'></i> "+
+                         "<img src='/static/images/waiter.png'> "+
+                        waiter_name +"</h4>"+
+                        "</span>"+
+                        "<button id='bump_all-"+order_id+"' type='button' onclick='recall_all(this);'"+
+                        " class='pointer bump-all-btn btn-primary btn"+
+                        " '>"+
+                        "<h4 class='admin_font bold capitalized'>Recall All</h4></button>"+
+                        "</div>" +
+                      "</div>"+
+                    "</div>"
+                  )[0];
+                  return el;
+
+                    }
+
+              })
+
+              .style("opacity", 1);
+
+
+
+          container.exit()
+              .transition()
+              .duration(duration)
+              .style("opacity", 0)
+              .remove();
+
+          container = container.merge(tempContainer);
+
+          var rows = container.select(".recall-content").selectAll("div").data(function(d){
+                return d.value;
+              }, function(d){
+                return d.ID;
+              });
+
+
+          var old_data = rows.exit()
+              .remove();
+
+          var new_data = rows.enter()
+              .append("div")
+              .attr("data-attr-id", function(d){ return d.ID; })
+              .attr("data-attr-status", function(d){ return d.OrderStatus; })
+              .attr("data-attr-item-name", function(d){return d.item_name; })
+              .attr("data-attr-item-status", function(d){return d.OrderStatus; })
+              .attr("data-attr-item-category", function(d){ return d.MenuCategory; });
+
+          new_data.style("position", "relative");
+              // .style("left", "-205px")
+              // .style("transform", "rotate(18deg)")
+              // .transition()
+              // .delay(function(d,i) {
+              //   return Math.floor(duration / 2) * i + (index * duration);
+              // })
+              // .duration(duration*2)
+              // .style("left", "35px")
+              // .style("transform", "rotate(0deg)")
+              // //.style("height", "100px")
+              // // .style("height", function(d){
+              // //   return "100px";
+              // // })
+              // // .transition()
+              // // .delay(Math.floor(duration*2))
+              // // .duration(duration)
+              // .transition()
+              // .duration(duration)
+              // .style("left", "0px")
+              // .style("position", "relative");
+
+          rows = rows.merge(new_data);
+
+          rows = rows.merge(old_data);
+
+          // 1st span
+          rows.selectAll("span").remove();
+
+          rows.append("div")
+              .attr("class","recall-item col-sm-8")
+              .html(function(d){
+                // Allergies
+                // "Index": 0,
+                // "OrderStatus": 3,
+                // "Status": 3,
+                // "ID": 10,
+                // "Quantity": 2,
+                // "SpecialRequest": "",
+                // "Remarks": "",
+                // "SpicyLevel": 0,
+                // "Name": "salad",
+                // "Waiter": "Ricky Manalo",
+                // "Table": 1,
+                // "TableNumber": 1,
+                // "OrderType": 3,
+                // "KitchenLocation": 1,
+                // "Customer": "Jerick Gonito",
+                // "MenuCategory": 1,
+                // "OrderID": 3,
+                // "Allergy": "",
+                // "ServedTime": "2017-07-21T09:43:28.462361339+08:00"
+                allergies = d.Allergy;
+                spicy_level = d.SpicyLevel,
+                len = spicy_level,
+                i = 0;
+                var html_str = "";
+                    html_str += "<span class='bigger_font'>";
+                    html_str += d.Quantity + " x " + d.item_name;
+                    html_str += "</span>";
+                    html_str += "<h4 class='bigger_font' style='font-weight:bold;color:inherit;margin:0px;padding:0px;'>";
+                    html_str += "[" + (d.OrderType == 1 ? "Dine-In" : "Take-Out") + "]";
+                    html_str += "</h4>";
+                    if (allergies.length > 0) {
+                      html_str += "<span>";
+                      html_str += "<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;";
+                      html_str += allergies.join("<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;");
+                      html_str += "</span><br>";
+                    }
+                    if (d.Remarks.length && d.Remarks != "") {
+                      html_str += "<span>";
+                      html_str += "<i class='fa fa-sticky-note-o' aria-hidden='true'></i>&nbsp;" + d.Remarks;
+                      html_str += "</span><br>";
+                    }
+                    if (spicy_level === -1) {
+
+                    }else{
+                      for (; i < len; i ++) {
+                        html_str += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>";
+                      }
+                      while (i++ < 3) {
+                        html_str += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>";
+                      }
+                    }
+
+                    // html_str +='<i class="bell-container"></i>&nbsp;';
+                    // html_str +='<span class="elapsed_time" data-serving-time="'+d.serving_time+'" data-attr-seconds="'+d.elapsed_time_seconds+'">'+d.elapsed_time+'</span>';
+                    html_str +="<h4 class='";
+
+                    // if (d.status != 2){
+                    //   html_str += "hidden";
+                    // }else{
+                    //   html_str += "";
+                    // }
+                    var served_date = new Date(d.ServedTime);
+                    html_str += " order_completed bold'><center><span class='capitalized admin_font'>"+prettyDate(served_date)+"</span></center></h4>";
+
+
+                return html_str;
+              });
+
+          rows.append("div")
+              .attr("class","recall-btn col-sm-4")
+              .html(function(d){
+                var context = this.parentNode,
+                    args = {
+                      "request_id":$(context).data("attr-id"),
+                      "request_status":1,
+                      "session_bundle" : $(context).closest('.recall-instance').attr('data-attr-order-no'),
+                      "table_no" : $(context).closest('.recall-instance').attr('data-attr-table-no'),
+                      "table_id" : $(context).closest('.recall-instance').attr('data-attr-table-id'),
+                      "type" : "DRINKS",
+                      "item_name" : $(context).attr('data-attr-item-name')
+                    };
+
+                this.setAttribute("data-details", JSON.stringify(args));
+                //console.log(d.ID);
+                // Allergies
+                var html_str = "";
+                    // html_str +="<div class='mo-content-2 col-sm-4'>";
+                      html_str +=  '<button onclick="RecallItem(this);"  data-orderitem-id="' + d.ID + '" type="button"  class="recall_btn pointer btn-primary bgRightbtn admin_font bold capitalized">Recall</button>';
+                      // html_str +=  '<button onclick=\'swingOut(this);\' type="button" class="recall_btn pointer btn-primary bgRightbtn admin_font bold capitalized">Recall</button>';
+                    // html_str +="</div>";
+                return html_str;
+              });
+
+          rows.attr("data-attr-status", function(d){ return d.Status; })
+              .attr("class", function(d){
+                switch (d.Status) {
+                  case 0: return "recieved";
+                  case 1: return "preparing";
+                  case 2: return "ready";
+                  case 3: return "served";
+                }
+                return "cancelled";
+              });
+          rows.attr("data-attr-item-status", function(d){
+            // filtering
+            var $this = $(this),
+                filter = $("[data-current-filter]").attr("data-current-filter").split(":");
+
+            switch (filter[0]) {
+              case "status":
+                if (d.Status == filter[1]) {
+                  $this.show();
+                } else {
+                  $this.hide();
+                }
+                break;
+              case "category":
+                if (d.MenuCategory == filter[1]) {
+                  $this.show();
+                } else {
+                  $this.hide();
+                }
+                break;
+            }
+
+            return d.Status;
+          });
+
+
+
+
+        }
+
+        retrieveRestoOrdersProcessing = false;
+      });
+        // updateFilterStatus("Recently served orders displayed","Recall");
+        // $(".mo-container-served").html("<pre>"+JSON.stringify(result)+"</pre>");
+
+    }
+    $(".mo-container-served").hide();
+
+    function updateStatusText(data){
+      if (data == "Served"){
+        // /apiFunction/?method=GetServedOrderItems
+        $(".mo-container-toggler").hide();
+        $(".mo-container-served").show();
+        updateFilterStatus("Recently served orders displayed","Recall");
+      }else{
+        $(".mo-container-toggler").show();
+        $(".mo-container-served").hide();
+        // console.log(data);
+        updateFilterStatus(data,"Order Status");
+      }
+    };
+    function updateCategoryText(data){
+      $(".mo-container-toggler").show();
+      $(".mo-container-served").hide();
+
+      updateFilterStatus(data,"Order Category");
+      $('.selected_category_trigger').text("Category : "+data);
+    };
+    function updateFilterAll(){
+      $(".mo-container-toggler").show();
+      $(".mo-container-served").hide();
+
+      updateFilterStatus("All active orders displayed","None");
+      $('.selected_category_trigger').text("Category");
+    };
+
       var server_address = window.location.hostname;
       var socket = io.connect('http://' + server_address + ':' + window.location.port);
       var is_annoy = false;
       var is_80p = false;
       var notified_80 = false;
+
+      $("#filter_category").on("click", function(e){
+        var $target = $(e.target);
+        if ($target.prop("tagName").toLowerCase() !== "li") {
+          $target = $target.closest("[data-filter]");
+        }
+
+        if ($target.length === 1 && $target[0].hasAttribute("data-filter")) {
+          var filter = $target.attr("data-filter"),
+              id = $target.attr("data-" + filter + "-id");
+
+          if (filter === "none") {
+            $("[data-attr-id]").show();
+            $target.closest("[data-current-filter]").attr("data-current-filter", "");
+            return;
+          }
+
+          if ($target.closest("[data-current-filter]").attr("data-current-filter") === (filter + ":" + id)) {
+            return;
+          }
+          $target.closest("[data-current-filter]").attr("data-current-filter", (filter + ":" + id));
+
+
+          $("[data-attr-id]").hide();
+          $("[data-attr-item-" + filter + "=" + id + "]").show();
+
+          /*
+          switch (filter) {
+            case "status":
+              var status_id = $target.attr("data-status-id");
+              $("[data-attr-item-status=" + status_id + "]").hide();
+              break;
+            case "category":
+              var category_id = $target.attr("data-category-id");
+              $("[data-attr-item-category=" + category_id + "]").hide();
+              break;
+          }
+          */
+        }
+      })
+
 
       $(document).ready(function(){
         $('#nav-menu-{{ .LocationID }}').addClass('active');
@@ -238,12 +902,16 @@
       }
 
       var retrieveRestoOrdersProcessing = false;
+
+
+
       function retrieveRestoOrders() {
         // if (retrieveRestoOrdersProcessing) {
         //   return;
         // }
 
         retrieveRestoOrdersProcessing = true;
+        // var url = "GetServedItems";
         d3.json("/apiFunction/?method=GetMonitoringOrderItems", function(response){
 
           var duration = 500,
@@ -252,21 +920,39 @@
               data = {},
               i = 0,
               len = tmp_data.length;
-
           // transform data
-          for (; i < len; i ++) {
+          for (i; i < len; i ++) {
+            var j;
+            if (i > 0){
+               j = i-1;
+            }else{
+              j = 0;
+            }
+
             tmp = tmp_data[i];
             tmp["item_name"] = tmp.item;
             tmp["customer_name"] = tmp.customer;
             tmp["source"] = tmp.type;
             tmp["location"] = tmp.type;
+            tmp["waiter_name"] = tmp.waiter;
+            tmp["with_not_ready"] = false;
+
+            if (tmp.status != 2){
+                tmp["with_not_ready"] = true;
+            }
+
+            // console.log(order_item_flag);
 
             delete tmp.item;
             delete tmp.customer;
             delete tmp.type;
+            delete tmp.waiter;
 
             var kl_id = tmp.location,
-                order_key = [tmp.customer_name, tmp.table_id, tmp.table_no, tmp.order].join("|");
+                // kl_id = 1,
+                order_key = [tmp.customer_name, tmp.table_id, tmp.table_no, tmp.order, tmp.waiter_name].join("|");
+
+                // console.log(order_key);
 
             if (!data[kl_id]) {
               data[kl_id] = {};
@@ -302,27 +988,155 @@
 
             var tempContainer = container.enter()
                 .append(function(d){
-                  var key_parts = d.key.split("|"),
-                      customer_name = key_parts[0],
-                      table_id = key_parts[1],
-                      table_no = key_parts[2],
-                      order_id = key_parts[3],
-                      el = $(
-                        "<div class='mo-instance' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>" +
-                          "<div class='mo-title'>Table" + table_no + "</div>" +
-                          "<div class='mo-title-customer-name'>" + customer_name + "</div>" +
-                          "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'>" +
-                          "</div>" +
-                          "<div class='mo-footer'></div>" +
-                        "</div>"
-                      )[0];
-                  return el;
+
+                  var with_not_ready  = false;
+                  $.each(d.value, function(i, v){
+                    if (v.with_not_ready) {
+                      with_not_ready = true;
+                      return false;
+                    }
+                  });
+
+                  var key_parts       = d.key.split("|"),
+                      customer_name   = key_parts[0],
+                      table_id        = key_parts[1],
+                      table_no        = key_parts[2],
+                      order_id        = key_parts[3],
+                      waiter_name     = key_parts[4];
+                  var a = window.location.pathname;
+                  var top_part = "";
+                  var el;
+                  //if (with_not_ready == "true"){
+                  if (with_not_ready){
+
+                    if (a == "/" || a == "/monitoring" || a == "/monitoring/" || a == "/monitoring/all"){
+                       el = $("<div class='mo-instance col-xs-12 col-sm-6 col-md-6' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
+                       "<div class='mo-instance-padding col-sm-12'>"+
+                         "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                         "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                         // "<div class='row'>" +
+                         "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                           // "<div class='mo-content-2 col-sm-4'>" +
+                           //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                           // "</div>" +
+                         // "</div>" +
+                         "<div class='mo-footer'>"+
+                         "<span>"+
+                         "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                         // "<i class='fa fa-user-o'></i> "+
+                          "<img src='/static/images/waiter.png'> "+
+                         waiter_name +"</h4>"+
+                         "</span>"+
+                         "<button disabled id='bump_all-"+order_id+"' type='button' onclick='bump_all(this);'"+
+                         " class='pointer bump-all-btn btn-primary btn"+
+                         " btn-disabled'>"+
+                         "<h4 class='admin_font bold capitalized'>Bump All</h4></button>"+
+                         "</div>" +
+                       "</div>"+
+                     "</div>"
+                     )[0];
+
+                    }else{
+                        el = $("<div class='mo-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
+                       "<div class='mo-instance-padding col-sm-12'>"+
+                         "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                         "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                         // "<div class='row'>" +
+                         "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                           // "<div class='mo-content-2 col-sm-4'>" +
+                           //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                           // "</div>" +
+                         // "</div>" +
+                         "<div class='mo-footer'>"+
+                         "<span>"+
+                         "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                         // "<i class='fa fa-user-o'></i> "+
+                          "<img src='/static/images/waiter.png'> "+
+                         waiter_name +"</h4>"+
+                         "</span>"+
+                         "<button disabled id='bump_all-"+order_id+"' type='button' onclick='bump_all(this);'"+
+                         " class='pointer bump-all-btn btn-primary btn"+
+                         " btn-disabled'>"+
+                         "<h4 class='admin_font bold capitalized'>Bump All</h4></button>"+
+                         "</div>" +
+                       "</div>"+
+                     "</div>"
+                     )[0];
+                     return el;
+
+                    }
+
+
+                    }else{
+                      if (a == "/monitoring/" || a == "/monitoring/all"){
+                          el = $("<div class='mo-instance col-xs-12 col-sm-6 col-md-6' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
+                         "<div class='mo-instance-padding col-sm-12'>"+
+                           "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                           "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                           // "<div class='row'>" +
+                           "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                             // "<div class='mo-content-2 col-sm-4'>" +
+                             //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                             // "</div>" +
+                           // "</div>" +
+                           "<div class='mo-footer'>"+
+                           "<span>"+
+                           "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                           // "<i class='fa fa-user-o'></i> "+
+                            "<img src='/static/images/waiter.png'> "+
+                           waiter_name +"</h4>"+
+                           "</span>"+
+                           "<button id='bump_all-"+order_id+"' type='button' onclick='bump_all(this);'"+
+                           " class='pointer bump-all-btn btn-primary btn"+
+                           " '>"+
+                           "<h4 class='admin_font bold capitalized'>Bump All</h4></button>"+
+                           "</div>" +
+                         "</div>"+
+                       "</div>"
+                     )[0];
+
+                      }else{
+                          el = $("<div class='mo-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
+                         "<div class='mo-instance-padding col-sm-12'>"+
+                           "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                           "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                           // "<div class='row'>" +
+                           "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                             // "<div class='mo-content-2 col-sm-4'>" +
+                             //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                             // "</div>" +
+                           // "</div>" +
+                           "<div class='mo-footer'>"+
+                           "<span>"+
+                           "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                           // "<i class='fa fa-user-o'></i> "+
+                           "<img src='/static/images/waiter.png'> "+
+                           waiter_name +"</h4>"+
+                           "</span>"+
+                           "<button id='bump_all-"+order_id+"' type='button' onclick='bump_all(this);'"+
+                           " class='pointer bump-all-btn btn-primary btn"+
+                           " '>"+
+                           "<h4 class='admin_font bold capitalized'>Bump All</h4></button>"+
+                           "</div>" +
+                         "</div>"+
+                       "</div>"
+                     )[0];
+
+                      }
+                    }
+                    return el;
+
                 })
                 // .style("opacity", 1)
                 // .transition()
                 // .duration(duration)
                 .style("opacity", 1);
 
+            // tempContainer.select(".bgRightbtn")
+            //   .style("height", function(d){
+            //     var h = $(this).closest(".mo-instance").find(".mo-content").height() ;
+            //     return h + "px";
+            //   });
 
             container.exit()
                 .transition()
@@ -350,25 +1164,28 @@
             //     })
 
             var old_data = rows.exit()
-                .attr("class", "served")
-                .transition()
-                .duration(duration)
-                .style("left","-15px")
-                .transition()
-                .duration(duration)
-                .style("left", function(d){
-                  return 185*2.5 + "px";
-                })
-                .style("opacity", 0)
+                //.attr("class", "served")
+                // .transition()
+                // .duration(duration)
+                // .style("left","-15px")
+                // .transition()
+                // .duration(duration)
+                // .style("left", function(d){
+                //   return 185*2.5 + "px";
+                // })
+                // .style("opacity", 0)
                 .remove();
 
             var new_data = rows.enter()
                 .append("div")
+                // .attr("class","mo-main")
                 .attr("data-attr-id", function(d){ return d.order_item_id; })
-                //.attr("data-attr-status", function(d){ return d.status; })
-                .attr("data-attr-item-name", function(d){ return d.item_name; })
-                .attr("data-toggle", "context")
-                .attr("data-target", "#context-menu");
+                .attr("data-attr-status", function(d){ return d.status; })
+                .attr("data-attr-item-name", function(d){return d.item_name; })
+                .attr("data-attr-item-status", function(d){return d.status; })
+                .attr("data-attr-item-category", function(d){ return d.item_category_id; });
+                //.attr("data-toggle", "context")
+                //.attr("data-target", "#context-menu");
                 // .append("td")
                 // .text(function(d){return d.item_name;});
 
@@ -379,7 +1196,7 @@
             //*
 
             new_data.style("position", "relative")
-                .style("left", "-200px")
+                .style("left", "-700px")
                 .style("transform", "rotate(18deg)")
                 .transition()
                 .delay(function(d,i) {
@@ -406,229 +1223,206 @@
 
             // 1st span
             rows.selectAll("span").remove();
-            rows.append("span")
-                .text(function(d){
-                  return d.quantity + " x " + d.item_name;
-                });
-            rows.append("span")
-                .style("font-weight", "bold")
-                .style("color", "#f00")
-                .text(function(d){
-                  return "[" + (d.order_type == 1 ? "Dine-In" : "Take-Out") + "]";
-                });
-            rows.append("span")
-                .text(function(d){
+
+            rows.append("div")
+                .attr("class","mo-item col-sm-12")
+                .html(function(d){
                   // Allergies
-                  var html_str = "",
-                      allergies = d.allergies;
-                  if (allergies.length > 0) {
-                    html_str = "<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;";
-                    html_str += allergies.join("<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;");
-                  }
-
-                  return html_str;
-                });
-            rows.append("span")
-                .html(function(d){
-                  // remarks
+                  allergies = d.allergies;
+                  spicy_level = d.spicy_level,
+                  len = spicy_level;
                   var html_str = "";
-                  if (d.remarks.length && d.remarks != "") {
-                    html_str = "<i class='fa fa-sticky-note-o' aria-hidden='true'></i>&nbsp;" + d.remarks;
-                  }
+                      html_str += "<span class='bigger_font'>";
+                      html_str += d.quantity + " x " + d.item_name;
+                      html_str += "</span>";
+                      html_str += "<h4 class='bigger_font' style='font-weight:bold;color:inherit;margin:0px;padding:0px;'>";
+                      html_str += "[" + (d.order_type == 1 ? "Dine-In" : "Take-Out") + "]";
+                      html_str += "</h4>";
+                      if (allergies.length > 0) {
+                        html_str += "<span>";
+                        html_str += "<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;";
+                        html_str += allergies.join("<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;");
+                        html_str += "</span><br>";
+                      }
+                      if (d.remarks.length && d.remarks != "") {
+                        html_str += "<span>";
+                        html_str += "<i class='fa fa-sticky-note-o' aria-hidden='true'></i>&nbsp;" + d.remarks;
+                        html_str += "</span><br>";
+                      }
+                      if (spicy_level === -1) {
+
+                      }else{
+                        var i = 0;
+                        for (i; i < len; i ++) {
+                          html_str += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>";
+                        }
+                        while (i++ < 3) {
+                          html_str += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>";
+                        }
+                      }
+
+                      html_str +='<br><i class="bell-container"></i>&nbsp;';
+                      html_str +='<span class="elapsed_time" data-serving-time="'+d.serving_time+'" data-attr-seconds="'+d.elapsed_time_seconds+'">'+d.elapsed_time+'</span>';
+                      html_str +="<h4 class='";
+
+                      if (d.status != 2){
+                        html_str += "hidden";
+                      }else{
+                        html_str += "";
+                      }
+                      html_str += " order_completed bold'><center><span class='capitalized admin_font'>COMPLETED</span></center></h4>";
+
+
                   return html_str;
                 });
-            rows.append("span")
+
+            rows.append("div")
+                .attr("class","mo-btn col-sm-12")
                 .html(function(d){
-                  // Spicy
-                  var html_str = "",
-                      spicy_level = d.spicy_level,
-                      len = spicy_level,
-                      i = 0;
 
-                  if (spicy_level === -1) {
-                    return html_str;
-                  }
+                  var context = this.parentNode,
+                      args = {
+                        "request_id":$(context).data("attr-id"),
+                        "request_status":3,
+                        "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
+                        "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
+                        "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
+                        "type" : "DRINKS",
+                        "item_name" : $(context).attr('data-attr-item-name'),
+                        "with_not_ready": d.with_not_ready
+                      };
 
-                  for (; i < len; i ++) {
-                    html_str += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>";
-                  }
-                  while (i++ < 3) {
-                    html_str += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>";
-                  }
+                  this.setAttribute("data-details", JSON.stringify(args));
+
+                  // Allergies
+                  var html_str = "";
+                      // html_str +="<div class='mo-content-2 col-sm-4'>";
+                      if (d.status == 2){
+                        html_str +=  '<button style="width:33.333% !important;" onclick=\'swingOut(this);\' type="button"  class="bump_btn pointer btn-primary bgRightbtn admin_font bold capitalized">Bump</button>';
+                      }else{
+                        html_str +=  '<button style="width:33.333% !important;" onclick=\'swingOut(this);\' type="button" disabled class="bump_btn pointer btn-primary btn-disabled bgRightbtn admin_font bold capitalized">Bump</button>';
+                      }
+                      // console.log(d.order_item_id);
+                      if (d.status != 1){
+                        html_str +=  '<button data-orderitem-id="'+d.order_item_id+'" style="width:33.333% !important;" onclick="RecallItem(this);" type="button"  class="p_btn pointer btn-warning bgRightbtn admin_font bold capitalized">P</button>';
+                      }else{
+                        html_str +=  '<button disabled data-orderitem-id="'+d.order_item_id+'" style="width:33.333% !important;" onclick="RecallItem(this);" type="button"  class="p_btn pointer btn-warning bgRightbtn admin_font bold capitalized btn-disabled">P</button>';
+                      }
+
+                      if (d.status != 2){
+                        html_str +=  '<button data-orderitem-id="'+d.order_item_id+'" style="width:33.333% !important;" onclick="CompleteItem(this);" class="c_btn pointer btn-success bgRightbtn admin_font bold capitalized">C</button>';
+                      }else{
+                        html_str +=  '<button disabled data-orderitem-id="'+d.order_item_id+'" style="width:33.333% !important;" onclick="CompleteItem(this);" class="c_btn pointer btn-success bgRightbtn admin_font bold capitalized btn-disabled">C</button>';
+                      }
+
+                      // html_str +="</div>";
+
                   return html_str;
                 });
-            rows.append("span")
-                .html(function(d){
-                  return '<i class="bell-container"></i>' +
-                  '<span class="elapsed_time" data-serving-time="'+d.serving_time+'" data-attr-seconds="'+d.elapsed_time_seconds+'">'+d.elapsed_time+'</span>';
-                });
-                // .append("span")
-                // .attr("class", "table table-condensed")
-                // .append("tbody")
-                // .append("tr")
-                // .style("border", "none")
-                // .append("td")
-                // .style("border", "none");
 
-
-            // current_selection = current_selection.append("strong");
-            //
-            // current_selection.append("br")
-            // current_selection.append("span").style("color", "#f00");
-            //
-            // // 2nd tr
-            // current_selection = rows.select("td table tbody")
-            //     .append("tr")
-            //     .style("border", "none")
-            //     .append("td")
-            //     .style("border", "none");
-            //
-            // current_selection.append("span")
-            //     .style("display", "block")
-            //     .style("font-weight", "bold");
-            //
-            // current_selection.append("span").style("font-weight", "bold");
-            //
-            // // 3rd tr
-            // current_selection = rows.select("td table tbody")
-            //     .append("tr")
-            //     .style("border", "none")
-            //     .append("td")
-            //     .style("border", "none");
-            //
-            // current_selection.append("span")
-            //     .attr("class", "bell-container fa fa-bell-o")
-            //     .style("color", "#f00");
-            //
-            // current_selection.append("span")
-            //     .attr("class", "elapsed_time")
-            //     .attr("data-attr-100", "true")
-            //     .style("color", "#f00");
-
-
-
-            // *** START UPDATE ***
-            // rows = rows.merge(new_data);
-
-            // 1st row
             rows.attr("data-attr-status", function(d){ return d.status; })
                 .attr("class", function(d){
                   switch (d.status) {
+                    case 0: return "recieved";
                     case 1: return "preparing";
                     case 2: return "ready";
                     case 3: return "served";
                   }
                   return "cancelled";
                 });
-                // .select("td")
-                // .attr("class", function(d){
-                //   return d.allergies.length === 0 ? "" : "allergy-order";
-                // })
-                // .select("table tbody tr td")
-                // .attr("class", function(d){
-                //   switch (d.status) {
-                //     case 1: return "warning";
-                //     case 2: return "info";
-                //     case 3: return "success";
-                //   }
-                //   return "danger";
-                // });
+            rows.attr("data-attr-item-status", function(d){
+              // filtering
+              var $this = $(this),
+                  filter = $("[data-current-filter]").attr("data-current-filter").split(":");
 
-            // current_selection.select("span")
-            //     .text(function(d){
-            //       return d.quantity + "x " + d.item_name;
-            //     });
-
-            // current_selection.select("strong span")
-            //     .text(function(d){
-            //       return "[" + (d.order_type == 1 ? "Dine-In" : "Take-Out") + "]";
-            //     });
-
-            // 2nd row
-
-            // 3rd row
-            // rows.select("td table tbody tr:nth-child(3) td")
-            //     .attr("class", function(d){
-            //       switch (d.status) {
-            //         case 1: return "warning";
-            //         case 2: return "info";
-            //         case 3: return "success";
-            //       }
-            //       return "danger";
-            //     })
-            //     .select("span:nth-child(2)")
-            //     .attr("data-serving-time", function(d){
-            //       return d.serving_time;
-            //     })
-            //     .attr("data-attr-seconds", function(d){
-            //       return d.elapsed_time_seconds;
-            //     })
-            //     .text(function(d){
-            //       return d.elapsed_time;
-            //     });
-
-            rows.each(function(d){
-              var el = this;
-              if (!el.hasAttribute("data-has-context-menu")) {
-                el.setAttribute("data-has-context-menu", "1");
-                $(el).contextmenu({
-                  "target": "#context-menu",
-                  "before": function(e, context) {
-                    if($(e.target).hasClass("no-context-menu")) {
-                      return;
-                    }
-                    console.log($(context).attr("data-attr-status"));
-                    this.getMenu().find("li").removeClass();
-                    this.getMenu().find("li > a[data-attr-status='" + $(context).attr("data-attr-status") + "']").parent().addClass("disabled");
-                    return true;
-                  },
-                  "onItem": function (context, e) {
-                    if($(e.target).parent().hasClass("disabled")){
-                      return;
-                    }
-
-                    var item_ID = $(context).data("attr-id"),
-                        status = $(e.target).data("attr-status");
-
-                    var fakePlayClicked = false;
-                    if (status == 2 || status == 3 || status == 4) {
-                      if (itemAlamList[item_ID] && typeof itemAlamList[item_ID] === "object" && "pause" in itemAlamList[item_ID]) {
-                        itemAlamList[item_ID].pause();
-
-                        setTimeout(function(){
-                          itemAlamList[item_ID] = null;
-                          delete itemAlamList[item_ID];
-                        }, 5000)
-
-                        itemAlamList[item_ID] = {"play":function(){
-
-                        }};
-                      }
-                    }
-
-                    var args = {
-                      "request_id": item_ID,
-                      "request_status": status,
-                      "session_bundle": $(context).closest(".mo-instance").attr("data-attr-order-no"),
-                      "table_no": $(context).closest(".mo-instance").attr("data-attr-table-no"),
-                      "table_id": $(context).closest(".mo-instance").attr("data-attr-table-id"),
-                      "type": "DRINKS",
-                      "item_name": $(context).attr("data-attr-item-name")
-                    };
-
-                    updateStatus(args);
+              switch (filter[0]) {
+                case "status":
+                  if (d.status == filter[1]) {
+                    $this.show();
+                  } else {
+                    $this.hide();
                   }
-                });
+                  break;
+                case "category":
+                  if (d.item_category_id == filter[1]) {
+                    $this.show();
+                  } else {
+                    $this.hide();
+                  }
+                  break;
+              }
+
+              return d.status;
+            });
+
+          }
+
+          //*
+          $(".mo-instance").each(function(i, el){
+            var $el = $(el),
+                with_not_ready = false,
+                ready = false,
+                preparing = false;
+            $el.find("[data-attr-item-status]").each(function(i, el){
+              var status = el.getAttribute("data-attr-item-status");
+              if (status < 2) {
+                with_not_ready = true;
+                //return false;
+              }
+              if (status == 2) {
+                $(el).find(".c_btn")
+                     .attr("disabled", true)
+                     .addClass("btn-disabled");
+
+              }else{
+                $(el).find(".c_btn")
+                     .attr("disabled", false)
+                     .removeClass("btn-disabled");
+              }
+              if (status != 0) {
+                $(el).find(".p_btn")
+                     .attr("disabled", true)
+                     .addClass("btn-disabled");
+              }else{
+                $(el).find(".p_btn")
+                     .attr("disabled", false)
+                     .removeClass("btn-disabled");
               }
             });
 
 
-
-          }
+            if (with_not_ready) {
+              $el.find(".bump-all-btn")
+                .attr("disabled", true)
+                .addClass("btn-disabled");
+            } else {
+              $el.find(".bump-all-btn")
+                .attr("disabled", false)
+                .removeClass("btn-disabled");
+            }
+          });
+          //*/
 
           retrieveRestoOrdersProcessing = false;
         });
+        RecallServedOrders();
       }
+      // BUMP ALL
+
+      function bump_all(me){
+        // console.log($(me).parent());
+          $(me).parent().parent().find(".mo-btn").each(function(){
+            $(this).find(".bump_btn").click();
+          });
+      }
+
+      function recall_all(me){
+        // console.log($(me).parent());
+          $(me).parent().parent().find(".recall-btn").each(function(){
+            $(this).find("button").click();
+          });
+      }
+
 
       function retrieveRestoOrders_ORIG(){
         // *** get data via jquery.ajax ***
@@ -657,7 +1451,8 @@
                     "allergies": data[i].allergies,
                     "serving_time": data[i].serving_time,
                     "elapsed_time_seconds": data[i].elapsed_time_seconds,
-                    "order_type": data[i].order_type
+                    "order_type": data[i].order_type,
+                    "item_category_id" : data[i].item_category_id
                   };
               appendRequestInstance(args);
             }
@@ -836,13 +1631,84 @@
     );
   }
 
+
+
+  function swingOut(el){
+    $(el).closest("[data-attr-id]").addClass("swing_out");
+    setTimeout(function(){
+      // updateStatus(el.parentNode.getAttribute("data-details"))
+      $(el).closest("[data-attr-id]").hide();
+      setTimeout(function(){
+        //console.log(el.parentNode.getAttribute("data-details"));
+        //updateStatus(el.parentNode.getAttribute("data-details"));
+
+        var details = JSON.parse(el.parentNode.getAttribute("data-details"));
+        updateStatus({
+          "request_id":details.request_id,
+          "status":details.request_status
+        })
+      }, 500);
+    }, 950);
+  }
+
+  function RecallItem(elem){
+    var args = {
+      "request_id":$(elem).attr('data-orderitem-id'),
+      "status":1
+    }
+
+    $(elem).closest(".mo-instance").find(".bump-all-btn")
+      .attr("disabled", true)
+      .addClass("btn-disabled");
+
+    updateStatus(args);
+  }
+
+  function CompleteItem(elem){
+    //elem.setAttribute("data-attr-item-status", 2);
+    var args = {
+      "request_id":$(elem).attr('data-orderitem-id'),
+      "status":2
+    },
+    $p = $(elem).closest(".mo-instance"),
+    with_not_ready = false;
+
+    $p.find("[data-attr-item-status]").each(function(i, el){
+      var status = el.getAttribute("data-attr-item-status");
+      if (status < 2) {
+        with_not_ready = true;
+        return false;
+      }
+    });
+
+
+    if (with_not_ready) {
+        $p.find(".bump-all-btn")
+          .attr("disabled", true)
+          .addClass("btn-disabled");
+    } else {
+        $p.find(".bump-all-btn")
+          .removeClass("btn-disabled")
+          .attr("disabled", false);
+    }
+
+    //$p.find(".bump-all-btn")[0].disabled = with_not_ready;
+
+    updateStatus(args);
+  }
+
+
   function updateStatus(args){
+    if (typeof args === "string") {
+      args = JSON.parse(args);
+    }
+
     var result = $.ajax({
           "url": "/apiFunction/?method=UpdateOrderItemStatus",
           "dataType": "json",
           "data": {
             "order_item": args['request_id'],
-            "status": args['request_status']
+            "status": args['status']
           },
           "async": false
         }).responseText;
@@ -856,6 +1722,7 @@
       alert("Failed Updating Status!");
     }
   }
+
 
 
   function checkIfMonitoringIntanceExist(args){
@@ -891,54 +1758,74 @@
     $('#span-remarks').text(param['remarks']);
     $('#remarks-modal').modal('show');
   }
+
+
+
   function IncrementTime(){
       $('.elapsed_time').each(function(){
-        $(this).attr('data-attr-seconds',parseInt($(this).attr('data-attr-seconds')) + 1)
-        if ($(this).parent().parent().attr('data-attr-status')!=1) {
-          $(this).removeAttr('data-attr-seconds')
-          $(this).css('color','black');
-          $(this).attr('data-attr-100', 'false');
-          $(this).prev().removeClass('fa fa-bell-o').css("color", "black");
+        //console.log($(this).attr('data-attr-item-status'));
+          if ($(this).closest("[data-attr-item-status]").attr('data-attr-item-status') != 0){
+            // console.log($(this).attr('data-attr-seconds'));
+            $(this).attr('data-attr-seconds',parseInt($(this).attr('data-attr-seconds')) + 1)
+            if ($(this).parent().parent().attr('data-attr-status')!=1 && $(this).parent().parent().attr('data-attr-status')!=2  && $(this).parent().parent().attr('data-attr-status')!=0) {
+              $(this).removeAttr('data-attr-seconds')
+              $(this).css('color','black');
+              $(this).attr('data-attr-100', 'false');
+              $(this).prev().removeClass('fa fa-bell-o').css("color", "black");
+            }
+            else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time')) && ($(this).parent().parent().attr('data-attr-status')==0 || $(this).parent().parent().attr('data-attr-status')==1 || $(this).parent().parent().attr('data-attr-status')==2)) {
+              $(this).closest("[data-attr-id]").css("background","#ffb2b2").find("span").css("color","#222");//.css('color','red');
+              $(this).closest("[data-attr-id]").find("i").css("color","#222");//.css('color','red');
+              $(this).css("font-weight","bold");//.css('color','red');
+              $(this).attr('data-attr-100', 'true');
+              $(this).prev().addClass('fa fa-bell-o fa-2x').css("font-weight","bold").css("color", "red"); //CHANGE COLOR ON ALARM .css("color", "red");
+            }else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time'))*0.8 && ($(this).parent().parent().attr('data-attr-status')==0 || $(this).parent().parent().attr('data-attr-status')==1 || $(this).parent().parent().attr('data-attr-status')==2)) {
+
+              if($(this).attr('data-attr-80-notified') == null){
+                $(this).attr('data-attr-80', 'true');
+                $(this).attr('data-attr-80-notified', 'false');
+                $(this).prev().addClass('fa fa-bell-o fa-2x').css("font-weight","bold").css("color", "red");
+              }
+            }else{
+                // $(this).closest("[data-attr-id]").css("background","#a20").find("span").css("color","#eee");
+            }
+            var c_time = $(this).text().split(':');
+      			var c_hour = c_time[0]
+      			var c_min =c_time[1];
+      			var c_sec =c_time[2];
+      			c_sec = parseInt(parseInt(c_sec) + 1);
+
+      			if(c_sec == "60"){
+      				c_sec = "00";
+      				c_min = parseInt(parseInt(c_min) + 1 );
+      			}else if(parseInt(c_sec) < 10){
+      				c_sec = "0" + c_sec;
+      			}
+
+      			if(c_min == "60"){
+      				c_min = "00";
+      				c_hour = parseInt(parseInt(c_hour) + 1);
+      			}else if(parseInt (c_min) <10){
+      				c_min = "0" + parseInt(c_min);
+      			}
+
+      			c_time = c_hour+ ":" + c_min + ":" + c_sec;
+      			$(this).text(c_time);
         }
-
-        else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time')) && $(this).parent().parent().attr('data-attr-status')==1) {
-          $(this).css('color','red');
-          $(this).attr('data-attr-100', 'true');
-          $(this).prev().addClass('fa fa-bell-o').css("color", "red");
-        }else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time'))*0.8 && $(this).parent().parent().attr('data-attr-status')==1) {
-          if($(this).attr('data-attr-80-notified') == null){
-            $(this).attr('data-attr-80', 'true');
-            $(this).attr('data-attr-80-notified', 'false');
-            $(this).prev().addClass('fa fa-bell-o').css("color", "black");
-          }
-        }
-        var c_time = $(this).text().split(':');
-  			var c_hour = c_time[0]
-  			var c_min =c_time[1];
-  			var c_sec =c_time[2];
-  			c_sec = parseInt(parseInt(c_sec) + 1);
-
-  			if(c_sec == "60"){
-  				c_sec = "00";
-  				c_min = parseInt(parseInt(c_min) + 1 );
-  			}else if(parseInt(c_sec) < 10){
-  				c_sec = "0" + c_sec;
-  			}
-
-  			if(c_min == "60"){
-  				c_min = "00";
-  				c_hour = parseInt(parseInt(c_hour) + 1);
-  			}else if(parseInt (c_min) <10){
-  				c_min = "0" + parseInt(c_min);
-  			}
-
-  			c_time = c_hour+ ":" + c_min + ":" + c_sec;
-  			$(this).text(c_time);
       });
 	}
       $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
 
       {{if .Demo}} notifyDemo(); {{end}}
+
+      // $(document).ready(function(){
+      //   $(".format_name").each(function(){
+      //     $(this).text($(this).text().split(":")[1].replace("}","").replace('"',"").replace('"',""));
+      //   });
+      // });
+      if (window.location.pathname == "/"){
+        window.location.pathname = "/monitoring/"
+      }
     </script>
   </body>
 </html>

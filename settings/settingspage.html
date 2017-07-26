@@ -276,41 +276,41 @@ TIME   : <b>{{.Status.Time}}</b>
                               </div>
                             </td>
                             <td>
-                              <select id="subnetmask" type="text" data-placeholder="Select" class="chosen-select form-control" tabindex="2" name="SUBNET" placeholder="Subnet Mask">
-                                <option value="24" {{if eq .NetSUBNET "24"}}selected{{end}}>-</option>
-                                <option value="0" {{if eq .NetSUBNET "0"}}selected{{end}}>0.0.0.0</option>
-                                <option value="1" {{if eq .NetSUBNET "1"}}selected{{end}}>128.0.0.0</option>
-                                <option value="2" {{if eq .NetSUBNET "2"}}selected{{end}}>192.0.0.0</option>
-                                <option value="3" {{if eq .NetSUBNET "3"}}selected{{end}}>224.0.0.0</option>
-                                <option value="4" {{if eq .NetSUBNET "4"}}selected{{end}}>240.0.0.0</option>
-                                <option value="5" {{if eq .NetSUBNET "5"}}selected{{end}}>248.0.0.0</option>
-                                <option value="6" {{if eq .NetSUBNET "6"}}selected{{end}}>252.0.0.0</option>
-                                <option value="7" {{if eq .NetSUBNET "7"}}selected{{end}}>254.0.0.0</option>
-                                <option value="8" {{if eq .NetSUBNET "8"}}selected{{end}}>255.0.0.0</option>
-                                <option value="9" {{if eq .NetSUBNET "9"}}selected{{end}}>255.128.0.0</option>
-                                <option value="10" {{if eq .NetSUBNET "10"}}selected{{end}}>255.192.0.0</option>
-                                <option value="11" {{if eq .NetSUBNET "11"}}selected{{end}}>255.224.0.0</option>
-                                <option value="12" {{if eq .NetSUBNET "12"}}selected{{end}}>255.240.0.0</option>
-                                <option value="13" {{if eq .NetSUBNET "13"}}selected{{end}}>255.248.0.0</option>
-                                <option value="14" {{if eq .NetSUBNET "14"}}selected{{end}}>255.252.0.0</option>
-                                <option value="15" {{if eq .NetSUBNET "15"}}selected{{end}}>255.254.0.0</option>
-                                <option value="16" {{if eq .NetSUBNET "16"}}selected{{end}}>255.255.0.0</option>
-                                <option value="17" {{if eq .NetSUBNET "17"}}selected{{end}}>255.255.128.0</option>
-                                <option value="18" {{if eq .NetSUBNET "18"}}selected{{end}}>255.255.192.0</option>
-                                <option value="19" {{if eq .NetSUBNET "19"}}selected{{end}}>255.255.224.0</option>
-                                <option value="20" {{if eq .NetSUBNET "20"}}selected{{end}}>255.255.240.0</option>
-                                <option value="21" {{if eq .NetSUBNET "21"}}selected{{end}}>255.255.248.0</option>
-                                <option value="22" {{if eq .NetSUBNET "22"}}selected{{end}}>255.255.252.0</option>
-                                <option value="23" {{if eq .NetSUBNET "23"}}selected{{end}}>255.255.254.0</option>
-                                <option value="24" {{if eq .NetSUBNET "24"}}selected{{end}}>255.255.255.0</option>
-                                <option value="25" {{if eq .NetSUBNET "25"}}selected{{end}}>255.255.255.128</option>
-                                <option value="26" {{if eq .NetSUBNET "26"}}selected{{end}}>255.255.255.192</option>
-                                <option value="27" {{if eq .NetSUBNET "27"}}selected{{end}}>255.255.255.224</option>
-                                <option value="28" {{if eq .NetSUBNET "28"}}selected{{end}}>255.255.255.240</option>
-                                <option value="29" {{if eq .NetSUBNET "29"}}selected{{end}}>255.255.255.248</option>
-                                <option value="30" {{if eq .NetSUBNET "30"}}selected{{end}}>255.255.255.252</option>
-                                <option value="31" {{if eq .NetSUBNET "31"}}selected{{end}}>255.255.255.254</option>
-                                <option value="32" {{if eq .NetSUBNET "32"}}selected{{end}}>255.255.255.255</option>
+                              <select id="subnetmask" type="text" data-placeholder="Select" class="form-control" tabindex="2" name="SUBNET" placeholder="Subnet Mask" required>
+                                <option value="">-- Select Subnetmask --</option>
+                                <option value="0" {{if eq .NetSUBNET "0"}}selected{{end}}>0.0.0.0 (0)</option>
+                                <option value="1" {{if eq .NetSUBNET "1"}}selected{{end}}>128.0.0.0 (1)</option>
+                                <option value="2" {{if eq .NetSUBNET "2"}}selected{{end}}>192.0.0.0 (2)</option>
+                                <option value="3" {{if eq .NetSUBNET "3"}}selected{{end}}>224.0.0.0 (3)</option>
+                                <option value="4" {{if eq .NetSUBNET "4"}}selected{{end}}>240.0.0.0 (4)</option>
+                                <option value="5" {{if eq .NetSUBNET "5"}}selected{{end}}>248.0.0.0 (5)</option>
+                                <option value="6" {{if eq .NetSUBNET "6"}}selected{{end}}>252.0.0.0 (6)</option>
+                                <option value="7" {{if eq .NetSUBNET "7"}}selected{{end}}>254.0.0.0 (7)</option>
+                                <option value="8" {{if eq .NetSUBNET "8"}}selected{{end}}>255.0.0.0 (8)</option>
+                                <option value="9" {{if eq .NetSUBNET "9"}}selected{{end}}>255.128.0.0 (9)</option>
+                                <option value="10" {{if eq .NetSUBNET "10"}}selected{{end}}>255.192.0.0 (10)</option>
+                                <option value="11" {{if eq .NetSUBNET "11"}}selected{{end}}>255.224.0.0 (11)</option>
+                                <option value="12" {{if eq .NetSUBNET "12"}}selected{{end}}>255.240.0.0 (12)</option>
+                                <option value="13" {{if eq .NetSUBNET "13"}}selected{{end}}>255.248.0.0 (13)</option>
+                                <option value="14" {{if eq .NetSUBNET "14"}}selected{{end}}>255.252.0.0 (14)</option>
+                                <option value="15" {{if eq .NetSUBNET "15"}}selected{{end}}>255.254.0.0 (15)</option>
+                                <option value="16" {{if eq .NetSUBNET "16"}}selected{{end}}>255.255.0.0 (16)</option>
+                                <option value="17" {{if eq .NetSUBNET "17"}}selected{{end}}>255.255.128.0 (17)</option>
+                                <option value="18" {{if eq .NetSUBNET "18"}}selected{{end}}>255.255.192.0 (18)</option>
+                                <option value="19" {{if eq .NetSUBNET "19"}}selected{{end}}>255.255.224.0 (19)</option>
+                                <option value="20" {{if eq .NetSUBNET "20"}}selected{{end}}>255.255.240.0 (20)</option>
+                                <option value="21" {{if eq .NetSUBNET "21"}}selected{{end}}>255.255.248.0 (21)</option>
+                                <option value="22" {{if eq .NetSUBNET "22"}}selected{{end}}>255.255.252.0 (22)</option>
+                                <option value="23" {{if eq .NetSUBNET "23"}}selected{{end}}>255.255.254.0 (23)</option>
+                                <option value="24" {{if eq .NetSUBNET "24"}}selected{{end}}>255.255.255.0 (24)</option>
+                                <option value="25" {{if eq .NetSUBNET "25"}}selected{{end}}>255.255.255.128 (25)</option>
+                                <option value="26" {{if eq .NetSUBNET "26"}}selected{{end}}>255.255.255.192 (26)</option>
+                                <option value="27" {{if eq .NetSUBNET "27"}}selected{{end}}>255.255.255.224 (27)</option>
+                                <option value="28" {{if eq .NetSUBNET "28"}}selected{{end}}>255.255.255.240 (28)</option>
+                                <option value="29" {{if eq .NetSUBNET "29"}}selected{{end}}>255.255.255.248 (29)</option>
+                                <option value="30" {{if eq .NetSUBNET "30"}}selected{{end}}>255.255.255.252 (30)</option>
+                                <option value="31" {{if eq .NetSUBNET "31"}}selected{{end}}>255.255.255.254 (31)</option>
+                                <option value="32" {{if eq .NetSUBNET "32"}}selected{{end}}>255.255.255.255 (32)</option>
                               </select>
                             </td>
                           </tr>
@@ -463,8 +463,8 @@ TIME   : <b>{{.Status.Time}}</b>
                             <div class="input-group">
                               <span class="input-group-addon"><i class="fa fa-cloud-download fa-fw"></i></span>
                               <select name="backupmethod" id="backupmethod" class="form-control" >
-                                <option value="cloud" {{if eq .BackupTo "cloud"}}selected{{end}}>Cloud</option>
                                 <option value="usb" {{if eq .BackupTo "usb"}}selected{{end}}>USB</option>
+                                <option value="cloud" {{if eq .BackupTo "cloud"}}selected{{end}}>Cloud</option>
                               </select>
                             </div>
                           </td>
@@ -486,8 +486,8 @@ TIME   : <b>{{.Status.Time}}</b>
                             <div class="input-group">
                               <span class="input-group-addon"><i class="fa fa-cloud-download fa-fw"></i></span>
                               <select name="backupdst" class="form-control" >
-                                <option value="cloud" {{if eq .BackupDst "cloud"}}selected{{end}}>Cloud</option>
                                 <option value="download" {{if eq .BackupDst "download"}}selected{{end}}>Download</option>
+                                <option value="cloud" {{if eq .BackupDst "cloud"}}selected{{end}}>Cloud</option>
                                 <option value="usb" {{if eq .BackupDst "usb"}}selected{{end}}>USB</option>
                               </select>
                               <span class="input-group-addon btn btn-success"><a type="submit" onclick="$('#backupaction').val('backupnow');$('#backup-form').submit(); $('#backupaction').val(''); return false;" name="backupnow" class="no-style" style="color:#fff;"><i class="fa fa-download"></i> Backup Now</a></span>
@@ -814,6 +814,17 @@ TIME   : <b>{{.Status.Time}}</b>
                     </tr>
                     <tr class="search">
                       <td class="settings-label">
+                        <label for="">Recall Served Orders (Minutes Earlier)</label>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
+                          <input name="served_minutes" type="number" value="{{.RestaurantInfo.ServedMinutes}}" class="form-control"  data-toggle="toggle">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="search">
+                      <td class="settings-label">
                         <label for="">Service Charge</label>
                       </td>
                       <td>
@@ -1061,12 +1072,9 @@ TIME   : <b>{{.Status.Time}}</b>
         $("div.bhoechie-tab-menu>div.list-group>a").removeClass("active");
         $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
 
-
         $("div.bhoechie-tab-menu>div.list-group>a[href='" + window.location.hash + "']").addClass("active");
         $("div#tab-"+window.location.hash.substr(1)+".bhoechie-tab-content").addClass("active");
       }
-
-
 
       $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
         e.preventDefault();
@@ -1108,8 +1116,8 @@ TIME   : <b>{{.Status.Time}}</b>
         $("#ipaddress").attr("disabled", "disabled");
         $("#GW4").attr("disabled", "disabled");
         $("#subnetmask").attr("disabled", "disabled");
-        $("#subnetmask").chosen("destroy");
-        $("#subnetmask").chosen();
+        // $("#subnetmask").chosen("destroy");
+        // $("#subnetmask").chosen();
         $("#DNS4").attr("disabled", "disabled");
       }
       $(function() {

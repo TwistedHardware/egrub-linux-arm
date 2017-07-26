@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="stylesheet" type="text/css" href="/static/assets/bootstrap/3.3.7/css/bootstrap.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="/static/assets/fa/css/font-awesome.min.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" media="all"/>
+    <!-- <link rel="stylesheet" href="/static/assets/admin/main.css"> -->
+
+    <link rel="shortcut icon" href="img/vector_beer_logo_2.png">
+    <title>Expediter</title>
+    <style>
+    .bold{
+      font-weight: bold;
+    }
+    .order_completed h4{
+      margin-top: 0px !important;
+      padding-top: 0px !important;
+    }
+    .bgRightbtn{
+      /*position: absolute;*/
+      width:100%;
+      /*height: 100%;*/
+      /*right:0px;*/
+      /*top:0px;*/
+      min-height: 60px;
+      border: none !important;
+      font-weight: 600;
+      box-shadow: 0px 0px 10px #999;
+      border-radius: 2px;
+      /*width:20px;*/
+    }
+    .mo-item{
+      height: auto;
+    }
+    .mo-content div{
+      border: none;
+      /*box-shadow:0px 0px 100px #aaa;*/
+      margin-top:1.5px;
+    }
+    .mo-content div:last-child{
+      border: none;
+    }
+    .bump-all-btn {
+      min-width:100%;
+      /*margin-bottom:px;*/
+    }
+    .mo-footer{
+      padding:0px !important;
+      margin: 0px !important;
+    }
+
+
+    .swing_in {
+        animation-name: rotate;
+        animation-duration: 0.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+
+    .swing_out {
+        animation-name: swing_out;
+        animation-duration: 1s;
+        animation-iteration-count: 1;
+        animation-timing-function: linear;
+    }
+
+
+
+
+
+
+    @keyframes swing_out {
+        /*from {transform: rotate(0deg);}
+        to {transform: rotate(80deg);}*/
+      0% {
+        /*background: orange;*/
+        transform: rotate(20deg);
+        min-width:100%;
+      }
+      20% {
+        /*background: orange;*/
+        margin-left:-10px;
+        margin-top: -5px;
+        /*position:absolute;*/
+      }
+      70% {
+        opacity: 1;
+      }
+      /* You could think of as "step 2" */
+      100% {
+        transform: rotate(0deg);
+        margin-left:100%;
+        margin-top: +5px;
+        opacity: 0;
+        min-width:100%;
+        /*display: none;*/
+        /*background: black;*/
+      }
+    }
+
+    /*@keyframes swing_out_2 {
+        from {left: 0px;}
+        to {left: 2000px;}
+    }*/
+    .corner-filter-status{
+      background-color: rgba(0,0,0,1);
+      position: fixed;
+      bottom:0px;
+      right:0px;
+      color:white;
+      padding:10px;
+      opacity: 0.9;
+      z-index: 54 !important;
+      /*width:100px;*/
+    }
+    .corner-filter-status:hover{
+      opacity: 1;
+      /*width:100px;*/
+    }
+
+    .mo-content span.bigger_font, .recall-content h4.bigger_font{
+      font-size: 16px;
+      font-weight: 600;
+    }
+    </style>
+    <script>
+    var category  = "";
+    var status  = "";
+    </script>
+  </head>
+  <body class="dashboard">
+    <header role="banner">
+      <nav role="navigation" class="navbar navbar-inverse">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/expediter/">
+              <span  style="font-size: 26px;color: #ddd;" class="admin_font letter-spaced">
+                <!-- font-family: 'Consolas', serif ; -->
+                <img class="" style="margin-top: -10px;" src="/static/logo.png">&nbsp;&nbsp;Expediter</span>
+            </a>
+          </div>
+          <div class="navbar-collapse collapse">
+
+            <ul class = "nav navbar-nav navbar-right">
+              <li class = "dropdown">
+                <a class = "dropdown-toggle" data-toggle = "dropdown" href = "#"><span class = "fa fa-cogs"></span></a>
+                <ul class = "dropdown-menu">
+                  <li hidden><a href="/active_order/"><span  style = "font-size : 18px;" class = "fa fa-hourglass-half">&nbsp;Active Session</span></a></li>
+                  <li hidden><a href="/"><span  style = "font-size : 18px;" class = "fa fa-history">&nbsp;Table History</span></a></li>
+                  <li><a href = "/branding/" target="_blank"><span  style = "font-size : 18px;" class = "fa fa-paint-brush">&nbsp;Theme Editor</span></a></li>
+                  <li><a href = "/report/"><span  style = "font-size : 18px;" class = "fa fa-table">&nbsp;Report</span></a></li>
+                  <li><a href = "/admin/"><span  style = "font-size : 18px;" class = "fa fa-lock">&nbsp;Admin</span></a></li>
+                </ul>
+              </li>
+            </ul>
+            <!-- FILTERING -->
+            <ul class = "nav navbar-nav navbar-right letter-spaced capitalized admin_font bold" id="filter_category" data-current-filter="">
+              <li class = "dropdown">
+                <a class = "dropdown-toggle" data-toggle = "dropdown" href = "#"><span class="selected_category_trigger">Category</span> <i class="fa fa-angle-down"></i></a>
+                <ul class = "dropdown-menu">
+                {{ range .Category }}
+                  <li style='cursor:pointer;' class="selected_category bold" data-filter="category" data-category-id="{{ .ID }}" >
+                    <a onclick="updateCategoryText('{{ . }}');" class="format_name bold" ><span class="bold">{{ . }}</span></a></li>
+                {{ end }}
+                </ul>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu" data-filter="status" data-status-id="2">
+                <a onclick="updateStatusText('Ready');" style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-success btn btn-sm capitalized">Ready</button></a>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu" data-filter="status" data-status-id="1">
+                <a onclick="updateStatusText('Preparing');" style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-warning btn btn-sm capitalized">Preparing</button></a>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu" data-filter="none" data-status-id="all">
+                <a onclick="updateFilterAll();" style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-default btn btn-sm capitalized">All</button></a>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu" data-filter="status" data-status-id="3">
+                <a onclick="updateStatusText('Served');" style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-info btn btn-sm capitalized">Recall</button></a>
+              </li>
+            </ul>
+            <!-- <ul class = "nav navbar-nav navbar-right">
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu">
+                <a style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-success btn btn-sm">Ready</button></a>
+              </li>
+              <li style="margin:0px !important;padding:0px !important;" class = "nav-menu">
+                <a style="margin:10px 5px !important;padding:0px !important;"><button type="button" class="btn-warning btn btn-sm">Preparing</button></a>
+              </li>
+            </ul> -->
+            <!-- FILTERING END -->
+          </div>
+        </div>
+      </nav>
+
+    </header>
+
+    <div class = "modal fade" id = "confirm-logout" tabindex = "-1" role = "dialog">
+      <div class = "modal-dialog modal-sm">
+        <div class = "modal-content">
+          <div class = "modal-header">
+            <button class = "close" data-dismiss = "modal" >&times;</button>
+            <h4 class = "modal-title">Confirm Logout</h4>
+          </div>
+          <div class = "modal-body">
+            <span>Are you sure you want to logout?</span>
+            </br>
+            </br>
+            <div class = "form-horizontal">
+              <div class = "form-group">
+                <div class = "col-xs-12 col-sm-6">
+                  <button class = "btn btn-danger btn-block" data-dismiss = "modal" />No!</button>
+                </div>
+                <div class = "col-xs-12 col-sm-6">
+                  <a href = "/logout/" class = "btn btn-success btn-block">Yes!</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1></h1>
+    <div class="legend capitalized admin_font letter-spaced">
+      <ul>
+        <li><i class="shadowed fa fa-square recieved-text"></i> RECIEVED</li>
+        <li><i class="shadowed fa fa-square preparing-text"></i> PREPARING</li>
+        <li><i class="shadowed fa fa-square ready-text"></i> READY</li>
+        <li><i class="shadowed fa fa-square served-text"></i> SERVED</li>
+        <!-- <li><i class="fa fa-square cancelled-text"></i> CANCELLED</li> -->
+      </ul>
+    </div>
+    <div id="context-menu">
+      <ul class="dropdown-menu" role="menu">
+        <!-- <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=2>Ready</a></li> -->
+        <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status=3>Bump</a></li>
+        <!-- <li><a style = "font-size : 21px;" tabindex="-1" href="#" data-attr-status="4">Cancel</a></li> -->
+      </ul>
+    </div>
+    <div class="clr"></div>
+
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+
+        <div class="panel panel-info">
+          <!-- <div class="panel-heading">
+            <strong>
+              <span style="font-size : 18px;"></span>
+            </strong>
+          </div> -->
+          <div class="panel-body">
+            <div class="mo-container-toggler mo-container-1"></div>
+            <div class="mo-container-served recall-container-1"></div>
+
+          </div>
+        </div>
+      </div>
+
+    <div class="corner-filter-status admin_font bold letter-spaced">
+      <h4 style="margin-top:0px;">Filtering: <span style="font-size:-10px;" class="filter_mode" >None</span></h4>
+      <center><span class="filter_value capitalized">All active orders displayed</span></center>
+    </div>
+    <div class="mo-container"></div>
+
+    <div class="modal fade" id="serve-order-modal">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Confirm</h4>
+          </div>
+          <div class="modal-body">
+            <span id="modal-message" class="text-success">Are you sure to serve order?</span>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default pull-left" data-dismiss="modal">No</button>
+            <button class="btn btn-success pull-right" id = "btn-update-status">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="remarks-modal">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Order Remarks</h4>
+          </div>
+          <div class="modal-body">
+            <span id="span-remarks"></span>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default pull-right" data-dismiss="modal">
+              <i class="fa fa-close fa-fw"></i>&nbsp;Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/assets/js/jquery.min.js"></script>
+    <script src="/static/assets/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/static/assets/bootstrapcontextmenu/context-menu.js"></script>
+    <script src="/static/assets/socket.io-client/socket.io.js"></script>
+    <script src="/static/js/d3.min.js"></script>
+    <script src="/static/assets/admin/main.js"></script>
+    <script>
+
+    function updateFilterStatus(value,mode){
+      $(".corner-filter-status").animate({
+          opacity: 0
+          // left: "+=50",
+          // height: "toggle"
+        }, 300, function() {
+          // Animation complete.
+          $(".corner-filter-status").animate({
+              opacity: 1
+              // left: "+=50",
+              // height: "toggle"
+            }, 300);
+        });
+      // console.log(data);
+      $('.filter_value').text(value);
+      $('.filter_mode').text(mode);
+
+    }
+    function prettyDate(time){
+      var delta = Math.round((+new Date - time) / 1000);
+
+            var minute = 60,
+              hour = minute * 60,
+              day = hour * 24,
+              week = day * 7;
+
+            var fuzzy;
+
+            if (delta < 30) {
+              fuzzy = 'just then.';
+            } else if (delta < minute) {
+              fuzzy = delta + ' seconds ago.';
+            } else if (delta < 2 * minute) {
+              fuzzy = 'a minute ago.'
+            } else if (delta < hour) {
+              fuzzy = Math.floor(delta / minute) + ' minutes ago.';
+            } else if (Math.floor(delta / hour) == 1) {
+              fuzzy = '1 hour ago.'
+            } else if (delta < day) {
+              fuzzy = Math.floor(delta / hour) + ' hours ago.';
+            } else if (delta < day * 2) {
+              fuzzy = 'yesterday';
+            } else{
+              fuzzy = 'yesterday';
+            }
+
+            return fuzzy;
+      }
+    function RecallServedOrders(){
+      // "Index": 0,
+      // "OrderStatus": 3,
+      // "ID": 16,
+      // "Quantity": 5,
+      // "SpecialRequest": "",
+      // "Remarks": "",
+      // "SpicyLevel": 0,
+      // "Name": "Apple Juice",
+      // "Waiter": "Ricky Manalo",
+      // "Table": 1,
+      // "TableNumber": 1,
+      // "OrderType": 1,
+      // "KitchenLocation": 2,
+      // "Customer": "Jerick Gonito",
+      // "MenuCategory": 2,
+      // "OrderID": 4,
+      // "ServedTime": "2017-07-21T08:37:03.544154015+08:00"
+      d3.json("/apiFunction/?method=GetServedOrderItems", function(response){
+
+        var duration = 500,
+            tmp_data = response,
+            tmp = null,
+            data = {},
+            i = 0,
+            len = tmp_data.length;
+        // transform data
+        for (i; i < len; i ++) {
+          var j;
+          if (i > 0){
+             j = i-1;
+          }else{
+            j = 0;
+          }
+
+          tmp = tmp_data[i];
+          // console.log(tmp);
+          tmp["item_name"] = tmp.Name;
+          tmp["customer_name"] = tmp.Customer;
+          tmp["source"] = tmp.KitchenLocation;
+          tmp["location"] = tmp.KitchenLocation;
+          tmp["waiter_name"] = tmp.Waiter;
+          tmp["with_not_ready"] = false;
+
+          if (tmp.Status != 2){
+              tmp["with_not_ready"] = true;
+          }
+
+          // console.log(order_item_flag);
+
+          delete tmp.Name;
+          delete tmp.Customer;
+          delete tmp.KitchenLocation;
+          delete tmp.Waiter;
+
+          var //kl_id = tmp.location,
+              kl_id = 1,
+              order_key = [tmp.customer_name, tmp.Table, tmp.TableNumber, tmp.OrderID, tmp.waiter_name, tmp.with_not_ready].join("|");
+
+              // console.log(order_key);
+
+          if (!data[kl_id]) {
+            data[kl_id] = {};
+          }
+
+          if (!data[kl_id][order_key]) {
+            data[kl_id][order_key] = [];
+          }
+
+          data[kl_id][order_key].push(tmp);
+        }
+
+        var kl_id = null;
+        var kl_list =[];
+        {{ range .KitchenLocation}}
+        kl_list.push({{.ID}});
+        {{ end }}
+
+        for (var index=0;index<kl_list.length;index++) {
+          kl_id = 1; //kl_list[index] ;
+          var orders = data[kl_id],
+              $kl_container = $(".recall-container-" + kl_id);
+
+          if ($kl_container.length === 0) {
+
+          }
+
+          var container = d3.select($kl_container[0])
+              .selectAll(".recall-instance")
+              .data(d3.entries(orders), function(d){
+                return d.key;
+              });
+
+          var tempContainer = container.enter()
+              .append(function(d){
+                var key_parts = d.key.split("|"),
+                    customer_name   = key_parts[0],
+                    table_id        = key_parts[1],
+                    table_no        = key_parts[2],
+                    order_id        = key_parts[3],
+                    waiter_name     = key_parts[4],
+                    with_not_ready  = key_parts[5];
+
+                    var el = $(
+                          "<div class='recall-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>" +
+                            "<div class='recall-instance-padding col-sm-12'>"+
+                              "<div class='recall-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                              "<div class='recall-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                              // "<div class='row'>" +
+                              "<div class='recall-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                                // "<div class='mo-content-2 col-sm-4'>" +
+                                //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                                // "</div>" +
+                              // "</div>" +
+                              "<div class='recall-footer'>"+
+                              "<span>"+
+                              "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                              // "<i class='fa fa-user-o'></i> "+
+                               "<img src='/static/images/waiter.png'> "+
+                              waiter_name +"</h4>"+
+                              "</span>"+
+                              "<button id='bump_all-"+order_id+"' type='button' onclick='recall_all(this);'"+
+                              " class='pointer bump-all-btn btn-primary btn"+
+                              " '>"+
+                              "<h4 class='admin_font bold capitalized'>Recall All</h4></button>"+
+                              "</div>" +
+                            "</div>"+
+                          "</div>"
+                        )[0];
+                return el;
+              })
+
+              .style("opacity", 1);
+
+
+
+          container.exit()
+              .transition()
+              .duration(duration)
+              .style("opacity", 0)
+              .remove();
+
+          container = container.merge(tempContainer);
+
+          var rows = container.select(".recall-content").selectAll("div").data(function(d){
+                return d.value;
+              }, function(d){
+                return d.order_item_id;
+              });
+
+
+          var old_data = rows.exit()
+              .remove();
+
+          var new_data = rows.enter()
+              .append("div")
+              // .attr("class","mo-main")
+
+              // "Index": 0,
+              // "OrderStatus": 3,
+              // "ID": 16,
+              // "Quantity": 5,
+              // "SpecialRequest": "",
+              // "Remarks": "",
+              // "SpicyLevel": 0,
+              // "Name": "Apple Juice",
+              // "Waiter": "Ricky Manalo",
+              // "Table": 1,
+              // "TableNumber": 1,
+              // "OrderType": 1,
+              // "KitchenLocation": 2,
+              // "Customer": "Jerick Gonito",
+              // "MenuCategory": 2,
+              // "OrderID": 4,
+              // "ServedTime": "2017-07-21T08:37:03.544154015+08:00"
+              .attr("data-attr-id", function(d){ return d.ID; })
+              .attr("data-attr-status", function(d){ return d.OrderStatus; })
+              .attr("data-attr-item-name", function(d){return d.item_name; })
+              .attr("data-attr-item-status", function(d){return d.OrderStatus; })
+              .attr("data-attr-item-category", function(d){ return d.MenuCategory; });
+              //.attr("data-toggle", "context")
+              //.attr("data-target", "#context-menu");
+              // .append("td")
+              // .text(function(d){return d.item_name;});
+
+
+          // new_data = rows.merge(new_data);
+
+
+          //*
+
+          new_data.style("position", "relative");
+              // .style("left", "-205px")
+              // .style("transform", "rotate(18deg)")
+              // .transition()
+              // .delay(function(d,i) {
+              //   return Math.floor(duration / 2) * i + (index * duration);
+              // })
+              // .duration(duration*2)
+              // .style("left", "35px")
+              // .style("transform", "rotate(0deg)")
+              // //.style("height", "100px")
+              // // .style("height", function(d){
+              // //   return "100px";
+              // // })
+              // // .transition()
+              // // .delay(Math.floor(duration*2))
+              // // .duration(duration)
+              // .transition()
+              // .duration(duration)
+              // .style("left", "0px")
+              // .style("position", "relative");
+
+          rows = rows.merge(new_data);
+
+          rows = rows.merge(old_data);
+
+          // 1st span
+          rows.selectAll("span").remove();
+
+          rows.append("div")
+              .attr("class","recall-item col-sm-8")
+              .html(function(d){
+                // Allergies
+                // "Index": 0,
+                // "OrderStatus": 3,
+                // "Status": 3,
+                // "ID": 10,
+                // "Quantity": 2,
+                // "SpecialRequest": "",
+                // "Remarks": "",
+                // "SpicyLevel": 0,
+                // "Name": "salad",
+                // "Waiter": "Ricky Manalo",
+                // "Table": 1,
+                // "TableNumber": 1,
+                // "OrderType": 3,
+                // "KitchenLocation": 1,
+                // "Customer": "Jerick Gonito",
+                // "MenuCategory": 1,
+                // "OrderID": 3,
+                // "Allergy": "",
+                // "ServedTime": "2017-07-21T09:43:28.462361339+08:00"
+                allergies = d.Allergy;
+                spicy_level = d.SpicyLevel,
+                len = spicy_level,
+                i = 0;
+                var html_str = "";
+                    html_str += "<span class='bigger_font'>";
+                    html_str += d.Quantity + " x " + d.item_name;
+                    html_str += "</span>";
+                    html_str += "<h4 class='bigger_font' style='font-weight:bold;color:inherit;margin:0px;padding:0px;'>";
+                    html_str += "[" + (d.OrderType == 1 ? "Dine-In" : "Take-Out") + "]";
+                    html_str += "</h4>";
+                    if (allergies.length > 0) {
+                      html_str += "<span>";
+                      html_str += "<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;";
+                      html_str += allergies.join("<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;");
+                      html_str += "</span><br>";
+                    }
+                    if (d.Remarks.length && d.Remarks != "") {
+                      html_str += "<span>";
+                      html_str += "<i class='fa fa-sticky-note-o' aria-hidden='true'></i>&nbsp;" + d.Remarks;
+                      html_str += "</span><br>";
+                    }
+                    if (spicy_level === -1) {
+
+                    }else{
+                      for (; i < len; i ++) {
+                        html_str += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>";
+                      }
+                      while (i++ < 3) {
+                        html_str += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>";
+                      }
+                    }
+
+                    // html_str +='<i class="bell-container"></i>&nbsp;';
+                    // html_str +='<span class="elapsed_time" data-serving-time="'+d.serving_time+'" data-attr-seconds="'+d.elapsed_time_seconds+'">'+d.elapsed_time+'</span>';
+                    html_str +="<h4 class='";
+
+                    // if (d.status != 2){
+                    //   html_str += "hidden";
+                    // }else{
+                    //   html_str += "";
+                    // }
+                    var served_date = new Date(d.ServedTime);
+                    html_str += " order_completed bold'><center><span class='capitalized admin_font'>"+prettyDate(served_date)+"</span></center></h4>";
+
+
+                return html_str;
+              });
+
+          rows.append("div")
+              .attr("class","recall-btn col-sm-4")
+              .html(function(d){
+                var context = this.parentNode,
+                    args = {
+                      "request_id":$(context).data("attr-id"),
+                      "request_status":3,
+                      "session_bundle" : $(context).closest('.recall-instance').attr('data-attr-order-no'),
+                      "table_no" : $(context).closest('.recall-instance').attr('data-attr-table-no'),
+                      "table_id" : $(context).closest('.recall-instance').attr('data-attr-table-id'),
+                      "type" : "DRINKS",
+                      "item_name" : $(context).attr('data-attr-item-name')
+                    };
+
+                this.setAttribute("data-details", JSON.stringify(args));
+
+                // Allergies
+                var html_str = "";
+                    // html_str +="<div class='mo-content-2 col-sm-4'>";
+                      html_str +=  '<button data-attr-id="'+d.ID+'" onclick=\'RecallItem(this);\' type="button"  class="recall_btn pointer btn-primary bgRightbtn admin_font bold capitalized">Recall</button>';
+
+                    // html_str +="</div>";
+
+                return html_str;
+              });
+
+          rows.attr("data-attr-status", function(d){ return d.Status; })
+              .attr("class", function(d){
+                switch (d.Status) {
+                  case 0: return "recieved";
+                  case 1: return "preparing";
+                  case 2: return "ready";
+                  case 3: return "served";
+                }
+                return "cancelled";
+              });
+          rows.attr("data-attr-item-status", function(d){
+            // filtering
+            var $this = $(this),
+                filter = $("[data-current-filter]").attr("data-current-filter").split(":");
+
+            switch (filter[0]) {
+              case "status":
+                if (d.Status == filter[1]) {
+                  $this.show();
+                } else {
+                  $this.hide();
+                }
+                break;
+              case "category":
+                if (d.MenuCategory == filter[1]) {
+                  $this.show();
+                } else {
+                  $this.hide();
+                }
+                break;
+            }
+
+            return d.Status;
+          });
+
+
+
+
+        }
+
+        retrieveRestoOrdersProcessing = false;
+      });
+        updateFilterStatus("Recently served orders displayed","Recall");
+        // $(".mo-container-served").html("<pre>"+JSON.stringify(result)+"</pre>");
+
+    }
+    $(".mo-container-served").hide();
+
+    function updateStatusText(data){
+      if (data == "Served"){
+        // /apiFunction/?method=GetServedOrderItems
+        $(".mo-container-toggler").hide();
+        RecallServedOrders();
+        $(".mo-container-served").show();
+      }else{
+        $(".mo-container-toggler").show();
+        $(".mo-container-served").hide();
+        // console.log(data);
+        updateFilterStatus(data,"Order Status");
+      }
+    };
+    function updateCategoryText(data){
+      $(".mo-container-toggler").show();
+      $(".mo-container-served").hide();
+
+      updateFilterStatus(data,"Order Category");
+      $('.selected_category_trigger').text("Category : "+data);
+    };
+    function updateFilterAll(){
+      $(".mo-container-toggler").show();
+      $(".mo-container-served").hide();
+
+      updateFilterStatus("All active orders displayed","None");
+      $('.selected_category_trigger').text("Category");
+    };
+
+      var server_address = window.location.hostname;
+      var socket = io.connect('http://' + server_address + ':' + window.location.port);
+      var is_annoy = false;
+      var is_80p = false;
+      var notified_80 = false;
+
+      $("#filter_category").on("click", function(e){
+        var $target = $(e.target);
+        if ($target.prop("tagName").toLowerCase() !== "li") {
+          $target = $target.closest("[data-filter]");
+        }
+
+        if ($target.length === 1 && $target[0].hasAttribute("data-filter")) {
+          var filter = $target.attr("data-filter"),
+              id = $target.attr("data-" + filter + "-id");
+
+          if (filter === "none") {
+            $("[data-attr-id]").show();
+            $target.closest("[data-current-filter]").attr("data-current-filter", "");
+            return;
+          }
+
+          if ($target.closest("[data-current-filter]").attr("data-current-filter") === (filter + ":" + id)) {
+            return;
+          }
+          $target.closest("[data-current-filter]").attr("data-current-filter", (filter + ":" + id));
+
+
+          $("[data-attr-id]").hide();
+          $("[data-attr-item-" + filter + "=" + id + "]").show();
+
+          /*
+          switch (filter) {
+            case "status":
+              var status_id = $target.attr("data-status-id");
+              $("[data-attr-item-status=" + status_id + "]").hide();
+              break;
+            case "category":
+              var category_id = $target.attr("data-category-id");
+              $("[data-attr-item-category=" + category_id + "]").hide();
+              break;
+          }
+          */
+        }
+      })
+
+
+      $(document).ready(function(){
+        $('#nav-menu-{{ .LocationID }}').addClass('active');
+        retrieveRestoOrders();
+        setInterval(function(){ IncrementTime(); }, 1000);
+        setInterval(function(){ playSound(); }, 50);
+        //setInterval(function(){ retrieveRestoOrders(); }, 3000);
+      });
+
+      console.log(typeof new Audio('/static/sounds/100p.mp3'));
+
+      var itemAlamList = {};
+      function playSound(){
+        if ($("span[data-attr-100='true']").length > 0) {
+          //*
+          $("span[data-attr-100='true']").each(function(i, el){
+            var item_ID = $(el).parent().parent().attr("data-attr-id"),
+                audio = null;
+
+
+            if (itemAlamList[item_ID] && typeof itemAlamList[item_ID] === "object" && "play" in itemAlamList[item_ID]) {
+              audio = itemAlamList[item_ID];
+            } else {
+              audio = itemAlamList[item_ID] = new Audio("/static/sounds/100p.mp3");
+            }
+
+            try {
+              if (audio.paused) {
+                audio.play();
+                //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+              }
+            } catch (err) {
+              // new Audio("/static/sounds/100p.mp3").play()
+            }
+          });
+          //*/
+
+          /*
+          var audio = new Audio('/static/sounds/100p.mp3');
+          audio.play();
+          //*/
+
+        } else if ($("span[data-attr-80='true'][data-attr-80-notified='false']").length > 0) {
+          $("span[data-attr-80='true']").attr("data-attr-80-notified", "true");
+          var audio = new Audio('/static/sounds/80p.mp3');
+          audio.play();
+          //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+        }
+      }
+
+      socket.on("NotifyUpdate",function(data){
+        if (data['method'] == "checkout") {
+          //retrieveRestoOrders();
+          //location.reload();
+        } else {
+          if (data["request_status"] == "1") {
+            var audio = new Audio('/static/sounds/new.mp3');
+            audio.play();
+            //Android.showToast("http://192.168.149.54:8000/static/sounds/100p.mp3");
+          }
+          //console.log("START UPDATE");
+          retrieveRestoOrders();
+          //console.log("END UPDATE");
+          //setTimeout(reloadPage, 4000);
+        }
+      });
+
+      function reloadPage(){
+        location.reload();
+      }
+
+      var retrieveRestoOrdersProcessing = false;
+
+
+
+      function retrieveRestoOrders() {
+        // if (retrieveRestoOrdersProcessing) {
+        //   return;
+        // }
+
+        retrieveRestoOrdersProcessing = true;
+        // var url = "GetServedItems";
+        d3.json("/apiFunction/?method=GetMonitoringOrderItems", function(response){
+
+          var duration = 500,
+              tmp_data = response.ordered_items,
+              tmp = null,
+              data = {},
+              i = 0,
+              len = tmp_data.length;
+          // transform data
+          for (i; i < len; i ++) {
+            var j;
+            if (i > 0){
+               j = i-1;
+            }else{
+              j = 0;
+            }
+
+            tmp = tmp_data[i];
+            tmp["item_name"] = tmp.item;
+            tmp["customer_name"] = tmp.customer;
+            tmp["source"] = tmp.type;
+            tmp["location"] = tmp.type;
+            tmp["waiter_name"] = tmp.waiter;
+            tmp["with_not_ready"] = false;
+
+            if (tmp.status != 2){
+                tmp["with_not_ready"] = true;
+            }
+
+            // console.log(order_item_flag);
+
+            delete tmp.item;
+            delete tmp.customer;
+            delete tmp.type;
+            delete tmp.waiter;
+
+            var //kl_id = tmp.location,
+                kl_id = 1,
+                order_key = [tmp.customer_name, tmp.table_id, tmp.table_no, tmp.order, tmp.waiter_name].join("|");
+
+                // console.log(order_key);
+
+            if (!data[kl_id]) {
+              data[kl_id] = {};
+            }
+
+            if (!data[kl_id][order_key]) {
+              data[kl_id][order_key] = [];
+            }
+
+            data[kl_id][order_key].push(tmp);
+          }
+
+          var kl_id = null;
+          var kl_list =[];
+          {{ range .KitchenLocation}}
+          kl_list.push({{.ID}});
+          {{ end }}
+
+          for (var index=0;index<kl_list.length;index++) {
+            kl_id = 1; //kl_list[index] ;
+            var orders = data[kl_id],
+                $kl_container = $(".mo-container-" + kl_id);
+
+            if ($kl_container.length === 0) {
+
+            }
+
+            var container = d3.select($kl_container[0])
+                .selectAll(".mo-instance")
+                .data(d3.entries(orders), function(d){
+                  return d.key;
+                });
+
+
+            var tempContainer = container.enter()
+                .append(function(d){
+                  var with_not_ready  = false;
+                  $.each(d.value, function(i, v){
+                    if (v.with_not_ready) {
+                      with_not_ready = true;
+                      return false;
+                    }
+                  });
+                  var key_parts = d.key.split("|"),
+                      customer_name   = key_parts[0],
+                      table_id        = key_parts[1],
+                      table_no        = key_parts[2],
+                      order_id        = key_parts[3],
+                      waiter_name     = key_parts[4];
+                  if (with_not_ready){
+                  var el = $(
+                        "<div class='mo-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>" +
+                          "<div class='mo-instance-padding col-sm-12'>"+
+                            "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                            "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                            // "<div class='row'>" +
+                            "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                              // "<div class='mo-content-2 col-sm-4'>" +
+                              //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                              // "</div>" +
+                            // "</div>" +
+                            "<div class='mo-footer'>"+
+                            "<span>"+
+                            "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                            // "<i class='fa fa-user-o'></i> "+
+                             "<img src='/static/images/waiter.png'> "+
+                            waiter_name +"</h4>"+
+                            "</span>"+
+                            "<button disabled id='bump_all-"+order_id+"' type='button' onclick='bump_all(this);'"+
+                            " class='pointer bump-all-btn btn-primary btn"+
+                            " btn-disabled'>"+
+                            "<h4 class='admin_font bold capitalized'>Bump All</h4></button>"+
+                            "</div>" +
+                          "</div>"+
+                        "</div>"
+                      )[0];
+                    }else{
+                      var el = $(
+                            "<div class='mo-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>" +
+                              "<div class='mo-instance-padding col-sm-12'>"+
+                                "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                                "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
+                                // "<div class='row'>" +
+                                "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
+                                  // "<div class='mo-content-2 col-sm-4'>" +
+                                  //   "<button type='button' class='btn-primary bgRightbtn'>Bump</button>" +
+                                  // "</div>" +
+                                // "</div>" +
+                                "<div class='mo-footer'>"+
+                                "<span>"+
+                                "<h4 class='admin_font capitalized letter-spaced bold' style='color:#eee;'>"+
+                                // "<i class='fa fa-user-o'></i> "+
+                                 "<img src='/static/images/waiter.png'> "+
+                                waiter_name +"</h4>"+
+                                "</span>"+
+                                "<button id='bump_all-"+order_id+"' type='button' onclick='bump_all(this);'"+
+                                " class='pointer bump-all-btn btn-primary btn"+
+                                " '>"+
+                                "<h4 class='admin_font bold capitalized'>Bump All</h4></button>"+
+                                "</div>" +
+                              "</div>"+
+                            "</div>"
+                          )[0];
+                    }
+                  return el;
+                })
+                // .style("opacity", 1)
+                // .transition()
+                // .duration(duration)
+                .style("opacity", 1);
+
+            // tempContainer.select(".bgRightbtn")
+            //   .style("height", function(d){
+            //     var h = $(this).closest(".mo-instance").find(".mo-content").height() ;
+            //     return h + "px";
+            //   });
+
+            container.exit()
+                .transition()
+                .duration(duration)
+                .style("opacity", 0)
+                .remove();
+
+            container = container.merge(tempContainer);
+
+            var rows = container.select(".mo-content").selectAll("div").data(function(d){
+                  return d.value;
+                }, function(d){
+                  return d.order_item_id;
+                });
+
+            // console.log("ABDULLAH");
+            // console.log(container);
+            // console.log(tempContainer);
+            // console.log(rows);
+
+            // var new_data = container.select(".mo-content table tbody").selectAll("tr").data(function(d){
+            //       return d.value;
+            //     }, function(d){
+            //       return d.order_item_id;
+            //     })
+
+            var old_data = rows.exit()
+                //.attr("class", "served")
+                // .transition()
+                // .duration(duration)
+                // .style("left","-15px")
+                // .transition()
+                // .duration(duration)
+                // .style("left", function(d){
+                //   return 185*2.5 + "px";
+                // })
+                // .style("opacity", 0)
+                .remove();
+
+            var new_data = rows.enter()
+                .append("div")
+                // .attr("class","mo-main")
+                .attr("data-attr-id", function(d){ return d.order_item_id; })
+                .attr("data-attr-status", function(d){ return d.status; })
+                .attr("data-attr-item-name", function(d){return d.item_name; })
+                .attr("data-attr-item-status", function(d){return d.status; })
+                .attr("data-attr-item-category", function(d){ return d.item_category_id; });
+                //.attr("data-toggle", "context")
+                //.attr("data-target", "#context-menu");
+                // .append("td")
+                // .text(function(d){return d.item_name;});
+
+
+            // new_data = rows.merge(new_data);
+
+
+            //*
+
+            new_data.style("position", "relative")
+                .style("left", "-700px")
+                .style("transform", "rotate(18deg)")
+                .transition()
+                .delay(function(d,i) {
+                  return Math.floor(duration / 2) * i + (index * duration);
+                })
+                .duration(duration*2)
+                .style("left", "35px")
+                .style("transform", "rotate(0deg)")
+                //.style("height", "100px")
+                // .style("height", function(d){
+                //   return "100px";
+                // })
+                // .transition()
+                // .delay(Math.floor(duration*2))
+                // .duration(duration)
+                .transition()
+                .duration(duration)
+                .style("left", "0px")
+                .style("position", "relative");
+
+            rows = rows.merge(new_data);
+
+            rows = rows.merge(old_data);
+
+            // 1st span
+            rows.selectAll("span").remove();
+
+            rows.append("div")
+                .attr("class","mo-item col-sm-8")
+                .html(function(d){
+                  // Allergies
+                  // console.log(d.spicy_level);
+                  var allergies = d.allergies;
+                  var spicy_level = d.spicy_level,
+                  len = spicy_level,
+                  x = 0;
+                  var html_str = "";
+                      html_str += "<span class='bigger_font' >";
+                      html_str += d.quantity + " x " + d.item_name;
+                      html_str += "</span>";
+                      html_str += "<h4 class='bigger_font'  style='font-weight:bold;color:inherit;margin:0px;padding:0px;'>";
+                      html_str += "[" + (d.order_type == 1 ? "Dine-In" : "Take-Out") + "]";
+                      html_str += "</h4>";
+                      if (allergies.length > 0) {
+                        html_str += "<span>";
+                        html_str += "<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;";
+                        html_str += allergies.join("<i class='fa fa-ban text-danger' aria-hidden='true'></i>&nbsp;");
+                        html_str += "</span><br>";
+                      }
+                      if (d.remarks.length && d.remarks != "") {
+                        html_str += "<span>";
+                        html_str += "<i class='fa fa-sticky-note-o' aria-hidden='true'></i>&nbsp;" + d.remarks;
+                        html_str += "</span><br>";
+                      }
+                      if (spicy_level === -1) {
+
+
+                      }else{
+                        // console.log(d.spicy_level);
+                        for (x = 0; x < len; x ++) {
+                          html_str += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>";
+                        }
+                        while (x++ < 3) {
+                          html_str += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>";
+                        }
+                      }
+
+                      html_str +='<br><i class="bell-container"></i>&nbsp;';
+                      html_str +='<span class="elapsed_time" data-serving-time="'+d.serving_time+'" data-attr-seconds="'+d.elapsed_time_seconds+'">'+d.elapsed_time+'</span>';
+                      html_str +="<h4 class='";
+
+                      if (d.status != 2){
+                        html_str += "hidden";
+                      }else{
+                        html_str += "";
+                      }
+                      html_str += " order_completed bold'><center><span class='capitalized admin_font'>COMPLETED</span></center></h4>";
+
+
+                  return html_str;
+                });
+
+            rows.append("div")
+                .attr("class","mo-btn col-sm-4")
+                .html(function(d){
+                  var context = this.parentNode,
+                      args = {
+                        "request_id":$(context).data("attr-id"),
+                        "request_status":3,
+                        "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
+                        "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
+                        "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
+                        "type" : "DRINKS",
+                        "item_name" : $(context).attr('data-attr-item-name')
+                      };
+
+                  this.setAttribute("data-details", JSON.stringify(args));
+
+                  // Allergies
+                  var html_str = "";
+                      // html_str +="<div class='mo-content-2 col-sm-4'>";
+                      if (d.status == 2){
+                        html_str +=  '<button onclick=\'swingOut(this);\' type="button"  class="bump_btn pointer btn-primary bgRightbtn admin_font bold capitalized">Bump</button>';
+                      }else{
+                        html_str +=  '<button onclick=\'swingOut(this);\' type="button" disabled class="bump_btn pointer btn-primary btn-disabled bgRightbtn admin_font bold capitalized">Bump</button>';
+                      }
+                      // html_str +="</div>";
+
+                  return html_str;
+                });
+
+            rows.attr("data-attr-status", function(d){ return d.status; })
+                .attr("class", function(d){
+                  switch (d.status) {
+                    case 0: return "recieved";
+                    case 1: return "preparing";
+                    case 2: return "ready";
+                    case 3: return "served";
+                  }
+                  return "cancelled";
+                });
+            rows.attr("data-attr-item-status", function(d){
+              // filtering
+              var $this = $(this),
+                  filter = $("[data-current-filter]").attr("data-current-filter").split(":");
+
+              switch (filter[0]) {
+                case "status":
+                  if (d.status == filter[1]) {
+                    $this.show();
+                  } else {
+                    $this.hide();
+                  }
+                  break;
+                case "category":
+                  if (d.item_category_id == filter[1]) {
+                    $this.show();
+                  } else {
+                    $this.hide();
+                  }
+                  break;
+              }
+
+              return d.status;
+            });
+
+
+            //update btn
+            $(".mo-instance").each(function(i, el){
+              var $el = $(el),
+                  with_not_ready = false;
+              $el.find("[data-attr-item-status]").each(function(i, el){
+                var status = el.getAttribute("data-attr-item-status");
+                if (status < 2) {
+                  with_not_ready = true;
+                  return false;
+                }
+              });
+
+
+              if (with_not_ready) {
+                $el.find(".bump-all-btn")
+                  .attr("disabled", true)
+                  .addClass("btn-disabled");
+              } else {
+                $el.find(".bump-all-btn")
+                  .attr("disabled", false)
+                  .removeClass("btn-disabled");
+              }
+            });
+
+
+          }
+
+          retrieveRestoOrdersProcessing = false;
+        });
+        RecallServedOrders();
+      }
+      // BUMP ALL
+
+      function bump_all(me){
+        // console.log($(me).parent());
+          $(me).parent().parent().find(".mo-btn").each(function(){
+            $(this).find("button").click();
+          });
+      }
+
+      function recall_all(me){
+        // console.log($(me).parent());
+          $(me).parent().parent().find(".recall-btn").each(function(){
+            $(this).find("button").click();
+          });
+      }
+
+
+      function retrieveRestoOrders_ORIG(){
+        // *** get data via jquery.ajax ***
+        $('.mo-container-1').empty();
+        $('.mo-container-2').empty();
+        $.ajax({
+          "url": "/apiFunction/?method=GetMonitoringOrderItems",
+          "type": "POST",
+          "success": function(data) {
+            data = data.ordered_items;
+            for(var i=0;i<data.length;i++){
+              var args = {
+                    "table_no": data[i].table_no,
+                    "item_name": data[i].item,
+                    "order": data[i].order,
+                    "quantity": data[i].quantity,
+                    "status": data[i].status,
+                    "customer_name": data[i].customer,
+                    "source": data[i].type,
+                    "order_item_id": data[i].order_item_id,
+                    "table_id": data[i].table_id,
+                    "remarks": data[i].remarks,
+                    "spicy_level": data[i].spicy_level,
+                    "location": data[i].type,
+                    "elapsed_time": data[i].elapsed_time,
+                    "allergies": data[i].allergies,
+                    "serving_time": data[i].serving_time,
+                    "elapsed_time_seconds": data[i].elapsed_time_seconds,
+                    "order_type": data[i].order_type,
+                    "item_category_id" : data[i].item_category_id
+                  };
+              appendRequestInstance(args);
+            }
+          },
+          "error": function(xhr, errmsg, err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg + " <a href='#' class='close'>&times;</a></div>");
+          }
+        });
+      }
+
+  function appendRequestInstance(args){
+    if(!checkIfMonitoringIntanceExist(args)){
+        appendMonitoringInstance(args);
+    }
+    var status = "";
+    if(args['status']==1){
+      status = "warning";
+    }else if (args['status']==2){
+      status = "info";
+    }else if (args['status']==3){
+      status = "success";
+    }else{
+      status = "danger";
+    }
+    var remarks = "";
+    if (args['allergies'].length > 0) {
+      for (var i=0;i<args['allergies'].length;i++) {
+        args['allergies'][i] = '<i class="fa fa-ban text-danger" aria-hidden="true"></i>&nbsp;' + args['allergies'][i]
+      }
+    }
+    if (args['remarks'] != "") {
+      args['remarks'] = '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>&nbsp;' + args['remarks']
+    }
+    if (args['spicy_level'] != -1) {
+      args['remarks'] += "<br />"
+      for (var i = 0; i < args['spicy_level']; i++) {
+        args['remarks'] += "<img src='/static/images/chilly_full.png' style='width:20px; height:auto;'>"
+      }
+      for (var i = args['spicy_level']; i < 3; i++) {
+        args['remarks'] += "<img src='/static/images/chilly_empty.png' style='width:20px; height:auto;'>"
+      }
+    }
+
+    if (args['remarks'] != "") {
+      remarks = $('<table>').addClass('table table-condensed').append(
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).text(args['quantity'] + "x " + args['item_name'])
+                    .append(
+                      $('<strong>').append(
+                        $('<br/>'),
+                        $('<span>').text(" [" +(args["order_type"] == "1" ? "Dine-In" : "Take-Out") + "]").css('color',"red")
+                      )
+                    )
+                  ),
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).append(
+                      $('<span style="display: block;">').html(args['remarks']).css('font-weight','bold'),
+                      $('<span>').html(args['allergies'].join("<br />")).css('font-weight','bold')
+                    )
+                  ),
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).append(
+                      $('<span>').text(' ').addClass('bell-container'),
+                      $('<span>').attr('data-serving-time',args['serving_time']).attr('data-attr-seconds',args['elapsed_time_seconds']).addClass('elapsed_time').text(args['elapsed_time'])
+                    )
+                  )
+                )
+    }else {
+
+      remarks =  $('<table>').addClass('table table-condensed').append(
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).text(args['quantity'] + "x " + args['item_name'])
+                    .append(
+                      $('<strong>').append(
+                        $('<br/>'),
+                        $('<span>').text(" [" +(args["order_type"] == "1" ? "Dine-In" : "Take-Out") + "]").css('color',"red")
+                      )
+                    )
+                  ),
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).append(
+                      $('<span>').html(args['allergies'].join("<br />")).css('font-weight','bold')
+                    )
+                  ),
+                  $('<tr>').css('border','none').append(
+                    $('<td>').css('border','none').addClass(status).append(
+                      $('<span>').text('  ').addClass('bell-container'),
+                      $('<span>').attr('data-serving-time',args['serving_time']).attr('data-attr-seconds',args['elapsed_time_seconds']).addClass('elapsed_time').text(args['elapsed_time'])
+                    )
+                  )
+                )
+    }
+    if($('#order-table-'+args.source+'-'+args['order']).find('tr[data-attr-id='+args['order_item_id']+']').length > 0){
+      return;
+    }
+    extraClasses = "";
+    if (args["allergies"].length > 0) {
+      extraClasses += "allergy-order";
+    }
+    $('#order-table-'+args.source+'-'+args['order']).append(
+      $('<tr>')
+      .attr('data-attr-id',args['order_item_id'])
+      .attr('data-attr-status',args['status'])
+      .attr('data-attr-item-name',args['item_name'])
+      .append(
+        $('<td class="' + extraClasses + '">').append(
+          remarks
+        )
+      )
+      .addClass(status)
+      .attr('data-toggle','context')
+      .attr('data-target','#context-menu')
+      .contextmenu({
+        target: '#context-menu',
+        before: function(e,context) {
+          if($(e.target).hasClass('no-context-menu')) {
+            return;
+          }
+          this.getMenu().find("li").removeClass();
+          this.getMenu().find("li > a[data-attr-status='" + $(context).data("attr-status") + "']").parent().addClass("disabled");
+          return true;
+        },
+        onItem: function (context, e) {
+          if($(e.target).parent().hasClass('disabled')){
+            return;
+          }
+          if($(e.target).attr('data-attr-status') == "1" && true == false){
+            $('#btn-update-status').unbind();
+            $('#btn-update-status').on('click',function(){
+              args = {
+                "request_id":$(context).data("attr-id"),
+                "request_status":$(e.target).data("attr-status"),
+                "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
+                "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
+                "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
+                "type" : "DRINKS",
+                "item_name" : $(context).attr('data-attr-item-name')
+              };
+              updateStatus(args);
+            });
+            $('#modal-message').removeClass().addClass('text-danger');
+            $('#modal-message').text('Are you sure to cancel order?');
+            $('#serve-order-modal').modal('show');
+            return;
+          }
+          if($(e.target).attr('data-attr-status') == 3 && true==false){
+            $('#btn-update-status').on('click',function(){
+              args = {
+                "request_id":$(context).data("attr-id"),
+                "request_status":$(e.target).data("attr-status"),
+                "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
+                "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
+                "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
+                "type" : "DRINKS",
+                "item_name" : $(context).attr('data-attr-item-name')
+              };
+              updateStatus(args);
+            });
+            $('#modal-message').removeClass().addClass('text-success');
+            $('#modal-message').text('Are you sure to serve order?');
+            $('#serve-order-modal').modal('show');
+            return;
+          }
+          var args = {
+            "request_id":$(context).data("attr-id"),
+            "request_status":$(e.target).data("attr-status"),
+            "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
+            "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
+            "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
+            "type" : "DRINKS",
+            "item_name" : $(context).attr('data-attr-item-name')
+          };
+          updateStatus(args);
+        }
+      })
+    );
+  }
+
+  function swingOut(el){
+    $(el).closest("[data-attr-id]").addClass("swing_out");
+    setTimeout(function(){
+      // updateStatus(el.parentNode.getAttribute("data-details"))
+      $(el).closest("[data-attr-id]").hide();
+      setTimeout(function(){
+        updateStatus(el.parentNode.getAttribute("data-details"));
+      }, 500);
+    }, 950);
+  }
+
+  function updateStatus(args){
+    // console.log(args);
+    if (typeof args === "string") {
+      args = JSON.parse(args);
+    }
+
+    var result = $.ajax({
+          "url": "/apiFunction/?method=UpdateOrderItemStatus",
+          "dataType": "json",
+          "data": {
+            "order_item": args['request_id'],
+            "status": args['request_status']
+          },
+          "async": false
+        }).responseText;
+
+    var jsn = JSON.parse(result);
+    if(jsn.status === "OK"){
+      socket.emit("broadcastUpdate", args);
+      //location.reload();
+      retrieveRestoOrders();
+    } else {
+      alert("Failed Updating Status!");
+    }
+  }
+
+
+  function checkIfMonitoringIntanceExist(args){
+    var is_exists = false;
+    if($('.mo-container-'+args['location']).find(".mo-instance[data-attr-order-no='"+args['order']+"']").length > 0){
+      is_exists = true;
+    }
+    return is_exists;
+  }
+
+  function appendMonitoringInstance(args){
+    $('.mo-container-'+args['location']).append(
+      $('<div>').addClass('mo-instance')
+      .attr('data-attr-table-no',args['table_no'])
+      .attr('data-attr-table-id',args['table_id'])
+      .attr('data-attr-order-no',args['order']).append(
+        $('<div>').addClass('mo-title').text("Table " + args['table_no']),
+        $('<div>').addClass('mo-title-customer-name').text("(" + args['customer_name'] + ")"),
+        $('<div>').addClass('mo-content').append(
+          $('<table>').addClass('table table-bordered table-condensed').append(
+            $('<tbody>').attr('id','order-table-'+args['location']+'-' + args['order']).append(
+
+            )
+          )
+        ),
+        $('<div>').addClass('mo-footer').append(
+        )
+      ).fadeIn("slow")
+    );
+  }
+
+  function openRemark(param){
+    $('#span-remarks').text(param['remarks']);
+    $('#remarks-modal').modal('show');
+  }
+
+  function RecallItem(elem){
+    args = {
+      "request_id":$(elem).attr('data-attr-id'),
+      "status":1
+    }
+    updateStatus(args);
+  }
+
+  function IncrementTime(){
+      $('.elapsed_time').each(function(){
+          if ($(this).closest("[data-attr-item-status]").attr('data-attr-item-status') != 0){
+          $(this).attr('data-attr-seconds',parseInt($(this).attr('data-attr-seconds')) + 1)
+          if ($(this).parent().parent().attr('data-attr-status')!=1 && $(this).parent().parent().attr('data-attr-status')!=0  && $(this).parent().parent().attr('data-attr-status')!=2) {
+            $(this).removeAttr('data-attr-seconds')
+            $(this).css('color','black');
+            $(this).attr('data-attr-100', 'false');
+            $(this).prev().removeClass('fa fa-bell-o').css("color", "black");
+          }
+          else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time')) && ($(this).parent().parent().attr('data-attr-status')==1 || $(this).parent().parent().attr('data-attr-status')==2 || $(this).parent().parent().attr('data-attr-status')==0)) {
+            $(this).closest("[data-attr-id]").css("background","#ffb2b2").find("span").css("color","#222");//.css('color','red');
+            $(this).closest("[data-attr-id]").find("i").css("color","#222");//.css('color','red');
+            $(this).css("font-weight","bold");//.css('color','red');
+            $(this).attr('data-attr-100', 'true');
+            $(this).prev().addClass('fa fa-bell-o fa-2x').css("font-weight","bold").css("color", "red"); //CHANGE COLOR ON ALARM .css("color", "red");
+          }else if (parseInt($(this).attr('data-attr-seconds')) > parseInt($(this).attr('data-serving-time'))*0.8 && ($(this).parent().parent().attr('data-attr-status')==1 || $(this).parent().parent().attr('data-attr-status')==2 || $(this).parent().parent().attr('data-attr-status')==0)) {
+            if($(this).attr('data-attr-80-notified') == null){
+              $(this).attr('data-attr-80', 'true');
+              $(this).attr('data-attr-80-notified', 'false');
+              $(this).prev().addClass('fa fa-bell-o fa-2x').css("font-weight","bold").css("color", "red");
+            }
+          }
+          var c_time = $(this).text().split(':');
+    			var c_hour = c_time[0]
+    			var c_min =c_time[1];
+    			var c_sec =c_time[2];
+    			c_sec = parseInt(parseInt(c_sec) + 1);
+
+    			if(c_sec == "60"){
+    				c_sec = "00";
+    				c_min = parseInt(parseInt(c_min) + 1 );
+    			}else if(parseInt(c_sec) < 10){
+    				c_sec = "0" + c_sec;
+    			}
+
+    			if(c_min == "60"){
+    				c_min = "00";
+    				c_hour = parseInt(parseInt(c_hour) + 1);
+    			}else if(parseInt (c_min) <10){
+    				c_min = "0" + parseInt(c_min);
+    			}
+
+    			c_time = c_hour+ ":" + c_min + ":" + c_sec;
+    			$(this).text(c_time);
+        }
+      });
+	}
+      $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
+
+      {{if .Demo}} notifyDemo(); {{end}}
+
+      // $(document).ready(function(){
+      //   $(".format_name").each(function(){
+      //     $(this).text($(this).text().split(":")[1].replace("}","").replace('"',"").replace('"',""));
+      //   });
+      // });
+
+    </script>
+  </body>
+</html>

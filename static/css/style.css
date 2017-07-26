@@ -1,3 +1,18 @@
+@font-face {
+    font-family: 'admin_font';
+    src: url('../assets/fonts/Brandon_reg.otf');
+}
+
+.admin_font{
+  font-family: 'admin_font' !important;
+}
+.capitalized{
+  text-transform: uppercase !important;
+}
+.letter-spaced{
+	letter-spacing:2px;
+}
+
 body{
 	background-color	: #ebebeb;
 }
@@ -6,90 +21,193 @@ a:link{
 	text-decoration : none;
 }
 
-.mo-container{
+.mo-container, .recall-container{
 	margin 			: 30px;
+	overflow-x: hidden !important;
 }
 
-.mo-content>div{
+.mo-content>div, .recall-content>div{
   border: 1px solid #555;
   border-bottom: none;
   overflow: hidden;
+	overflow-x: hidden !important;
 }
-.mo-content>div:last-child{
+.mo-content, .recall-content{
+	overflow-x: hidden !important;
+}
+.mo-content>div:last-child, .recall-content>div:last-child{
   border-bottom: 1px solid #555;
+	overflow-x: hidden !important;
 }
 
-.mo-content >div>span {
+.mo-content >div>span, .recall-content >div>span  {
   display: block;
+	overflow-x: hidden !important;
+
 }
 
 .mo-instance{
-	width 			: 200px;
+	/*width 			: 200px;*/
 	height 			: auto;
-	border 			: 3px solid #575757;
-	min-height 		: 300px;
-	margin-right 	: 10px;
+	/*border 			: 3px solid #575757;*/
+	min-height 		: 400px;
+	/*margin-right 	: 5px;*/
 	margin-bottom 	: 10px;
 	float 			: left;
-	box-shadow		: 5px 5px 5px #888888;
+	/*box-shadow		: 0px 0px 3px #888888;*/
+	background-color: transparent;
+	border-radius: 2px;
+	overflow-x: hidden !important;
+	padding:2px;
+
+
+}
+.recall-instance{
+	/*width 			: 200px;*/
+	height 			: auto;
+	/*border 			: 3px solid #575757;*/
+	min-height 		: 300px;
+	/*margin-right 	: 5px;*/
+	margin-bottom 	: 10px;
+	float 			: left;
+	/*box-shadow		: 0px 0px 3px #888888;*/
+	background-color: transparent;
+	border-radius: 2px;
+	overflow-x: hidden !important;
+	padding:2px;
+
+
+}
+.mo-instance-padding{
+	/*width 			: 200px;*/
+	height 			: auto;
+	/*border 			: 3px solid #575757;*/
+	/*min-height 		: 300px;*/
+	margin: 2.5px;
+	/*margin-bottom 	: 10px;*/
+	/*float 			: left;*/
+	box-shadow		: 0px 0px 3px #888888;
+	background-color: #333;
+	border-radius: 1px;
+	overflow-x: hidden !important;
+	padding:0px;
+
+
+}
+.recall-instance-padding{
+	/*width 			: 200px;*/
+	height 			: auto;
+	/*border 			: 3px solid #575757;*/
+	/*min-height 		: 300px;*/
+	margin: 2.5px;
+	/*margin-bottom 	: 10px;*/
+	/*float 			: left;*/
+	box-shadow		: 0px 0px 3px #888888;
+	background-color: #333;
+	border-radius: 1px;
+	overflow-x: hidden !important;
+	padding:0px;
+
+
 }
 
-.mo-title{
+.mo-title, .recall-title{
 	height 				: 28px;
 	font-weight 		: bold;
 	text-align 			: center;
-	background-color 	: #bfbfbf;
+	background-color 	: transparent;
+	background 	: transparent;
+	/*background-color 	: #bfbfbf;*/
     font-size           : 22px;
+		color:#FFF;
 }
-.mo-title-customer-name{
+.mo-title-customer-name, .recall-title-customer-name{
 	height 				: 20px;
 	font-weight 		: bold;
 	text-align 			: center;
-	background-color 	: #bfbfbf;
+	background-color 	: transparent;
+	background 	: transparent;
+	/*background-color 	: #bfbfbf;*/
     font-size           : 14px;
-    color               : #d40000;
+    /*color               : #d40000;*/
+    color               : #bbb;
 }
 
+.recieved {
+  background-color: #fff; /*f2dede !important; /* Light Pink  WHITE*/
+}
 .preparing {
-  background-color: #fcf8e3;
+  background-color: #fcf8e3; /* !important; /* Light Yellow */
 }
 
 .ready {
-  background-color: #d9edf7;
+  /*background-color: #d9edf7;*/
+/*  background-color: #5cb896; /* !important; /* Light Green*/
+  background-color: #5cb85c; /* !important; /* Light Green*/
 }
 
 .served {
-  background-color: #dff0d8;
+  /*background-color: #dff0d8;*/
+  background-color: #31d5cd; /* !important;*/
 }
 
 .cancelled {
-  background-color: #f2dede;
+  background-color: #f2dede; /* !important;*/
+}
+.recieved-text {
+  color: #fff; /* Light Pink */
+}
+.preparing-text {
+  color: #fcf8e3; /* Light Yellow */
 }
 
-.mo-content {
+.ready-text {
+  /*background-color: #d9edf7;*/
+  color: #5cb896; /* Light Green*/
+}
+
+.served-text {
+  color: #31d5cd;
+}
+
+.cancelled-text {
+  color: #f2dede;
+}
+
+.shadowed{
+  text-shadow: 0px 0px 3px #000;
+}
+
+.mo-content, .recall-content {
 	max-height 		: 400px;
 	min-height 		: 400px;
 	overflow-y		: auto;
 	/*margin 			: 10px;*/
-	padding 			: 5px;
+	/*padding 			: 5px;*/
+	z-index				: 21 !important;
+  background: #ddd;
 }
 
-.mo-content div {
+.mo-content div, .recall-content div {
   padding: 2px;
+	z-index: 20;
 }
 
-.mo-content div span {
+.mo-content div span, .recall-content div span {
   margin-bottom: 2px;
+	z-index: 21 !important;
 }
 
-.mo-content div span > i {
+.mo-content div span > i, .recall-content div span > i {
   margin-right: 2px;
 }
 
-.mo-footer{
+.mo-footer, .recall-footer{
 	height 		: auto;
 	font-weight : bold;
 	text-align 	: center;
+	margin: 0px;
+	width:100%;
 }
 
 .legend ul{
@@ -100,7 +218,8 @@ a:link{
 	float 			: left;
 	margin-right 	: 20px;
 	font-weight 	: bold;
-	font-size 		: 15px;
+	/*font-size 		: 15px;*/
+  margin-bottom:5px;
 }
 
 .clr{
@@ -122,4 +241,65 @@ a:link{
 .allergy-order {
 	border-width: 3px !important;
 	border-color: #bb2323 !important;
+}
+
+.hidden{
+	display: none !important;
+}
+
+.btn-disabled{
+	color: #bbb !important;
+	/*background-color: #5D8D89 !important;*/
+	background-color: #999 !important;
+	text-shadow: 0px 1px 0px rgba(255, 255, 255, .5) !important;
+	box-shadow: none !important;
+	cursor: not-allowed !important;
+}
+.btn-disabled:hover{
+	/*color: #3B5957 !important;*/
+	color: #bbb !important;
+	background-color: #999 !important;
+	text-shadow: 0px 1px 0px rgba(255, 255, 255, .5) !important;
+	box-shadow: none !important
+}
+
+.pointer{
+	cursor: pointer;
+}
+
+.recall-instance{
+	/*background: #555;*/
+	/*color:#eee;*/
+	/*padding:10px;*/
+}
+/*.btn-recall{
+	background:warning;
+}
+.btn-recall:hover{
+	background:warning;
+}*/
+
+.panel-custom .panel-heading{
+  background: #222;
+  border-radius: 0 !important;
+  color: #FFF;
+
+  /*text-transform: capitalize !important;*/
+}
+.panel-custom{
+  border-radius: 0 !important;
+  border:none;
+
+}
+.panel-custom .panel-body{
+  border-radius: 0 !important;
+  border:none;
+  /*box-shadow: 0px 0px 2px #000;*/
+
+}
+
+
+.recall-footer span h4 img, .mo-footer span h4  img{
+  width: 32px !important;
+  height: 32px !important;
 }
