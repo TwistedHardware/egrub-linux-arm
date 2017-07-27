@@ -456,6 +456,7 @@
 
           var tempContainer = container.enter()
               .append(function(d){
+
                 var key_parts = d.key.split("|"),
                     customer_name   = key_parts[0],
                     table_id        = key_parts[1],
@@ -465,6 +466,7 @@
                     with_not_ready  = key_parts[5];
 
                     var el = $(
+
                           "<div class='recall-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>" +
                             "<div class='recall-instance-padding col-sm-12'>"+
                               "<div class='recall-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
@@ -660,6 +662,7 @@
                     args = {
                       "request_id":$(context).data("attr-id"),
                       "request_status":3,
+                      "status":3,
                       "session_bundle" : $(context).closest('.recall-instance').attr('data-attr-order-no'),
                       "table_no" : $(context).closest('.recall-instance').attr('data-attr-table-no'),
                       "table_id" : $(context).closest('.recall-instance').attr('data-attr-table-id'),
@@ -668,14 +671,13 @@
                     };
 
                 this.setAttribute("data-details", JSON.stringify(args));
-
+                //console.log(d.ID);
                 // Allergies
                 var html_str = "";
                     // html_str +="<div class='mo-content-2 col-sm-4'>";
-                      html_str +=  '<button data-attr-id="'+d.ID+'" onclick=\'RecallItem(this);\' type="button"  class="recall_btn pointer btn-primary bgRightbtn admin_font bold capitalized">Recall</button>';
-
+                      html_str +=  '<button onclick="RecallItem(this);"  data-orderitem-id="' + d.ID + '" type="button"  class="recall_btn pointer btn-primary bgRightbtn admin_font bold capitalized">Recall</button>';
+                      // html_str +=  '<button onclick=\'swingOut(this);\' type="button" class="recall_btn pointer btn-primary bgRightbtn admin_font bold capitalized">Recall</button>';
                     // html_str +="</div>";
-
                 return html_str;
               });
 
@@ -977,7 +979,7 @@
                   var el = $(
                         "<div class='mo-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>" +
                           "<div class='mo-instance-padding col-sm-12'>"+
-                            "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                            "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span><h2 class='item_count pull-right'></h2></div>" +
                             "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
                             // "<div class='row'>" +
                             "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
@@ -1004,7 +1006,7 @@
                       var el = $(
                             "<div class='mo-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>" +
                               "<div class='mo-instance-padding col-sm-12'>"+
-                                "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                                "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span><h2 class='item_count pull-right'></h2></div>" +
                                 "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
                                 // "<div class='row'>" +
                                 "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
@@ -1189,6 +1191,7 @@
                       args = {
                         "request_id":$(context).data("attr-id"),
                         "request_status":3,
+                        "status":3,
                         "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
                         "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
                         "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
@@ -1250,15 +1253,25 @@
             //update btn
             $(".mo-instance").each(function(i, el){
               var $el = $(el),
+                  count = 0,
                   with_not_ready = false;
+
               $el.find("[data-attr-item-status]").each(function(i, el){
+                count++;
+
                 var status = el.getAttribute("data-attr-item-status");
                 if (status < 2) {
                   with_not_ready = true;
-                  return false;
+                  // return false;
                 }
-              });
 
+              });
+              // console.log(parseInt($(this).find(".item_count").text()));
+              if (parseInt($(this).find(".item_count").text()) == count){
+                  $(this).find(".item_count").text(count);
+              }else{
+                  $(this).find(".item_count").text(count).fadeOut().fadeIn();
+              }
 
               if (with_not_ready) {
                 $el.find(".bump-all-btn")
@@ -1513,31 +1526,7 @@
     }, 950);
   }
 
-  function updateStatus(args){
-    // console.log(args);
-    if (typeof args === "string") {
-      args = JSON.parse(args);
-    }
 
-    var result = $.ajax({
-          "url": "/apiFunction/?method=UpdateOrderItemStatus",
-          "dataType": "json",
-          "data": {
-            "order_item": args['request_id'],
-            "status": args['request_status']
-          },
-          "async": false
-        }).responseText;
-
-    var jsn = JSON.parse(result);
-    if(jsn.status === "OK"){
-      socket.emit("broadcastUpdate", args);
-      //location.reload();
-      retrieveRestoOrders();
-    } else {
-      alert("Failed Updating Status!");
-    }
-  }
 
 
   function checkIfMonitoringIntanceExist(args){
@@ -1575,11 +1564,42 @@
   }
 
   function RecallItem(elem){
-    args = {
-      "request_id":$(elem).attr('data-attr-id'),
+    var args = {
+      "request_id":$(elem).attr('data-orderitem-id'),
       "status":1
     }
+
+    $(elem).closest(".mo-instance").find(".bump-all-btn")
+      .attr("disabled", true)
+      .addClass("btn-disabled");
+
     updateStatus(args);
+  }
+
+  function updateStatus(args){
+    // console.log(args);
+    if (typeof args === "string") {
+      args = JSON.parse(args);
+    }
+
+    var result = $.ajax({
+          "url": "/apiFunction/?method=UpdateOrderItemStatus",
+          "dataType": "json",
+          "data": {
+            "order_item": args['request_id'],
+            "status": args['status']
+          },
+          "async": false
+        }).responseText;
+
+    var jsn = JSON.parse(result);
+    if(jsn.status === "OK"){
+      socket.emit("broadcastUpdate", args);
+      //location.reload();
+      retrieveRestoOrders();
+    } else {
+      alert("Failed Updating Status!");
+    }
   }
 
   function IncrementTime(){

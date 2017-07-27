@@ -690,6 +690,7 @@
                     args = {
                       "request_id":$(context).data("attr-id"),
                       "request_status":1,
+                      "status":1,
                       "session_bundle" : $(context).closest('.recall-instance').attr('data-attr-order-no'),
                       "table_no" : $(context).closest('.recall-instance').attr('data-attr-table-no'),
                       "table_id" : $(context).closest('.recall-instance').attr('data-attr-table-id'),
@@ -1012,7 +1013,7 @@
                     if (a == "/" || a == "/monitoring" || a == "/monitoring/" || a == "/monitoring/all"){
                        el = $("<div class='mo-instance col-xs-12 col-sm-6 col-md-6' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
                        "<div class='mo-instance-padding col-sm-12'>"+
-                         "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                         "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span><h2 class='item_count pull-right'></h2></div>" +
                          "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
                          // "<div class='row'>" +
                          "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
@@ -1039,7 +1040,7 @@
                     }else{
                         el = $("<div class='mo-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
                        "<div class='mo-instance-padding col-sm-12'>"+
-                         "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                         "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span><h2 class='item_count pull-right'></h2></div>" +
                          "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
                          // "<div class='row'>" +
                          "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
@@ -1071,7 +1072,7 @@
                       if (a == "/monitoring/" || a == "/monitoring/all"){
                           el = $("<div class='mo-instance col-xs-12 col-sm-6 col-md-6' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
                          "<div class='mo-instance-padding col-sm-12'>"+
-                           "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                           "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span><h2 class='item_count pull-right'></h2></div>" +
                            "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
                            // "<div class='row'>" +
                            "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
@@ -1098,7 +1099,7 @@
                       }else{
                           el = $("<div class='mo-instance col-xs-6 col-sm-4 col-md-3' data-attr-table-id='" + table_id + "' data-attr-table-no='" + table_no + "' data-attr-order-no='" + order_id + "'>"+
                          "<div class='mo-instance-padding col-sm-12'>"+
-                           "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span></div>" +
+                           "<div class='mo-title admin_font capitalized'>Table " + table_no + "<span class='time-container-"+table_id+"'></span><h2 class='item_count pull-right'></h2></div>" +
                            "<div class='mo-title-customer-name admin_font'><h4 class='bold'>" + customer_name + "</h4></div>" +
                            // "<div class='row'>" +
                            "<div class='mo-content' id='order-table-" + kl_id + "-" + order_id + "'></div>" +
@@ -1284,6 +1285,7 @@
                       args = {
                         "request_id":$(context).data("attr-id"),
                         "request_status":3,
+                        "status":3,
                         "session_bundle" : $(context).closest('.mo-instance').attr('data-attr-order-no'),
                         "table_no" : $(context).closest('.mo-instance').attr('data-attr-table-no'),
                         "table_id" : $(context).closest('.mo-instance').attr('data-attr-table-id'),
@@ -1362,8 +1364,11 @@
             var $el = $(el),
                 with_not_ready = false,
                 ready = false,
+                count = 0,
                 preparing = false;
             $el.find("[data-attr-item-status]").each(function(i, el){
+              // console.log(i);
+              count++;
               var status = el.getAttribute("data-attr-item-status");
               if (status < 2) {
                 with_not_ready = true;
@@ -1380,7 +1385,7 @@
                      .attr("disabled", false)
                      .removeClass("btn-disabled");
               }
-              
+
               if (status != 0) {
                 $(el).find(".p_btn")
                      .attr("disabled", true)
@@ -1395,6 +1400,11 @@
                     .addClass("btn-disabled");
               }
             });
+            if ($(this).find(".item_count").text() == count){
+                $(this).find(".item_count").text(count);
+            }else{
+                $(this).find(".item_count").text(count).fadeOut().fadeIn();
+            }
 
 
             if (with_not_ready) {
