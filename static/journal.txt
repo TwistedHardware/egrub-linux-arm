@@ -10948,3 +10948,189 @@ Valid Until: 08/08/2020
 THIS INVOICE RECEIPT SHALL BE 
 VALID FOR FIVE(5) YEARS FROM THE 
 DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 
+=================================
+Bill No.: 7
+This cancels bill no. : 6
+Waiter:Jameica Lopez
+Gold 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+DINE IN
+2017-07-28 04:21:00 PM
+
+Item           Qty Price   Amount
+French Onio... 2   350.00  700.00
+Anago sushi    1   400.00  400.00
+---------------------------------
+Sub Total                 1100.00
+QTY          3
+
+50 Percent (50%)          -550.00
+Service Charge              55.00
+
+Amount Due                 605.00
+
+VATable Sale               540.18
+VAT-Exempt Sale              0.00
+VAT-Zero Rated Sale          0.00
+VAT Amount (12%)            64.82
+---------------------------------
+Thank you, and please come again.
+
+Cust Name:_______________________
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: Muhammed I. Khokhar
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2017
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 
+=================================
+Bill No.: 8
+This cancels bill no. : 7
+Waiter:Jameica Lopez
+Gold 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+DINE IN
+2017-07-28 04:21:00 PM
+
+Item           Qty Price   Amount
+French Onio... 2   350.00  700.00
+Anago sushi    1   400.00  400.00
+---------------------------------
+Sub Total                 1100.00
+QTY          3
+
+50 Percent (50%)          -550.00
+Service Charge              55.00
+
+Amount Due                 605.00
+
+VATable Sale               540.18
+VAT-Exempt Sale              0.00
+VAT-Zero Rated Sale          0.00
+VAT Amount (12%)            64.82
+---------------------------------
+Thank you, and please come again.
+
+Cust Name:_______________________
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: Muhammed I. Khokhar
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2017
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
+
+Egrub Cafe
+Operated by: IntegrityNet
+Batangas City
+VAT Reg.
+00-123-123-00586
+Machine No.: 98
+Serial#: 106400014
+Business Style: 
+ OFFICIAL RECEIPT
+=================================
+OR No.:000000037
+Bill No.: 8
+Waiter:Jameica Lopez
+Cashier:admin 
+Gold 1
+Pax #: 1
+No. of Discounted Guest : 0
+=================================
+DINE IN
+2017-08-23 11:53:00 AM
+
+Item           Qty Price   Amount
+French Onio... 2   350.00  700.00
+Anago sushi    1   400.00  400.00
+---------------------------------
+Sub Total                 1100.00
+QTY          3
+
+50 Percent (50%)          -550.00
+Service Charge              55.00
+
+Amount Due                 605.00
+
+VATable Sale               540.18
+VAT-Exempt Sale              0.00
+VAT-Zero Rated Sale          0.00
+VAT Amount (12%)            64.82
+Card                         0.00
+Other                      605.00
+Cash                         0.00
+Change                       0.00
+---------------------------------
+Thank you, and please come again.
+
+THIS SERVES AS YOUR OFFICIAL 
+RECEIPT
+Cust Name:RED
+Addr:____________________________
+TIN:_____________________________
+Bus Style:_______________________
+SC/PWD TIN:______________________
+OSCA ID NO./PWD ID NO.:__________
+Signature:_______________________
+
+INTEGRITY NET SOLN AND SVCS
+Operated By: Muhammed I. Khokhar
+IntegrityNet Blgd, Joseling Rd. 
+Pallocan West, Batangas City
+VAT Reg TIN: 294-132-416-00000
+ACCR#: 123456786666
+Date Issued: 06/30/2017
+and valid until: 06/30/2020
+Serial#: 106400014
+PTU#: 87654321
+Date Issued: 08/08/2017
+Valid Until: 08/08/2020
+THIS INVOICE RECEIPT SHALL BE 
+VALID FOR FIVE(5) YEARS FROM THE 
+DATE OF THE PERMIT TO USE
