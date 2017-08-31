@@ -132,6 +132,7 @@
                 <div hidden class="report-toggle" onclick="$('#x-read-modal').modal('show');" data-toggle="tooltip" data-placement="right" title="X Reading Report"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
                 <div hidden class="report-toggle" onclick="$('#terminal-read-modal').modal('show');" data-toggle="tooltip" data-placement="right" title="Terminal Reading Report"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
                 <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="Download Journal"><a href="/static/journal.txt" download="journal.txt"><i class="fa fa-file-text fa-3x fa-fw"></i></a></div>
+                <div class="report-toggle" data-toggle="tooltip" data-placement="right" title="BIR Sales Report" onclick="GenerateBirSalesReport();"><i class="fa fa-file-text fa-3x fa-fw"></i></div>
                 <a href="../" data-toggle="tooltip" data-placement="right" title="back" class="back"><i class="fa fa-home fa-2x fa-fw"></i></a>
             </div>
             <div class="content-wrapper">
@@ -1564,6 +1565,52 @@
             $.get("/setdt/?t=" + Math.floor(Date.now() / 1000), function(){});
             console.log({{.Demo}});
             {{if .Demo}}notifyDemo();{{end}}
+
+            function GenerateBirSalesReport(){
+              //call ajax to generate bir report and pass the session
+              //console.log(getCookie("session"));
+              $.ajax({
+                  "url": "/apiFunction/",
+                  "data": {"method":"generate_bir_report","session":getCookie("session")},
+                  "method": "GET",
+                  "dataType": "json",
+                  "method": "GET",
+                  "beforeSend": function(xhr){
+                      if (xhr.overrideMimeType) {
+                          xhr.overrideMimeType("application/json");
+                      }
+                  },
+                  "success": function(response){
+                    if (response.status) {
+                      var link = document.createElement("a");
+                      link.download = "bir_sales_report.xlsx";
+                      link.href = "/media/export/bir_sales_report.xlsx";
+                      link.click();
+                    }else {
+
+                    }
+                  },
+                  "error": function(x,y){
+
+                  }
+                });
+            }
+
+            function getCookie(cname) {
+               var name = cname + "=";
+               var decodedCookie = decodeURIComponent(document.cookie);
+               var ca = decodedCookie.split(';');
+               for(var i = 0; i <ca.length; i++) {
+                   var c = ca[i];
+                   while (c.charAt(0) == ' ') {
+                       c = c.substring(1);
+                   }
+                   if (c.indexOf(name) == 0) {
+                       return c.substring(name.length, c.length);
+                   }
+               }
+               return "";
+            }
         </script>
     </body>
 </html>
